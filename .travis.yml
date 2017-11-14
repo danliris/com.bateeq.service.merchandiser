@@ -1,0 +1,5 @@
+deploy:
+  provider: azure_web_apps
+  username: "efrata.retailindo@gmail.com"
+  password: "Standar123."
+  site: "http://com-bateeq-service-merchandiser.azurewebsites.net"

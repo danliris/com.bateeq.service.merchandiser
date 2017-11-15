@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Com.Bateeq.Service.Merchandiser.WebApi.v1.ViewModels
+namespace Com.Bateeq.Service.Merchandiser.Lib
 {
     public class CategoryViewModel
     {

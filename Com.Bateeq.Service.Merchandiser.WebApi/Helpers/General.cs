@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
+﻿namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
 {
-    public static class Common
+    public static class General
     {
         public const int OK_STATUS_CODE = 200;
         public const int CREATED_STATUS_CODE = 201;
@@ -16,6 +11,6 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
         public const string OK_MESSAGE = "Ok";
         public const string NOT_FOUND_MESSAGE = "Data Not Found";
         public const string BAD_REQUEST_MESSAGE = "Data does not pass validation";
-        public const string INTERNAL_ERROR_MESSAGE = "Internal Server Error";
+        public const string CSV_ERROR_MESSAGE = "The header row of CSV file is not valid";
     }
 }

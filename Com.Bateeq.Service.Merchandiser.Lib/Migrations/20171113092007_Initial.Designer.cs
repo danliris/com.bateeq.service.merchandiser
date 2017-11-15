@@ -10,7 +10,7 @@ using System;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
-    [DbContext(typeof(CoreDbContext))]
+    [DbContext(typeof(MerchandiserDbContext))]
     [Migration("20171113092007_Initial")]
     partial class Initial
     {

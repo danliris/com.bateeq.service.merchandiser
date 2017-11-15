@@ -32,7 +32,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
             //string connectionString = Configuration.GetConnectionString("DefaultConnection") ?? Configuration["DefaultConnection"];
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser;Trusted_Connection=True;";
             services
-                .AddDbContext<CoreDbContext>(options => options.UseSqlServer(connectionString))
+                .AddDbContext<MerchandiserDbContext>(options => options.UseSqlServer(connectionString))
                 .AddTransient<CategoryService>()
                 .AddApiVersioning(options =>
                 {
@@ -63,7 +63,14 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                     });
                 })
                 .AddJsonFormatters();
-            services.AddMvc();
+
+            services.AddCors(options => options.AddPolicy("MerchandiserPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+            //services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +80,8 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseAuthentication();
+            app.UseCors("MerchandiserPolicy");
             app.UseMvc();
         }
     }

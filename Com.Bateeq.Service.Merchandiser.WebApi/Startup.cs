@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Com.Bateeq.Service.Merchandiser.Lib;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Services;
 using Microsoft.AspNetCore.Mvc;
 using IdentityServer4.AccessTokenValidation;
 using IdentityModel;
+using Newtonsoft.Json.Serialization;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi
 {
@@ -55,6 +50,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
 
             services
                 .AddMvcCore()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
                 .AddAuthorization(options =>
                 {
                     options.AddPolicy("service.core.read", (policyBuilder) =>

@@ -12,15 +12,15 @@ using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
-    public class CategoryService : BasicService<MerchandiserDbContext, Category>
+    public class MaterialService : BasicService<MerchandiserDbContext, Material>
     {
-        public CategoryService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public MaterialService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
-        public override Tuple<List<Category>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
+        public override Tuple<List<Material>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
         {
-            IQueryable<Category> Query = this.DbContext.Categories;
+            IQueryable<Material> Query = this.DbContext.Materials;
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
             /* Search With Keyword */
@@ -41,7 +41,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 };
 
             Query = Query
-                .Select(b => new Category
+                .Select(b => new Material
                 {
                     Id = b.Id,
                     Code = b.Code,
@@ -70,52 +70,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
 
             /* Pagination */
-            Pageable<Category> pageable = new Pageable<Category>(Query, Page - 1, Size);
-            List<Category> Data = pageable.Data.ToList<Category>();
+            Pageable<Material> pageable = new Pageable<Material>(Query, Page - 1, Size);
+            List<Material> Data = pageable.Data.ToList<Material>();
 
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
-
-        //public CategoryViewModel MapToViewModel(Category Category)
-        //{
-        //    CategoryViewModel CategoryVM = new CategoryViewModel();
-
-        //    CategoryVM._id = Category.Id;
-        //    CategoryVM._deleted = Category._IsDeleted;
-        //    CategoryVM._active = Category.Active;
-        //    CategoryVM._createdDate = Category._CreatedUtc;
-        //    CategoryVM._createdBy = Category._CreatedBy;
-        //    CategoryVM._createAgent = Category._CreatedAgent;
-        //    CategoryVM._updatedDate = Category._LastModifiedUtc;
-        //    CategoryVM._updatedBy = Category._LastModifiedBy;
-        //    CategoryVM._updateAgent = Category._LastModifiedAgent;
-        //    CategoryVM.code = Category.Code;
-        //    CategoryVM.name = Category.Name;
-        //    CategoryVM.description = Category.Description;
-
-        //    return CategoryVM;
-        //}
-
-        //public Category MapToModel(CategoryViewModel CategoryVM)
-        //{
-        //    Category Category = new Category();
-
-        //    Category.Id = CategoryVM._id;
-        //    Category._IsDeleted = CategoryVM._deleted;
-        //    Category.Active = CategoryVM._active;
-        //    Category._CreatedUtc = CategoryVM._createdDate;
-        //    Category._CreatedBy = CategoryVM._createdBy;
-        //    Category._CreatedAgent = CategoryVM._createAgent;
-        //    Category._LastModifiedUtc = CategoryVM._updatedDate;
-        //    Category._LastModifiedBy = CategoryVM._updatedBy;
-        //    Category._LastModifiedAgent = CategoryVM._updateAgent;
-        //    Category.Code = CategoryVM.code;
-        //    Category.Name = CategoryVM.name;
-        //    Category.Description = CategoryVM.description;
-
-        //    return Category;
-        //}
     }
 }

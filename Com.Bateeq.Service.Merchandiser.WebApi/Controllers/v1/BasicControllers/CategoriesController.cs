@@ -9,7 +9,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/categories")]
-    public class CategoriesController : BasicController<CategoryService, Category, CategoryViewModel, MerchandiserDbContext>
+    public class CategoriesController : BasicController<CategoryService, Category, MerchandiserDbContext>
     {
         private static readonly string ApiVersion = "1.0";
 
@@ -17,5 +17,4 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
         {
         }
     }
-
 }

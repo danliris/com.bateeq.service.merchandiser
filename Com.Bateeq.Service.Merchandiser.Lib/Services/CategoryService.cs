@@ -23,7 +23,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             IQueryable<Category> Query = this.DbContext.Categories;
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
-            /* Search With Keyword */
+            // Search With Keyword
             if (Keyword != null)
             {
                 List<string> SearchAttributes = new List<string>()
@@ -34,7 +34,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 Query = Query.Where(General.BuildSearch(SearchAttributes, Keyword), Keyword);
             }
 
-            /* Const Select */
+            // Const Select
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "Name", "Description"
@@ -49,12 +49,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Description = b.Description
                 });
 
-            /* Order */
+            // Order
             if (OrderDictionary.Count.Equals(0))
             {
                 OrderDictionary.Add("_LastModifiedUtc", General.DESCENDING);
 
-                Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
+                Query = Query.OrderByDescending(b => b._LastModifiedUtc); // Default Order
             }
             else
             {
@@ -69,7 +69,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
             }
 
-            /* Pagination */
+            // Pagination
             Pageable<Category> pageable = new Pageable<Category>(Query, Page - 1, Size);
             List<Category> Data = pageable.Data.ToList<Category>();
 
@@ -78,44 +78,46 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
 
-        //public CategoryViewModel MapToViewModel(Category Category)
-        //{
-        //    CategoryViewModel CategoryVM = new CategoryViewModel();
+        /*
+        public CategoryViewModel MapToViewModel(Category Category)
+        {
+            CategoryViewModel CategoryVM = new CategoryViewModel();
 
-        //    CategoryVM._id = Category.Id;
-        //    CategoryVM._deleted = Category._IsDeleted;
-        //    CategoryVM._active = Category.Active;
-        //    CategoryVM._createdDate = Category._CreatedUtc;
-        //    CategoryVM._createdBy = Category._CreatedBy;
-        //    CategoryVM._createAgent = Category._CreatedAgent;
-        //    CategoryVM._updatedDate = Category._LastModifiedUtc;
-        //    CategoryVM._updatedBy = Category._LastModifiedBy;
-        //    CategoryVM._updateAgent = Category._LastModifiedAgent;
-        //    CategoryVM.code = Category.Code;
-        //    CategoryVM.name = Category.Name;
-        //    CategoryVM.description = Category.Description;
+            CategoryVM._id = Category.Id;
+            CategoryVM._deleted = Category._IsDeleted;
+            CategoryVM._active = Category.Active;
+            CategoryVM._createdDate = Category._CreatedUtc;
+            CategoryVM._createdBy = Category._CreatedBy;
+            CategoryVM._createAgent = Category._CreatedAgent;
+            CategoryVM._updatedDate = Category._LastModifiedUtc;
+            CategoryVM._updatedBy = Category._LastModifiedBy;
+            CategoryVM._updateAgent = Category._LastModifiedAgent;
+            CategoryVM.code = Category.Code;
+            CategoryVM.name = Category.Name;
+            CategoryVM.description = Category.Description;
 
-        //    return CategoryVM;
-        //}
+            return CategoryVM;
+        }
 
-        //public Category MapToModel(CategoryViewModel CategoryVM)
-        //{
-        //    Category Category = new Category();
+        public Category MapToModel(CategoryViewModel CategoryVM)
+        {
+            Category Category = new Category();
 
-        //    Category.Id = CategoryVM._id;
-        //    Category._IsDeleted = CategoryVM._deleted;
-        //    Category.Active = CategoryVM._active;
-        //    Category._CreatedUtc = CategoryVM._createdDate;
-        //    Category._CreatedBy = CategoryVM._createdBy;
-        //    Category._CreatedAgent = CategoryVM._createAgent;
-        //    Category._LastModifiedUtc = CategoryVM._updatedDate;
-        //    Category._LastModifiedBy = CategoryVM._updatedBy;
-        //    Category._LastModifiedAgent = CategoryVM._updateAgent;
-        //    Category.Code = CategoryVM.code;
-        //    Category.Name = CategoryVM.name;
-        //    Category.Description = CategoryVM.description;
+            Category.Id = CategoryVM._id;
+            Category._IsDeleted = CategoryVM._deleted;
+            Category.Active = CategoryVM._active;
+            Category._CreatedUtc = CategoryVM._createdDate;
+            Category._CreatedBy = CategoryVM._createdBy;
+            Category._CreatedAgent = CategoryVM._createAgent;
+            Category._LastModifiedUtc = CategoryVM._updatedDate;
+            Category._LastModifiedBy = CategoryVM._updatedBy;
+            Category._LastModifiedAgent = CategoryVM._updateAgent;
+            Category.Code = CategoryVM.code;
+            Category.Name = CategoryVM.name;
+            Category.Description = CategoryVM.description;
 
-        //    return Category;
-        //}
+            return Category;
+        }
+        */
     }
 }

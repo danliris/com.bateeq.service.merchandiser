@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Com.Bateeq.Service.Merchandiser.Lib
+namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
 {
     public class CategoryViewModel
     {

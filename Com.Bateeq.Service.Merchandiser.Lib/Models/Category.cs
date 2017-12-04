@@ -21,18 +21,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         {
             List<ValidationResult> validationResult = new List<ValidationResult>();
 
+            // Model level validation
             if (string.IsNullOrWhiteSpace(this.Code))
                 validationResult.Add(new ValidationResult("Code is required", new List<string> { "Code" }));
 
             if (string.IsNullOrWhiteSpace(this.Name))
                 validationResult.Add(new ValidationResult("Name is required", new List<string> { "Name" }));
 
+            // Service-DB level validation
             if (validationResult.Count.Equals(0))
             {
-                /* Service Validation */
                 CategoryService service = (CategoryService)validationContext.GetService(typeof(CategoryService));
 
-                if (service.DbContext.Set<Category>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0) /* Code Unique */
+                if (service.DbContext.Set<Category>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
                     validationResult.Add(new ValidationResult("Code already exists", new List<string> { "Code" }));
             }
 

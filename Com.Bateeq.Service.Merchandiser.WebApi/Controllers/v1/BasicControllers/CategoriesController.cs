@@ -12,7 +12,6 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
     public class CategoriesController : BasicController<CategoryService, Category, MerchandiserDbContext>
     {
         private static readonly string ApiVersion = "1.0";
-
         public CategoriesController(CategoryService service) : base(service, ApiVersion)
         {
         }

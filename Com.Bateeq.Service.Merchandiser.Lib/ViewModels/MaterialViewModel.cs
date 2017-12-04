@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Com.Bateeq.Service.Merchandiser.WebApi.v1.ViewModels
+namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
 {
-    public class CategoryViewModel
+    public class MaterialViewModel
     {
         public int _id { get; set; }
 

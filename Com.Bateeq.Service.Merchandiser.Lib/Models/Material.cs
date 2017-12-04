@@ -6,8 +6,10 @@ using System.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 {
-    public class Category : StandardEntity, IValidatableObject
+    public class Material : StandardEntity, IValidatableObject
     {
+        public int CategoryId { get; set; }
+
         [StringLength(100)]
         public string Code { get; set; }
 
@@ -16,6 +18,18 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 
         [StringLength(3000)]
         public string Description { get; set; }
+
+        [StringLength(500)]
+        public string Composition { get; set; }
+
+        [StringLength(500)]
+        public string Construction { get; set; }
+
+        [StringLength(500)]
+        public string Width { get; set; }
+
+        [StringLength(500)]
+        public string Yarn { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -31,9 +45,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
             // Service-DB level validation
             if (validationResult.Count.Equals(0))
             {
-                CategoryService service = (CategoryService)validationContext.GetService(typeof(CategoryService));
+                MaterialService service = (MaterialService)validationContext.GetService(typeof(MaterialService));
 
-                if (service.DbContext.Set<Category>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
+                if (service.DbContext.Set<Material>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
                     validationResult.Add(new ValidationResult("Code already exists", new List<string> { "Code" }));
             }
 

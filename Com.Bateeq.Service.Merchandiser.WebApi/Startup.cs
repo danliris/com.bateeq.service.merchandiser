@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Com.Bateeq.Service.Merchandiser.Lib;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Services;
 using Microsoft.AspNetCore.Mvc;
 using IdentityServer4.AccessTokenValidation;
 using IdentityModel;
+using Newtonsoft.Json.Serialization;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi
 {
@@ -32,8 +27,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
             //string connectionString = Configuration.GetConnectionString("DefaultConnection") ?? Configuration["DefaultConnection"];
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser;Trusted_Connection=True;";
             services
-                .AddDbContext<CoreDbContext>(options => options.UseSqlServer(connectionString))
-                .AddTransient<CategoryService>()
+                .AddDbContext<MerchandiserDbContext>(options => options.UseSqlServer(connectionString))
                 .AddApiVersioning(options =>
                 {
                     options.ReportApiVersions = true;
@@ -41,6 +35,9 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                     options.DefaultApiVersion = new ApiVersion(1, 0);
                 });
 
+            services
+                .AddTransient<CategoryService>()
+                .AddTransient<MaterialService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
@@ -55,6 +52,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
 
             services
                 .AddMvcCore()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
                 .AddAuthorization(options =>
                 {
                     options.AddPolicy("service.core.read", (policyBuilder) =>
@@ -63,7 +61,14 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                     });
                 })
                 .AddJsonFormatters();
-            services.AddMvc();
+
+            services.AddCors(options => options.AddPolicy("MerchandiserPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+            //services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +78,8 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseAuthentication();
+            app.UseCors("MerchandiserPolicy");
             app.UseMvc();
         }
     }

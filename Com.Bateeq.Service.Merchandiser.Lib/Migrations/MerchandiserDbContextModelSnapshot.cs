@@ -72,6 +72,73 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.ToTable("Categories");
                 });
+
+            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Composition")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Construction")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(3000);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Width")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Yarn")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Materials");
+                });
 #pragma warning restore 612, 618
         }
     }

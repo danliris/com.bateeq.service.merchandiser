@@ -28,7 +28,6 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser;Trusted_Connection=True;";
             services
                 .AddDbContext<MerchandiserDbContext>(options => options.UseSqlServer(connectionString))
-                .AddTransient<CategoryService>()
                 .AddApiVersioning(options =>
                 {
                     options.ReportApiVersions = true;
@@ -36,6 +35,9 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                     options.DefaultApiVersion = new ApiVersion(1, 0);
                 });
 
+            services
+                .AddTransient<CategoryService>()
+                .AddTransient<MaterialService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>

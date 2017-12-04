@@ -23,7 +23,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             IQueryable<Material> Query = this.DbContext.Materials;
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
-            /* Search With Keyword */
+            // Search With Keyword
             if (Keyword != null)
             {
                 List<string> SearchAttributes = new List<string>()
@@ -34,10 +34,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 Query = Query.Where(General.BuildSearch(SearchAttributes, Keyword), Keyword);
             }
 
-            /* Const Select */
+            // Const Select
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name", "Description"
+                    "Id", "Code", "Name", "Description", "CategoryId"
                 };
 
             Query = Query
@@ -46,15 +46,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Id = b.Id,
                     Code = b.Code,
                     Name = b.Name,
-                    Description = b.Description
+                    Description = b.Description,
+                    CategoryId = b.CategoryId
                 });
 
-            /* Order */
+            // Order
             if (OrderDictionary.Count.Equals(0))
             {
                 OrderDictionary.Add("_LastModifiedUtc", General.DESCENDING);
 
-                Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
+                Query = Query.OrderByDescending(b => b._LastModifiedUtc); // Default Order
             }
             else
             {
@@ -69,7 +70,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
             }
 
-            /* Pagination */
+            // Pagination
             Pageable<Material> pageable = new Pageable<Material>(Query, Page - 1, Size);
             List<Material> Data = pageable.Data.ToList<Material>();
 

@@ -10,7 +10,7 @@ using Com.Moonlay.NetCore.Lib.Service;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Com.Bateeq.Service.Merchandiser.Test.Services
+namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
 {
     public abstract class BasicServiceTest<TDbContext, TService, TModel> : IDisposable
         where TDbContext : DbContext

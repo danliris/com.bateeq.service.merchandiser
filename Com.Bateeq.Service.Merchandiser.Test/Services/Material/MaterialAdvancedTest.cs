@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Models = Com.Bateeq.Service.Merchandiser.Lib.Models;
-using System.Text;
 using Xunit;
 
 namespace Com.Bateeq.Service.Merchandiser.Test.Services.Material

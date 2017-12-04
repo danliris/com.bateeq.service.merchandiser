@@ -1,9 +1,9 @@
 using Com.Bateeq.Service.Merchandiser.Lib;
 using Com.Bateeq.Service.Merchandiser.Lib.Services;
 using Models = Com.Bateeq.Service.Merchandiser.Lib.Models;
-using Com.Bateeq.Service.Merchandiser.Test.Services;
 using System;
 using Xunit;
+using Com.Bateeq.Service.Merchandiser.Test.Helpers;
 
 namespace Com.Bateeq.Service.Merchandiser.Test.Service.Category
 {

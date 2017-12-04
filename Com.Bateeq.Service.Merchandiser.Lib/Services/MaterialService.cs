@@ -1,5 +1,4 @@
 ﻿using Com.Bateeq.Service.Merchandiser.Lib.Models;
-using Com.Moonlay.NetCore.Lib.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,6 @@ using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
-using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {

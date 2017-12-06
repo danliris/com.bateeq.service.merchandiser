@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchand
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchandiser.WebApi", "Com.Bateeq.Service.Merchandiser.WebApi\Com.Bateeq.Service.Merchandiser.WebApi.csproj", "{62618CE7-9DF3-49B1-A56B-7573A41D276D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Bateeq.Service.Merchandiser.Test", "Com.Bateeq.Service.Merchandiser.Test\Com.Bateeq.Service.Merchandiser.Test.csproj", "{FB623A13-CD98-473A-8D16-683BFB50C976}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchandiser.Test", "Com.Bateeq.Service.Merchandiser.Test\Com.Bateeq.Service.Merchandiser.Test.csproj", "{FB623A13-CD98-473A-8D16-683BFB50C976}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{93D576CD-ACB7-4087-B422-4980B3885BD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{FB623A13-CD98-473A-8D16-683BFB50C976}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB623A13-CD98-473A-8D16-683BFB50C976}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB623A13-CD98-473A-8D16-683BFB50C976}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93D576CD-ACB7-4087-B422-4980B3885BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93D576CD-ACB7-4087-B422-4980B3885BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93D576CD-ACB7-4087-B422-4980B3885BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93D576CD-ACB7-4087-B422-4980B3885BD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

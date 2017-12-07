@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.0</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>93d576cd-acb7-4087-b422-4980b3885bd5</ProjectGuid>
+    <ProjectGuid>f1f0fb22-ad78-4e21-be65-1c2e1efb7d04</ProjectGuid>
     <DockerLaunchBrowser>True</DockerLaunchBrowser>
     <DockerServiceUrl>http://localhost:{ServicePort}/api/values</DockerServiceUrl>
     <DockerServiceName>com.bateeq.service.merchandiser.webapi</DockerServiceName>

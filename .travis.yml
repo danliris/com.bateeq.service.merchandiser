@@ -34,9 +34,3 @@ after_success:
 
     - docker tag com-bateeq-service-merchandiser-webapi:test stvyangm/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
     - docker push stvyangm/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
-
-# deploy:
-#   provider: azure_web_apps
-#   username: "efrata.retailindo@gmail.com"
-#   password: "Standar123."
-#   site: "http://com-bateeq-service-merchandiser.azurewebsites.net"

@@ -29,11 +29,11 @@ script:
 after_success:
     - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
       
-    - docker tag com-bateeq-service-merchandiser-webapi:test bateeq/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
-    - docker push bateeq/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
+    - docker tag com-bateeq-service-merchandiser-webapi:test stvyangm/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
+    - docker push stvyangm/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
 
-    - docker tag com-bateeq-service-merchandiser-webapi:test bateeq/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
-    - docker push bateeq/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
+    - docker tag com-bateeq-service-merchandiser-webapi:test stvyangm/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
+    - docker push stvyangm/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
 
 # deploy:
 #   provider: azure_web_apps

@@ -20,24 +20,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> validationResult = new List<ValidationResult>();
-
-            // Model level validation
+            CategoryService service = (CategoryService)validationContext.GetService(typeof(CategoryService));
+            
             if (string.IsNullOrWhiteSpace(this.Code))
-                validationResult.Add(new ValidationResult("Code is required", new List<string> { "Code" }));
+                yield return new ValidationResult("Kode harus diisi", new List<string> { "Code" });
+            else if (service.DbContext.Set<Category>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
+                yield return new ValidationResult("Kode sudah terdaftar", new List<string> { "Code" });
 
             if (string.IsNullOrWhiteSpace(this.Name))
-                validationResult.Add(new ValidationResult("Name is required", new List<string> { "Name" }));
-
-            // Service-DB level validation
-            if (validationResult.Count.Equals(0))
-            {
-                CategoryService service = (CategoryService)validationContext.GetService(typeof(CategoryService));
-
-                if (service.DbContext.Set<Category>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
-                    validationResult.Add(new ValidationResult("Code already exists", new List<string> { "Code" }));
-            }
-
-            return validationResult;
+                yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });
         }
     }
 }

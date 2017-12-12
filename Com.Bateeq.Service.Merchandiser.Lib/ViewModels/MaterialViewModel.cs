@@ -4,28 +4,45 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
 {
     public class MaterialViewModel
     {
-        public int _id { get; set; }
+        public int Id { get; set; }
 
-        public bool _deleted { get; set; }
+        public bool _IsDeleted { get; set; }
 
-        public bool _active { get; set; }
+        public bool Active { get; set; }
 
-        public DateTime _createdDate { get; set; }
+        public DateTime _CreatedUtc { get; set; }
 
-        public string _createdBy { get; set; }
+        public string _CreatedBy { get; set; }
 
-        public string _createAgent { get; set; }
+        public string _CreatedAgent { get; set; }
 
-        public DateTime _updatedDate { get; set; }
+        public DateTime _LastModifiedUtc { get; set; }
 
-        public string _updatedBy { get; set; }
+        public string _LastModifiedBy { get; set; }
 
-        public string _updateAgent { get; set; }
+        public string _LastModifiedAgent { get; set; }
 
-        public string code { get; set; }
+        public string Code { get; set; }
 
-        public string name { get; set; }
+        public string Name { get; set; }
 
-        public string description { get; set; }
+        public string Description { get; set; }
+
+        public string Composition { get; set; }
+
+        public string Construction { get; set; }
+
+        public string Width { get; set; }
+
+        public string Yarn { get; set; }
+
+        public MaterialCategoryViewModel Category { get; set; }
+    }
+
+    public class MaterialCategoryViewModel
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
     }
 }

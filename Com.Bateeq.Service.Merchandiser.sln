@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchand
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchandiser.Test", "Com.Bateeq.Service.Merchandiser.Test\Com.Bateeq.Service.Merchandiser.Test.csproj", "{FB623A13-CD98-473A-8D16-683BFB50C976}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F1F0FB22-AD78-4E21-BE65-1C2E1EFB7D04}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{FB623A13-CD98-473A-8D16-683BFB50C976}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB623A13-CD98-473A-8D16-683BFB50C976}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB623A13-CD98-473A-8D16-683BFB50C976}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1F0FB22-AD78-4E21-BE65-1C2E1EFB7D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1F0FB22-AD78-4E21-BE65-1C2E1EFB7D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1F0FB22-AD78-4E21-BE65-1C2E1EFB7D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1F0FB22-AD78-4E21-BE65-1C2E1EFB7D04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

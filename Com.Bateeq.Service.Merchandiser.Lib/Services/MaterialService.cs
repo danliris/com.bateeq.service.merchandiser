@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
+using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
+using System.Threading.Tasks;
+using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
+using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
-    public class MaterialService : BasicService<MerchandiserDbContext, Material>
+    public class MaterialService : BasicService<MerchandiserDbContext, Material>, IMap<Material, MaterialViewModel>
     {
         public MaterialService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
@@ -35,7 +39,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             // Const Select
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name", "Description", "CategoryId"
+                    "Id", "Code", "Name", "Description", "Category"
                 };
 
             Query = Query
@@ -75,6 +79,32 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+        
+        public MaterialViewModel MapToViewModel(Material material)
+        {
+            MaterialViewModel materialVM = new MaterialViewModel();
+            materialVM.Category = new MaterialCategoryViewModel();
+            PropertyCopier<Material, MaterialViewModel>.Copy(material, materialVM);
+
+            CategoryService categoryService = this.ServiceProvider.GetService<CategoryService>();
+            Task<Category> materialCategory = Task.Run(() => categoryService.GetAsync(material.CategoryId));
+            materialCategory.Wait();
+            
+            materialVM.Category.Id = materialCategory.Result.Id;
+            materialVM.Category.Name = materialCategory.Result.Name;
+
+            return materialVM;
+        }
+
+        public Material MapToModel(MaterialViewModel materialVM)
+        {
+            Material material = new Material();
+            PropertyCopier<MaterialViewModel, Material>.Copy(materialVM, material);
+
+            material.CategoryId = materialVM.Category.Id;
+
+            return material;
         }
     }
 }

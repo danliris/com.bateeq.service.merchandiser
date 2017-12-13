@@ -13,8 +13,8 @@ namespace Com.Bateeq.Service.Merchandiser.Test
         public IServiceProvider ServiceProvider { get; private set; }
         public ServiceProviderFixture()
         {
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser.test;Trusted_Connection=True;";
-            //string connectionString = "Server=localhost,1401;Database=com.bateeq.db.merchandiser.test;User=sa;password=Standar123;MultipleActiveResultSets=true";
+            //string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser.test;Trusted_Connection=True;";
+            string connectionString = "Server=localhost,1401;Database=com.bateeq.db.merchandiser.test;User=sa;password=Standar123;MultipleActiveResultSets=true";
             this.ServiceProvider = new ServiceCollection()
 
                 .AddDbContext<MerchandiserDbContext>((serviceProvider, options) =>

@@ -17,7 +17,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             UOMService service = (UOMService)validationContext.GetService(typeof(UOMService));
-
+            //Test
             if (string.IsNullOrWhiteSpace(this.Code))
                 yield return new ValidationResult("Kode harus diisi", new List<string> { "Code" });
             else if (service.DbContext.Set<UOM>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)

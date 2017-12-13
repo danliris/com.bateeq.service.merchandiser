@@ -23,6 +23,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test
                 }, ServiceLifetime.Transient)
                 .AddTransient<CategoryService>(provider => new CategoryService(provider))
                 .AddTransient<MaterialService>(provider => new MaterialService(provider))
+                .AddTransient<UOMService>(provider => new UOMService(provider))
                 .AddTransient<CategoryServiceDataUtil>()
                 .BuildServiceProvider();
             

@@ -33,13 +33,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            List<ValidationResult> validationResult = new List<ValidationResult>();
             MaterialService service = (MaterialService)validationContext.GetService(typeof(MaterialService));
             
             if (string.IsNullOrWhiteSpace(this.Code))
                 yield return new ValidationResult("Kode harus diisi", new List<string> { "Code" });
             else if (service.DbContext.Set<Material>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
-                yield return new ValidationResult("Kode sudah terdaftar", new List<string> { "Code" });
+                yield return new ValidationResult("Kode material sudah ada", new List<string> { "Code" });
 
             if (string.IsNullOrWhiteSpace(this.Name))
                 yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });

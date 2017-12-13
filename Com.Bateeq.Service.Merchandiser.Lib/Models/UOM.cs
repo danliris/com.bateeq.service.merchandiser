@@ -14,9 +14,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         [StringLength(500)]
         public string Name { get; set; }
 
-        [StringLength(3000)]
-        public string Description { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             UOMService service = (UOMService)validationContext.GetService(typeof(UOMService));

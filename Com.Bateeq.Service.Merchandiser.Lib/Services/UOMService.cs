@@ -10,15 +10,15 @@ using Com.Moonlay.NetCore.Lib;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
-    public class CategoryService : BasicService<MerchandiserDbContext, Category>
+    public class UOMService : BasicService<MerchandiserDbContext, UOM>
     {
-        public CategoryService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public UOMService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
-        public override Tuple<List<Category>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
+        public override Tuple<List<UOM>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
         {
-            IQueryable<Category> Query = this.DbContext.Categories;
+            IQueryable<UOM> Query = this.DbContext.UOMs;
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
             // Search With Keyword
@@ -35,16 +35,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             // Const Select
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name", "Description"
+                    "Id", "Code", "Name"
                 };
 
             Query = Query
-                .Select(b => new Category
+                .Select(b => new UOM
                 {
                     Id = b.Id,
                     Code = b.Code,
-                    Name = b.Name,
-                    Description = b.Description
+                    Name = b.Name
                 });
 
             // Order
@@ -68,8 +67,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
 
             // Pagination
-            Pageable<Category> pageable = new Pageable<Category>(Query, Page - 1, Size);
-            List<Category> Data = pageable.Data.ToList<Category>();
+            Pageable<UOM> pageable = new Pageable<UOM>(Query, Page - 1, Size);
+            List<UOM> Data = pageable.Data.ToList<UOM>();
 
             int TotalData = pageable.TotalCount;
 

@@ -11,11 +11,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
     {
         public MerchandiserDbContext(DbContextOptions<MerchandiserDbContext> options) : base(options)
         {
-
         }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Material> Materials { get; set; }
+        public DbSet<UOM> UOMs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

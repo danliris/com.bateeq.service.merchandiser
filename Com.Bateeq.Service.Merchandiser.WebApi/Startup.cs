@@ -24,8 +24,8 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //string connectionString = Configuration.GetConnectionString("DefaultConnection") ?? Configuration["DefaultConnection"];
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser;Trusted_Connection=True;";
+            string connectionString = Configuration.GetConnectionString("DefaultConnection") ?? Configuration["DefaultConnection"];
+
             services
                 .AddDbContext<MerchandiserDbContext>(options => options.UseSqlServer(connectionString))
                 .AddApiVersioning(options =>
@@ -37,7 +37,8 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
 
             services
                 .AddTransient<CategoryService>()
-                .AddTransient<MaterialService>();
+                .AddTransient<MaterialService>()
+                .AddTransient<UOMService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>

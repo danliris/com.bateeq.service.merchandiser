@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 {
-    public class Category : StandardEntity, IValidatableObject
+    public class Size : StandardEntity, IValidatableObject
     {
         [StringLength(100)]
         public string Code { get; set; }
@@ -14,17 +14,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         [StringLength(500)]
         public string Name { get; set; }
 
-        [StringLength(3000)]
-        public string Description { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            CategoryService service = (CategoryService)validationContext.GetService(typeof(CategoryService));
-            
+            UOMService service = (UOMService)validationContext.GetService(typeof(UOMService));
+
             if (string.IsNullOrWhiteSpace(this.Code))
                 yield return new ValidationResult("Kode harus diisi", new List<string> { "Code" });
-            else if (service.DbContext.Set<Category>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
-                yield return new ValidationResult("Kode kategori sudah ada", new List<string> { "Code" });
+            else if (service.DbContext.Set<UOM>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
+                yield return new ValidationResult("Kode satuan sudah ada", new List<string> { "Code" });
 
             if (string.IsNullOrWhiteSpace(this.Name))
                 yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });

@@ -1,1 +1,32 @@
+sudo: required
+dist: trusty
+language: csharp
+mono: none
+dotnet: 2.0.0
+solution: Com.Bateeq.Service.Merchandiser.sln
+services:
+    - docker
+env:
+    - ASPNETCORE_ENVIRONMENT=Test 
 
+before_install:
+    - bash Dockerfile.test.build.sh
+install: true
+
+before_script:
+    - docker-compose -f docker-compose.test.yml up -d
+    - sleep 60
+
+script:
+    - dotnet restore Com.Bateeq.Service.Merchandiser.Test/Com.Bateeq.Service.Merchandiser.Test.csproj
+    - dotnet build Com.Bateeq.Service.Merchandiser.Test/Com.Bateeq.Service.Merchandiser.Test.csproj
+    - dotnet test Com.Bateeq.Service.Merchandiser.Test/Com.Bateeq.Service.Merchandiser.Test.csproj
+
+after_success:
+    - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      
+    - docker tag com-bateeq-service-merchandiser-webapi:test efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
+    - docker push efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
+
+    - docker tag com-bateeq-service-merchandiser-webapi:test efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
+    - docker push efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;

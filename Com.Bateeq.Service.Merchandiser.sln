@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchand
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchandiser.WebApi", "Com.Bateeq.Service.Merchandiser.WebApi\Com.Bateeq.Service.Merchandiser.WebApi.csproj", "{62618CE7-9DF3-49B1-A56B-7573A41D276D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Bateeq.Service.Merchandiser.Test", "Com.Bateeq.Service.Merchandiser.Test\Com.Bateeq.Service.Merchandiser.Test.csproj", "{FB623A13-CD98-473A-8D16-683BFB50C976}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Bateeq.Service.Merchandiser.Test", "Com.Bateeq.Service.Merchandiser.Test\Com.Bateeq.Service.Merchandiser.Test.csproj", "{FB623A13-CD98-473A-8D16-683BFB50C976}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

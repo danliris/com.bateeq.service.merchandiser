@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 {
-    public class UOM : StandardEntity, IValidatableObject
+    public class Size : StandardEntity, IValidatableObject
     {
         [StringLength(100)]
         public string Code { get; set; }
@@ -25,8 +25,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 
             if (string.IsNullOrWhiteSpace(this.Name))
                 yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });
-            else if (int.TryParse(this.Name, out int n))
-                yield return new ValidationResult("Satuan hanya berupa huruf", new List<string> { "Name" });
         }
     }
 }

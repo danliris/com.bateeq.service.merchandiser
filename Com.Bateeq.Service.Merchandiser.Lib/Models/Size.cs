@@ -16,11 +16,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            UOMService service = (UOMService)validationContext.GetService(typeof(UOMService));
+            SizeService service = (SizeService)validationContext.GetService(typeof(SizeService));
 
             if (string.IsNullOrWhiteSpace(this.Code))
                 yield return new ValidationResult("Kode harus diisi", new List<string> { "Code" });
-            else if (service.DbContext.Set<UOM>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
+            else if (service.DbContext.Set<Size>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
                 yield return new ValidationResult("Kode satuan sudah ada", new List<string> { "Code" });
 
             if (string.IsNullOrWhiteSpace(this.Name))

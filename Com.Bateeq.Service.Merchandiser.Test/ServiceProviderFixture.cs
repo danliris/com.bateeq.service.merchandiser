@@ -13,8 +13,12 @@ namespace Com.Bateeq.Service.Merchandiser.Test
         public IServiceProvider ServiceProvider { get; private set; }
         public ServiceProviderFixture()
         {
+            /* For unit test by local machine (using localdb) */
             //string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser.test;Trusted_Connection=True;";
-            string connectionString = "Server=localhost,1401;Database=com.bateeq.db.merchandiser.test;User=sa;password=Standar123;MultipleActiveResultSets=true";
+
+            /* For unit test by Travis CI (using docker container mssql) */
+            string connectionString = "Server=localhost,1401;Database=com.bateeq.db.merchandiser.test;User=sa;password=Standar123;MultipleActiveResultSets=true;";
+
             this.ServiceProvider = new ServiceCollection()
 
                 .AddDbContext<MerchandiserDbContext>((serviceProvider, options) =>
@@ -24,6 +28,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test
                 .AddTransient<CategoryService>(provider => new CategoryService(provider))
                 .AddTransient<MaterialService>(provider => new MaterialService(provider))
                 .AddTransient<UOMService>(provider => new UOMService(provider))
+                .AddTransient<SizeService>(provider => new SizeService(provider))
                 .AddTransient<CategoryServiceDataUtil>()
                 .BuildServiceProvider();
             

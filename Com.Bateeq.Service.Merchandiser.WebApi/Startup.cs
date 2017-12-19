@@ -70,6 +70,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+
             //services.AddMvc();
         }
 
@@ -79,6 +80,11 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<MerchandiserDbContext>();
+                context.Database.Migrate();
             }
             app.UseAuthentication();
             app.UseCors("MerchandiserPolicy");

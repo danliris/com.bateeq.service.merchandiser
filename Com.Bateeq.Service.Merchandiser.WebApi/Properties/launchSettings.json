@@ -14,7 +14,14 @@
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser;Trusted_Connection=True;"
+        /* Docker Database */
+        //"DefaultConnection": "Server=localhost,1401;Database=com.bateeq.db.merchandiser;User=sa;password=Standar123;MultipleActiveResultSets=true;"
+
+        /* Azure Database */
+        "DefaultConnection": "Server=tcp:com-bateeq-db-dev.database.windows.net,1433;Initial Catalog=com-bateeq-merchandiser-db-dev;Persist Security Info=False;User ID=efrata.retailindo;Password=Standar123.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+        /* Local Database */
+        //"DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=com.bateeq.db.merchandiser;Trusted_Connection=True;"
       }
     },
     "Com.Bateeq.Service.Merchandiser.WebApi": {

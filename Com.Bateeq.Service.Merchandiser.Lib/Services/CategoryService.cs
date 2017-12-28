@@ -26,7 +26,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                     {
-                        "Code", "Name"
+                        "Name", "SubCategory"
                     };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes, Keyword), Keyword);
@@ -35,7 +35,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             // Const Select
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name", "Description"
+                    "Id", "Code", "Name", "SubCategory"
                 };
 
             Query = Query
@@ -44,7 +44,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Id = b.Id,
                     Code = b.Code,
                     Name = b.Name,
-                    Description = b.Description
+                    SubCategory = b.SubCategory
                 });
 
             // Order
@@ -74,6 +74,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+
+        public override void OnCreating(Category model)
+        {
+            CodeGenerator codeGenerator = new CodeGenerator();
+
+            do
+            {
+                model.Code = codeGenerator.GenerateCode();
+            }
+            while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
+
+            base.OnCreating(model);
         }
     }
 }

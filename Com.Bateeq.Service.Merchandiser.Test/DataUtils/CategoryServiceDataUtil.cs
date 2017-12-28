@@ -30,7 +30,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.DataUtils
                 {
                     Code = "Test",
                     Name = "Test Category",
-                    Description = "Test Category Description"
+                    SubCategory = "Test Category Sub Category"
                 };
                 int id = CategoryService.Create(testCategory);
                 return CategoryService.GetAsync(id);

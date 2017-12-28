@@ -17,6 +17,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<Material> Materials { get; set; }
         public DbSet<UOM> UOMs { get; set; }
         public DbSet<Size> Sizes { get; set; }
+        public DbSet<OTL> OTLs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

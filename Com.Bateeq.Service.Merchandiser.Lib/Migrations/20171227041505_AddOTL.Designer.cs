@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171227041505_AddOTL")]
+    partial class AddOTL
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,10 +31,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Code")
                         .HasMaxLength(100);
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(500);
+                    b.Property<string>("Description")
+                        .HasMaxLength(3000);
 
-                    b.Property<string>("SubCategory")
+                    b.Property<string>("Name")
                         .HasMaxLength(500);
 
                     b.Property<string>("_CreatedAgent")
@@ -153,7 +154,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("Rate");
+                    b.Property<int>("Rate");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()

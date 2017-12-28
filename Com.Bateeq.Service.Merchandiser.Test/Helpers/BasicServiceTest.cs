@@ -198,7 +198,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
             }
             catch (ServiceValidationExeption ex)
             {
-                this.AssertCreateEmpty(ex);
+                this.AssertUpdateEmpty(ex);
             }
         }
 

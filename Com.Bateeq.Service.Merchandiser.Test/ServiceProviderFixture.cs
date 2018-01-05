@@ -30,6 +30,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test
                 .AddTransient<UOMService>(provider => new UOMService(provider))
                 .AddTransient<SizeService>(provider => new SizeService(provider))
                 .AddTransient<OTLService>(provider => new OTLService(provider))
+                .AddTransient<BuyerService>(provider => new BuyerService(provider))
                 .AddTransient<CategoryServiceDataUtil>()
                 .BuildServiceProvider();
             

@@ -40,7 +40,8 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                 .AddTransient<MaterialService>()
                 .AddTransient<UOMService>()
                 .AddTransient<SizeService>()
-                .AddTransient<OTLService>();
+                .AddTransient<OTLService>()
+                .AddTransient<BuyerService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>

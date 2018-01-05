@@ -8,10 +8,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 {
     public class Size : StandardEntity, IValidatableObject
     {
-        [StringLength(100)]
         public string Code { get; set; }
-
-        [StringLength(500)]
         public string Name { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

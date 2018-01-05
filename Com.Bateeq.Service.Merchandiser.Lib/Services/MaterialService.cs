@@ -14,7 +14,7 @@ using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
-    public class MaterialService : BasicService<MerchandiserDbContext, Material>, IMap<Material, MaterialViewModel>
+    public class MaterialService : BasicService<MerchandiserDbContext, Material>
     {
         public MaterialService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
@@ -39,17 +39,18 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             // Const Select
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name", "Description", "Category"
+                    "Id", "Code", "Name", "Description", "Category", "CategoryId"
                 };
 
             Query = Query
-                .Select(b => new Material
+                .Select(m => new Material
                 {
-                    Id = b.Id,
-                    Code = b.Code,
-                    Name = b.Name,
-                    Description = b.Description,
-                    CategoryId = b.CategoryId
+                    Id = m.Id,
+                    Code = m.Code,
+                    Name = m.Name,
+                    Description = m.Description,
+                    Category = m.Category,
+                    CategoryId = m.CategoryId
                 });
 
             // Order
@@ -75,36 +76,67 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             // Pagination
             Pageable<Material> pageable = new Pageable<Material>(Query, Page - 1, Size);
             List<Material> Data = pageable.Data.ToList<Material>();
-
             int TotalData = pageable.TotalCount;
+
+            //IQueryable<Category> categoryQuery = this.DbContext.Categories;
+            //foreach (Material material in Data)
+            //{
+            //    var category = categoryQuery
+            //        .Select(c => new Category
+            //        {
+            //            Id = c.Id,
+            //            Code = c.Code,
+            //            Name = c.Name,
+            //            SubCategory = c.SubCategory
+            //        })
+            //        .Where(c => c.Id == material.CategoryId)
+            //        .FirstOrDefault();
+            //    material.Category = (Category) category;
+            //}
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
-        
-        public MaterialViewModel MapToViewModel(Material material)
+
+        public override async Task<int> CreateModel(Material Model)
         {
-            MaterialViewModel materialVM = new MaterialViewModel();
-            materialVM.Category = new MaterialCategoryViewModel();
-            PropertyCopier<Material, MaterialViewModel>.Copy(material, materialVM);
+            if (Model.Category != null)
+                Model.CategoryId = Model.Category.Id;
+            Model.Category = null;
 
-            CategoryService categoryService = this.ServiceProvider.GetService<CategoryService>();
-            Task<Category> materialCategory = Task.Run(() => categoryService.GetAsync(material.CategoryId));
-            materialCategory.Wait();
-            
-            materialVM.Category.Id = materialCategory.Result.Id;
-            materialVM.Category.Name = materialCategory.Result.Name;
-
-            return materialVM;
+            return await this.CreateAsync(Model);
         }
 
-        public Material MapToModel(MaterialViewModel materialVM)
+        public override async Task<Material> ReadModelById(int Id)
         {
-            Material material = new Material();
-            PropertyCopier<MaterialViewModel, Material>.Copy(materialVM, material);
+            var model = await this.GetAsync(Id);
 
-            material.CategoryId = materialVM.Category.Id;
+            CategoryService categoryService = this.ServiceProvider.GetService<CategoryService>();
+            model.Category = await categoryService.ReadModelById(model.CategoryId);
+            model.Category.Materials = null;
 
-            return material;
+            return model;
+        }
+
+        public override async Task<int> UpdateModel(int Id, Material Model)
+        {
+            if (Model.Category != null)
+                Model.CategoryId = Model.Category.Id;
+            Model.Category = null;
+
+            return await this.UpdateAsync(Id, Model);
+        }
+
+        public override void OnCreating(Material model)
+        {
+            CodeGenerator codeGenerator = new CodeGenerator();
+
+            do
+            {
+                model.Code = codeGenerator.GenerateCode();
+            }
+            while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
+
+            base.OnCreating(model);
         }
     }
 }

@@ -1,12 +1,15 @@
 ﻿using Com.Bateeq.Service.Merchandiser.Lib.Models;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Newtonsoft.Json;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -74,6 +77,36 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+
+        public override async Task<int> DeleteModel(int Id)
+        {
+            MaterialService materialService = this.ServiceProvider.GetService<MaterialService>();
+
+            int deleted = 0;
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    deleted = await this.DeleteAsync(Id);
+
+                    List<Material> includedMaterials = this.DbContext.Materials
+                        .Where(m => m.CategoryId == Id && m._IsDeleted == false)
+                        .ToList();
+                    foreach (Material m in includedMaterials)
+                    {
+                        await materialService.DeleteModel(m.Id);
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                }
+            }
+
+            return deleted;
         }
 
         public override void OnCreating(Category model)

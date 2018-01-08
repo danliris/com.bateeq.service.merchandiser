@@ -111,9 +111,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             var model = await this.GetAsync(Id);
 
             CategoryService categoryService = this.ServiceProvider.GetService<CategoryService>();
-            model.Category = await categoryService.ReadModelById(model.CategoryId);
-            model.Category.Materials = null;
-
+            if (model.CategoryId != null)
+            {
+                model.Category = await categoryService.ReadModelById((int)model.CategoryId);
+                model.Category.Materials = null;
+            }
+            
             return model;
         }
 

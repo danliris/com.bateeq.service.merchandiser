@@ -22,7 +22,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Configs
             builder
                 .HasOne(m => m.Category)
                 .WithMany(c => c.Materials)
-                .HasForeignKey(m => m.CategoryId);
+                .HasForeignKey(m => m.CategoryId)
+                .IsRequired();
         }
     }
 }

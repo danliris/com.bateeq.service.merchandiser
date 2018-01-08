@@ -26,7 +26,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                     {
-                        "Name", "Email"
+                        "InitialRange", "FinalRange", "Value"
                     };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes, Keyword), Keyword);
@@ -35,7 +35,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             // Const Select
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name", "Email", "Address1", "Address2"
+                    "Id", "Code", "InitialRange", "FinalRange", "Value"
                 };
 
             Query = Query

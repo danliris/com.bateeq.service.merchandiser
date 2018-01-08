@@ -20,6 +20,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<Size> Sizes { get; set; }
         public DbSet<OTL> OTLs { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
+        public DbSet<Efficiency> Efficiencies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

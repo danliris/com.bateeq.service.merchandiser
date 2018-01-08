@@ -31,6 +31,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test
                 .AddTransient<SizeService>(provider => new SizeService(provider))
                 .AddTransient<OTLService>(provider => new OTLService(provider))
                 .AddTransient<BuyerService>(provider => new BuyerService(provider))
+                .AddTransient<EfficiencyService>(provider => new EfficiencyService(provider))
                 .AddTransient<CategoryServiceDataUtil>()
                 .BuildServiceProvider();
             

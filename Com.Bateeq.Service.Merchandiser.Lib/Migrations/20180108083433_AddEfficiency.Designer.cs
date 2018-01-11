@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180108083433_AddEfficiency")]
+    partial class AddEfficiency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,8 +192,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<int?>("CategoryId")
-                        .IsRequired();
+                    b.Property<int?>("CategoryId");
 
                     b.Property<string>("Code")
                         .HasMaxLength(100);
@@ -410,8 +410,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                 {
                     b.HasOne("Com.Bateeq.Service.Merchandiser.Lib.Models.Category", "Category")
                         .WithMany("Materials")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CategoryId");
                 });
 #pragma warning restore 612, 618
         }

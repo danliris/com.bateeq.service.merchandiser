@@ -31,8 +31,8 @@ namespace Com.Bateeq.Service.Merchandiser.Test.DataUtils
                     Code = "Test",
                     Name = "Test Category"
                 };
-                int id = SizeService.Create(testSize);
-                return SizeService.GetAsync(id);
+                SizeService.Create(testSize);
+                return SizeService.GetAsync(testSize.Id);
             }
         }
     }

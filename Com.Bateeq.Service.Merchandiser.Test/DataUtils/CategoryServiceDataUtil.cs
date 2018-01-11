@@ -30,10 +30,29 @@ namespace Com.Bateeq.Service.Merchandiser.Test.DataUtils
                 {
                     Code = "Test",
                     Name = "Test Category",
-                    Description = "Test Category Description"
+                    SubCategory = "Test Category Sub Category"
                 };
-                int id = CategoryService.Create(testCategory);
-                return CategoryService.GetAsync(id);
+                CategoryService.Create(testCategory);
+                return CategoryService.GetAsync(testCategory.Id);
+            }
+        }
+
+        public Task<Category> GetTestCategory_Fabric()
+        {
+            Category testCategory = CategoryService.DbSet.FirstOrDefault(category => category.Code == "Test Fabric");
+
+            if (testCategory != null)
+                return Task.FromResult(testCategory);
+            else
+            {
+                testCategory = new Category()
+                {
+                    Code = "Test Fabric",
+                    Name = "Fabric",
+                    SubCategory = "Test Category Sub Category"
+                };
+                CategoryService.Create(testCategory);
+                return CategoryService.GetAsync(testCategory.Id);
             }
         }
     }

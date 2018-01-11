@@ -106,7 +106,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
 
             TModel createdData = await this.GetCreatedTestData(service);
 
-            TModel data = await service.GetAsync(createdData.Id);
+            TModel data = await service.ReadModelById(createdData.Id);
             Assert.NotNull(data);
         }
 
@@ -174,7 +174,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
             TService service = this.Service;
             TModel createdData = await this.GetCreatedTestData(service);
 
-            TModel data = await service.GetAsync(createdData.Id);
+            TModel data = await service.ReadModelById(createdData.Id);
             Assert.NotNull(data);
 
             int updatedCount = await service.UpdateModel(data.Id, data);
@@ -187,7 +187,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
             TService service = this.Service;
             TModel createdData = await this.GetCreatedTestData(service);
 
-            TModel data = await service.GetAsync(createdData.Id);
+            TModel data = await service.ReadModelById(createdData.Id);
             Assert.NotNull(data);
 
             this.EmptyUpdateModel(data);
@@ -198,7 +198,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
             }
             catch (ServiceValidationExeption ex)
             {
-                this.AssertCreateEmpty(ex);
+                this.AssertUpdateEmpty(ex);
             }
         }
 

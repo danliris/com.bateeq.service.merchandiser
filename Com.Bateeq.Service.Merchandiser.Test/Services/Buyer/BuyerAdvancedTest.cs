@@ -11,36 +11,36 @@ using System.Threading.Tasks;
 using Com.Moonlay.NetCore.Lib.Service;
 using System.Linq;
 
-namespace Com.Bateeq.Service.Merchandiser.Test.Services.UOM
+namespace Com.Bateeq.Service.Merchandiser.Test.Services.Buyer
 {
     [Collection("ServiceProviderFixture collection")]
-    public class UOMAdvancedTest : IDisposable
+    public class BuyerAdvancedTest : IDisposable
     {
         private IServiceProvider ServiceProvider;
 
-        public UOMAdvancedTest(ServiceProviderFixture fixture)
+        public BuyerAdvancedTest(ServiceProviderFixture fixture)
         {
             this.ServiceProvider = fixture.ServiceProvider;
         }
 
-        protected UOMService Service
+        protected BuyerService Service
         {
-            get { return this.ServiceProvider.GetService<UOMService>(); }
+            get { return this.ServiceProvider.GetService<BuyerService>(); }
         }
 
         protected MerchandiserDbContext DbContext
         {
             get { return this.ServiceProvider.GetService<MerchandiserDbContext>(); }
         }
-        
+
         [Fact]
-        public async Task TestCreateModel_NumericName()
+        public async Task TestCreateModel_InvalidEmail()
         {
-            UOMService service = this.Service;
-            Models.UOM testData = new Models.UOM()
+            BuyerService service = this.Service;
+            Models.Buyer testData = new Models.Buyer()
             {
-                Code = "Test Numeric Name",
-                Name = "123"
+                Name = "Test Email",
+                Email = "InvalidEmail"
             };
 
             try
@@ -49,7 +49,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.UOM
             }
             catch (ServiceValidationExeption ex)
             {
-                ValidationResult numericNameException = ex.ValidationResults.FirstOrDefault(r => r.MemberNames.Contains("Name"));
+                ValidationResult numericNameException = ex.ValidationResults.FirstOrDefault(r => r.MemberNames.Contains("Email"));
                 Assert.NotNull(numericNameException);
             }
         }

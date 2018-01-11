@@ -11,73 +11,15 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171227041505_AddOTL")]
+    partial class AddOTL
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Buyer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Address1")
-                        .HasMaxLength(3000);
-
-                    b.Property<string>("Address2")
-                        .HasMaxLength(3000);
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Buyers");
-                });
 
             modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Category", b =>
                 {
@@ -89,10 +31,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Code")
                         .HasMaxLength(100);
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(500);
+                    b.Property<string>("Description")
+                        .HasMaxLength(3000);
 
-                    b.Property<string>("SubCategory")
+                    b.Property<string>("Name")
                         .HasMaxLength(500);
 
                     b.Property<string>("_CreatedAgent")
@@ -132,58 +74,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Efficiency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Code");
-
-                    b.Property<int?>("FinalRange");
-
-                    b.Property<int?>("InitialRange");
-
-                    b.Property<int?>("Value");
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Efficiencies");
-                });
-
             modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Material", b =>
                 {
                     b.Property<int>("Id")
@@ -191,8 +81,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<int?>("CategoryId")
-                        .IsRequired();
+                    b.Property<int>("CategoryId");
 
                     b.Property<string>("Code")
                         .HasMaxLength(100);
@@ -249,8 +138,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Materials");
                 });
 
@@ -267,7 +154,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("Rate");
+                    b.Property<int>("Rate");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -404,14 +291,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UOMs");
-                });
-
-            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Material", b =>
-                {
-                    b.HasOne("Com.Bateeq.Service.Merchandiser.Lib.Models.Category", "Category")
-                        .WithMany("Materials")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

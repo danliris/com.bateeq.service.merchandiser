@@ -23,12 +23,10 @@ script:
     - dotnet test Com.Bateeq.Service.Merchandiser.Test/Com.Bateeq.Service.Merchandiser.Test.csproj
 
 after_success:
-    - if [ "$TRAVIS_PULL_REQUEST" == false ]; then
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
       
-      docker tag com-bateeq-service-merchandiser-webapi:test efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
-      docker push efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
+    - docker tag com-bateeq-service-merchandiser-webapi:test efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
+    - docker push efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.$TRAVIS_BUILD_NUMBER;
 
-      docker tag com-bateeq-service-merchandiser-webapi:test efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
-      docker push efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
-      fi
+    - docker tag com-bateeq-service-merchandiser-webapi:test efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;
+    - docker push efrataretailindo/com-bateeq-service-merchandiser-webapi:v1.0.0.latest;

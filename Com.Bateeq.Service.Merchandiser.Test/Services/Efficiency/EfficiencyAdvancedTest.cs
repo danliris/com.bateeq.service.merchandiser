@@ -51,17 +51,17 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.Efficiency
             }
             catch (ServiceValidationExeption ex)
             {
-                if (model.InitialRange == null || model.InitialRange <= 0)
+                if (model.InitialRange <= 0)
                 {
                     ValidationResult initialRangeValidation = ex.ValidationResults.FirstOrDefault(r => r.MemberNames.Contains("InitialRange"));
                     Assert.NotNull(initialRangeValidation);
                 }
-                if (model.FinalRange == null || model.FinalRange <= 0)
+                if (model.FinalRange <= 0)
                 {
                     ValidationResult finalRangeValidation = ex.ValidationResults.FirstOrDefault(r => r.MemberNames.Contains("FinalRange"));
                     Assert.NotNull(finalRangeValidation);
                 }
-                if (model.Value == null || model.Value <= 1)
+                if (model.Value <= 1)
                 {
                     ValidationResult valueValidation = ex.ValidationResults.FirstOrDefault(r => r.MemberNames.Contains("Value"));
                     Assert.NotNull(valueValidation);
@@ -82,10 +82,6 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.Efficiency
             new object[]
             {
                 new Models.Efficiency { InitialRange = 0, FinalRange = 0, Value = 1 }
-            },
-            new object[]
-            {
-                new Models.Efficiency { InitialRange = null, FinalRange = null, Value = null }
             }
         };
 

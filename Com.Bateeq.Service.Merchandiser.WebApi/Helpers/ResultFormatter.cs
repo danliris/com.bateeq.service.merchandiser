@@ -22,33 +22,6 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
             return Result;
         }
 
-        public Dictionary<string, object> Ok<TModel>(List<TModel> Data, int Page, int Size, int TotalData, int TotalPageData, Dictionary<string, string> Order, List<string> Select)
-        {
-            Dictionary<string, object> Info = new Dictionary<string, object>
-            {
-                { "count", TotalPageData },
-                { "page", Page },
-                { "size", Size },
-                { "total", TotalData },
-                { "order", Order }
-            };
-
-            if (Select.Count > 0)
-            {
-                var DataObj = Data.AsQueryable().Select(string.Concat("new(", string.Join(",", Select), ")"));
-                Result.Add("data", DataObj);
-                Info.Add("select", Select);
-            }
-            else
-            {
-                Result.Add("data", Data);
-            }
-
-            Result.Add("info", Info);
-
-            return Result;
-        }
-
         public Dictionary<string, object> Ok<TModel, TViewModel>(List<TModel> Data, Func<TModel, TViewModel> MapToViewModel, int Page, int Size, int TotalData, int TotalPageData, Dictionary<string, string> Order, List<string> Select)
         {
             Dictionary<string, object> Info = new Dictionary<string, object>
@@ -79,13 +52,6 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
             }
 
             Result.Add("info", Info);
-
-            return Result;
-        }
-
-        public Dictionary<string, object> Ok<TModel>(TModel Data)
-        {
-            Result.Add("data", Data);
 
             return Result;
         }

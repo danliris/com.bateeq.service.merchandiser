@@ -139,13 +139,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("Code");
+                    b.Property<string>("Code")
+                        .HasMaxLength(100);
 
-                    b.Property<int?>("FinalRange");
+                    b.Property<int>("FinalRange");
 
-                    b.Property<int?>("InitialRange");
+                    b.Property<int>("InitialRange");
 
-                    b.Property<int?>("Value");
+                    b.Property<int>("Value");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -191,8 +192,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<int?>("CategoryId")
-                        .IsRequired();
+                    b.Property<int>("CategoryId");
 
                     b.Property<string>("Code")
                         .HasMaxLength(100);
@@ -267,7 +267,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("Rate");
+                    b.Property<int>("Rate");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -304,6 +304,61 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OTLs");
+                });
+
+            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.RelatedSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("SizeId");
+
+                    b.Property<int>("SizeRangeId");
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SizeId");
+
+                    b.HasIndex("SizeRangeId");
+
+                    b.ToTable("RelatedSizes");
                 });
 
             modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Size", b =>
@@ -354,6 +409,56 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sizes");
+                });
+
+            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.SizeRange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SizeRanges");
                 });
 
             modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.UOM", b =>
@@ -411,6 +516,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.HasOne("Com.Bateeq.Service.Merchandiser.Lib.Models.Category", "Category")
                         .WithMany("Materials")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.RelatedSize", b =>
+                {
+                    b.HasOne("Com.Bateeq.Service.Merchandiser.Lib.Models.Size", "Size")
+                        .WithMany("RelatedSizes")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Com.Bateeq.Service.Merchandiser.Lib.Models.SizeRange", "SizeRange")
+                        .WithMany("RelatedSizes")
+                        .HasForeignKey("SizeRangeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

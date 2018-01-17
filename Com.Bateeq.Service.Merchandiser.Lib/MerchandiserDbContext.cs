@@ -21,6 +21,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<OTL> OTLs { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
         public DbSet<Efficiency> Efficiencies { get; set; }
+        public DbSet<SizeRange> SizeRanges { get; set; }
+        public DbSet<RelatedSize> RelatedSizes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +34,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
             modelBuilder.ApplyConfiguration(new SizeConfig());
             modelBuilder.ApplyConfiguration(new OTLConfig());
             modelBuilder.ApplyConfiguration(new BuyerConfig());
+            modelBuilder.ApplyConfiguration(new EfficiencyConfig());
+            modelBuilder.ApplyConfiguration(new SizeRangeConfig());
+            modelBuilder.ApplyConfiguration(new RelatedSizeConfig());
         }
     }
 }

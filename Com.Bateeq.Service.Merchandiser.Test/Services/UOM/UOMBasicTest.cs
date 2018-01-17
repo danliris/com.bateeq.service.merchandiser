@@ -10,8 +10,8 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.UOM
     [Collection("ServiceProviderFixture collection")]
     public class UOMBasicTest : BasicServiceTest<MerchandiserDbContext, UOMService, Models.UOM>
     {
-        private static readonly string[] createAttrAssertions = { "Code", "Name" };
-        private static readonly string[] updateAttrAssertions = { "Code", "Name" };
+        private static readonly string[] createAttrAssertions = { };
+        private static readonly string[] updateAttrAssertions = { };
         private static readonly string[] existAttrCriteria = { "Code" };
 
         public UOMBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
@@ -20,14 +20,10 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.UOM
 
         public override void EmptyCreateModel(Models.UOM model)
         {
-            model.Code = string.Empty;
-            model.Name = string.Empty;
         }
 
         public override void EmptyUpdateModel(Models.UOM model)
         {
-            model.Code = string.Empty;
-            model.Name = string.Empty;
         }
 
         public override Models.UOM GenerateTestModel()

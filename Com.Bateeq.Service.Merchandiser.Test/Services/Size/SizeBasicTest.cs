@@ -10,9 +10,9 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Size
     [Collection("ServiceProviderFixture collection")]
     public class SizeBasicTest : BasicServiceTest<MerchandiserDbContext, SizeService, Models.Size>
     {
-        private static readonly string[] createAttrAssertions = { "Code", "Name" };
-        private static readonly string[] updateAttrAssertions = { "Code", "Name" };
-        private static readonly string[] existAttrCriteria = { "Code" };
+        private static readonly string[] createAttrAssertions = { "Name" };
+        private static readonly string[] updateAttrAssertions = { "Name" };
+        private static readonly string[] existAttrCriteria = { };
 
         public SizeBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
         {
@@ -20,24 +20,19 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Size
 
         public override void EmptyCreateModel(Models.Size model)
         {
-            model.Code = string.Empty;
             model.Name = string.Empty;
         }
 
         public override void EmptyUpdateModel(Models.Size model)
         {
-            model.Code = string.Empty;
             model.Name = string.Empty;
         }
 
         public override Models.Size GenerateTestModel()
         {
-            string guid = Guid.NewGuid().ToString();
-            return new Models.Size()
-            {
-                Code = guid,
-                Name = string.Format("TEST SIZE {0}", guid)
-            };
+            Models.Size model = new Models.Size();
+            model.Name = string.Format("TEST SIZE {0}", model.Code);
+            return model;
         }
     }
 }

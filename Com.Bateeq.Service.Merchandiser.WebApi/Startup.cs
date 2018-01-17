@@ -42,7 +42,9 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                 .AddTransient<SizeService>()
                 .AddTransient<OTLService>()
                 .AddTransient<BuyerService>()
-                .AddTransient<EfficiencyService>();
+                .AddTransient<EfficiencyService>()
+                .AddTransient<SizeRangeService>()
+                .AddTransient<RelatedSizeService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
@@ -73,8 +75,6 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
-
-            //services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -32,7 +32,10 @@ namespace Com.Bateeq.Service.Merchandiser.Test
                 .AddTransient<OTLService>(provider => new OTLService(provider))
                 .AddTransient<BuyerService>(provider => new BuyerService(provider))
                 .AddTransient<EfficiencyService>(provider => new EfficiencyService(provider))
+                .AddTransient<RelatedSizeService>(provider => new RelatedSizeService(provider))
+                .AddTransient<SizeRangeService>(provider => new SizeRangeService(provider))
                 .AddTransient<CategoryServiceDataUtil>()
+                .AddTransient<SizeServiceDataUtil>()
                 .BuildServiceProvider();
             
             MerchandiserDbContext dbContext = ServiceProvider.GetService<MerchandiserDbContext>();

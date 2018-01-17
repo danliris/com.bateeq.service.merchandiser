@@ -20,16 +20,10 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Efficiency
 
         public override void EmptyCreateModel(Models.Efficiency model)
         {
-            model.InitialRange = null;
-            model.FinalRange = null;
-            model.Value = null;
         }
 
         public override void EmptyUpdateModel(Models.Efficiency model)
         {
-            model.InitialRange = null;
-            model.FinalRange = null;
-            model.Value = null;
         }
 
         public override Models.Efficiency GenerateTestModel()

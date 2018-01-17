@@ -10,7 +10,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/OTLs")]
-    public class OTLsController : BasicController<OTLService, OTL, MerchandiserDbContext>
+    public class OTLsController : BasicController<MerchandiserDbContext, OTLService, OTLViewModel, OTL>
     {
         private static readonly string ApiVersion = "1.0";
         public OTLsController(OTLService service) : base(service, ApiVersion)

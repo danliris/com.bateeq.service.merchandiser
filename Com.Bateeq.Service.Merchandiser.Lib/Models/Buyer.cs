@@ -17,13 +17,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (string.IsNullOrWhiteSpace(this.Name))
-                yield return new ValidationResult("Nama Pembeli harus diisi", new List<string> { "Name" });
-
-            if (string.IsNullOrWhiteSpace(this.Email))
-                yield return new ValidationResult("Nama Pembeli harus diisi", new List<string> { "Email" });
-            else if (!EmailValidation.IsValidEmail(this.Email))
-                yield return new ValidationResult("Format Email tidak benar", new List<string> { "Email" });
+            return new List<ValidationResult>();
         }
     }
 }

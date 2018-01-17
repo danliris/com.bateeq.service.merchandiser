@@ -33,26 +33,26 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.UOM
             get { return this.ServiceProvider.GetService<MerchandiserDbContext>(); }
         }
         
-        [Fact]
-        public async Task TestCreateModel_NumericName()
-        {
-            UOMService service = this.Service;
-            Models.UOM testData = new Models.UOM()
-            {
-                Code = "Test Numeric Name",
-                Name = "123"
-            };
+        //[Fact]
+        //public async Task TestCreateModel_NumericName()
+        //{
+        //    UOMService service = this.Service;
+        //    Models.UOM testData = new Models.UOM()
+        //    {
+        //        Code = "Test Numeric Name",
+        //        Name = "123"
+        //    };
 
-            try
-            {
-                await service.CreateModel(testData);
-            }
-            catch (ServiceValidationExeption ex)
-            {
-                ValidationResult numericNameException = ex.ValidationResults.FirstOrDefault(r => r.MemberNames.Contains("Name"));
-                Assert.NotNull(numericNameException);
-            }
-        }
+        //    try
+        //    {
+        //        await service.CreateModel(testData);
+        //    }
+        //    catch (ServiceValidationExeption ex)
+        //    {
+        //        ValidationResult numericNameException = ex.ValidationResults.FirstOrDefault(r => r.MemberNames.Contains("Name"));
+        //        Assert.NotNull(numericNameException);
+        //    }
+        //}
 
         public void Dispose()
         {

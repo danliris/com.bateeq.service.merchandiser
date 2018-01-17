@@ -94,7 +94,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
             TModel testModel = this.GenerateTestModel();
 
             int createdCount = await service.CreateModel(testModel);
-            Assert.True(createdCount == 1);
+            Assert.True(createdCount > 0);
 
             return testModel;
         }

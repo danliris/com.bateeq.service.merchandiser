@@ -13,8 +13,8 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Material
     [Collection("ServiceProviderFixture collection")]
     public class MaterialBasicTest : BasicServiceTest<MerchandiserDbContext, MaterialService, Models.Material>
     {
-        private static readonly string[] createAttrAssertions = { "Category", "Name" };
-        private static readonly string[] updateAttrAssertions = { "Category", "Name" };
+        private static readonly string[] createAttrAssertions = { };
+        private static readonly string[] updateAttrAssertions = { };
         private static readonly string[] existAttrCriteria = { };
 
         public MaterialBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
@@ -28,15 +28,10 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Material
 
         public override void EmptyCreateModel(Models.Material model)
         {
-            model.Category = null;
-            model.Name = string.Empty;
         }
 
         public override void EmptyUpdateModel(Models.Material model)
         {
-            model.Category = null;
-            model.CategoryId = 0;
-            model.Name = string.Empty;
         }
 
         public override Models.Material GenerateTestModel()
@@ -46,7 +41,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Material
             string guid = Guid.NewGuid().ToString();
             return new Models.Material()
             {
-                Category = testCategory.Result,
+                CategoryId = testCategory.Result.Id,
                 Code = guid,
                 Name = string.Format("TEST CATEGORY {0}", guid),
                 Description = "TEST CATEGORY DESCRIPTION"

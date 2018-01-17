@@ -1,20 +1,20 @@
 ﻿namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
-    public class PropertyCopier<TParent, TChild>
-        where TParent : class
-        where TChild : class
+    public class PropertyCopier<OriginClass, DestinationClass>
+        where OriginClass : class
+        where DestinationClass : class
     {
-        public static void Copy(TParent parent, TChild child)
+        public static void Copy(OriginClass origin, DestinationClass destination)
         {
-            var parentProperties = parent.GetType().GetProperties();
-            var childProperties = child.GetType().GetProperties();
-            foreach (var parentProperty in parentProperties)
+            var originProperties = origin.GetType().GetProperties();
+            var destinationProperties = destination.GetType().GetProperties();
+            foreach (var originProperty in originProperties)
             {
-                foreach (var childProperty in childProperties)
+                foreach (var destinationProperty in destinationProperties)
                 {
-                    if (parentProperty.Name == childProperty.Name && parentProperty.PropertyType == childProperty.PropertyType)
+                    if (originProperty.Name == destinationProperty.Name && originProperty.PropertyType == destinationProperty.PropertyType)
                     {
-                        childProperty.SetValue(child, parentProperty.GetValue(parent));
+                        destinationProperty.SetValue(destination, originProperty.GetValue(origin));
                         break;
                     }
                 }

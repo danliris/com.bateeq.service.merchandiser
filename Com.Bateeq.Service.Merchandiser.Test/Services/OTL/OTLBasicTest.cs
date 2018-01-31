@@ -22,12 +22,10 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.OTL
 
         public override void EmptyCreateModel(Models.OTL model)
         {
-            model.Name = string.Empty;
         }
 
         public override void EmptyUpdateModel(Models.OTL model)
         {
-            model.Name = string.Empty;
         }
 
         public override Models.OTL GenerateTestModel()

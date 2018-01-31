@@ -25,7 +25,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public double SH_Sewing { get; set; }
         public double SH_Finishing { get; set; }
         public DateTime DeliveryDate { get; set; }
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
         public int EfficiencyId { get; set; }
         public double EfficiencyValue { get; set; }
         public double Risk { get; set; }

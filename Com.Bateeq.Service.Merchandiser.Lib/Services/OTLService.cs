@@ -78,7 +78,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             OTL model = new OTL();
             PropertyCopier<OTLViewModel, OTL>.Copy(viewModel, model);
-            model.Rate = (int) viewModel.Rate;
+            model.Rate = (double)viewModel.Rate;
             return model;
         }
     }

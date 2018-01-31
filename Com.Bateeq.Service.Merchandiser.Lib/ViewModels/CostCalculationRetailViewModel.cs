@@ -21,7 +21,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double? SH_Finishing { get; set; }
 
         public DateTime DeliveryDate { get; set; }
-        public int? Quantity { get; set; }
+        public double? Quantity { get; set; }
         public EfficiencyVM Efficiency { get; set; }
         public double? Risk { get; set; }
         public string Description { get; set; }

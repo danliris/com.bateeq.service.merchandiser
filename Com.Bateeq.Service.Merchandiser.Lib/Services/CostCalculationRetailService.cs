@@ -333,7 +333,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.SH_Cutting = viewModel.SH_Cutting != null ? (double)viewModel.SH_Cutting : 0;
             model.SH_Sewing = viewModel.SH_Sewing != null ? (double)viewModel.SH_Sewing : 0;
             model.SH_Finishing = viewModel.SH_Finishing != null ? (double)viewModel.SH_Finishing : 0;
-            model.Quantity = viewModel.Quantity != null ? (int)viewModel.Quantity : 0;
+            model.Quantity = viewModel.Quantity != null ? (double)viewModel.Quantity : 0;
             model.EfficiencyId = viewModel.Efficiency.Id != null ? (int)viewModel.Efficiency.Id : 0;
             model.EfficiencyValue = viewModel.Efficiency.Value != null ? (double)viewModel.Efficiency.Value : 0;
             model.Risk = viewModel.Risk != null ? (double)viewModel.Risk / 100 : 0;

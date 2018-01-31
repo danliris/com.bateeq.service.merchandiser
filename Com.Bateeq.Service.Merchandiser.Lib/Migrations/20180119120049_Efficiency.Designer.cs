@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180119120049_Efficiency")]
+    partial class Efficiency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,258 +133,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.CostCalculationRetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Article")
-                        .HasMaxLength(500);
-
-                    b.Property<int>("BuyerId");
-
-                    b.Property<string>("BuyerName")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("DeliveryDate");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(3000);
-
-                    b.Property<int>("EfficiencyId");
-
-                    b.Property<double>("EfficiencyValue");
-
-                    b.Property<double>("HPP");
-
-                    b.Property<double>("OLCalculatedRate");
-
-                    b.Property<int>("OLId");
-
-                    b.Property<double>("OLRate");
-
-                    b.Property<double>("OTL1CalculatedRate");
-
-                    b.Property<int>("OTL1Id");
-
-                    b.Property<double>("OTL1Rate");
-
-                    b.Property<double>("OTL2CalculatedRate");
-
-                    b.Property<int>("OTL2Id");
-
-                    b.Property<double>("OTL2Rate");
-
-                    b.Property<double>("OTL3CalculatedRate");
-
-                    b.Property<int>("OTL3Id");
-
-                    b.Property<double>("OTL3Rate");
-
-                    b.Property<double>("Proposed20");
-
-                    b.Property<double>("Proposed21");
-
-                    b.Property<double>("Proposed22");
-
-                    b.Property<double>("Proposed23");
-
-                    b.Property<double>("Proposed24");
-
-                    b.Property<double>("Proposed25");
-
-                    b.Property<double>("Proposed26");
-
-                    b.Property<double>("Proposed27");
-
-                    b.Property<double>("Proposed28");
-
-                    b.Property<double>("Proposed29");
-
-                    b.Property<double>("Proposed30");
-
-                    b.Property<int>("Quantity");
-
-                    b.Property<string>("RO")
-                        .HasMaxLength(100);
-
-                    b.Property<double>("Risk");
-
-                    b.Property<double>("Rounding20");
-
-                    b.Property<double>("Rounding21");
-
-                    b.Property<double>("Rounding22");
-
-                    b.Property<double>("Rounding23");
-
-                    b.Property<double>("Rounding24");
-
-                    b.Property<double>("Rounding25");
-
-                    b.Property<double>("Rounding26");
-
-                    b.Property<double>("Rounding27");
-
-                    b.Property<double>("Rounding28");
-
-                    b.Property<double>("Rounding29");
-
-                    b.Property<double>("Rounding30");
-
-                    b.Property<double>("RoundingOthers");
-
-                    b.Property<double>("SH_Cutting");
-
-                    b.Property<double>("SH_Finishing");
-
-                    b.Property<double>("SH_Sewing");
-
-                    b.Property<string>("SeasonId")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("SeasonName")
-                        .HasMaxLength(500);
-
-                    b.Property<int>("SerialNumber");
-
-                    b.Property<int>("SizeRangeId");
-
-                    b.Property<string>("SizeRangeName")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("StyleId")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("StyleName")
-                        .HasMaxLength(500);
-
-                    b.Property<double>("WholesalePrice");
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CostCalculationRetails");
-                });
-
-            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.CostCalculationRetail_Material", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<int>("CategoryId");
-
-                    b.Property<string>("CategoryName")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(100);
-
-                    b.Property<double>("Conversion");
-
-                    b.Property<int>("CostCalculationRetailId");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(3000);
-
-                    b.Property<int>("MaterialId");
-
-                    b.Property<string>("MaterialName")
-                        .HasMaxLength(500);
-
-                    b.Property<double>("Price");
-
-                    b.Property<int>("Quantity");
-
-                    b.Property<double>("Total");
-
-                    b.Property<int>("UOMPriceId");
-
-                    b.Property<string>("UOMPriceName")
-                        .HasMaxLength(500);
-
-                    b.Property<int>("UOMQuantityId");
-
-                    b.Property<string>("UOMQuantityName")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CostCalculationRetailId");
-
-                    b.ToTable("CostCalculationRetail_Materials");
-                });
-
             modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Efficiency", b =>
                 {
                     b.Property<int>("Id")
@@ -401,7 +150,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<double>("Value");
+                    b.Property<int>("Value");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -764,14 +513,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UOMs");
-                });
-
-            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.CostCalculationRetail_Material", b =>
-                {
-                    b.HasOne("Com.Bateeq.Service.Merchandiser.Lib.Models.CostCalculationRetail", "CostCalculationRetail")
-                        .WithMany("CostCalculationRetail_Materials")
-                        .HasForeignKey("CostCalculationRetailId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Material", b =>

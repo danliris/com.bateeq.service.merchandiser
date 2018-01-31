@@ -19,7 +19,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
         {
         }
 
-        public abstract Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null);
+        public abstract Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}");
 
         public virtual async Task<int> CreateModel(TModel Model)
         {
@@ -46,7 +46,36 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
             /* Search with Keyword */
             if (Keyword != null)
             {
-                Query = Query.Where(General.BuildSearch(SearchAttributes, Keyword), Keyword);
+                Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
+            }
+            return Query;
+        }
+
+        public virtual IQueryable<TModel> ConfigureFilter(IQueryable<TModel> Query, Dictionary<string, string> FilterDictionary)
+        {
+            if (FilterDictionary != null && !FilterDictionary.Count.Equals(0))
+            {
+                foreach (var f in FilterDictionary)
+                {
+                    string Key = f.Key;
+                    string Value = f.Value;
+                    BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+                    PropertyInfo propInfo = typeof(TModel).GetProperty(Key, IgnoreCase);
+                    Object propValue = new Object();
+                    if (propInfo == null || String.IsNullOrEmpty(Value))
+                        propValue = null;
+                    if (propInfo.PropertyType.IsEnum)
+                    {
+                        Type enumType = propInfo.PropertyType;
+                        if (Enum.IsDefined(enumType, Value))
+                            propValue = Enum.Parse(enumType, Value);
+                    }
+                    if (propInfo.PropertyType == typeof(Uri))
+                        propValue = new Uri(Convert.ToString(Value));
+                    else
+                        propValue = Convert.ChangeType(Value, propInfo.PropertyType);
+                    Query = Query.Where(m => propInfo.GetValue(m).Equals(propValue));
+                }
             }
             return Query;
         }

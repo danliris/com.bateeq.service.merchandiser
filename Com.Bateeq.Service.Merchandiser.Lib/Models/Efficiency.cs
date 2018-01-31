@@ -10,9 +10,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
     public class Efficiency : StandardEntity, IValidatableObject
     {
         public string Code { get; set; }
+        public string Name { get; set; }
         public int InitialRange { get; set; }
         public int FinalRange { get; set; }
-        public int Value { get; set; }
+        public double Value { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

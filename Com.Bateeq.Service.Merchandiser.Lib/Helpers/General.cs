@@ -42,7 +42,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
             }
         }
 
-        public static string BuildSearch(List<string> SearchAttributes, string Keyword)
+        public static string BuildSearch(List<string> SearchAttributes)
         {
             string SearchQuery = String.Empty;
             foreach (string Attribute in SearchAttributes)

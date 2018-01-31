@@ -14,9 +14,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         {
             if (string.IsNullOrWhiteSpace(this.Name))
                 yield return new ValidationResult("Nama Kategori harus diisi", new List<string> { "Name" });
-
-            if (string.IsNullOrWhiteSpace(this.SubCategory))
-                yield return new ValidationResult("Sub Kategori harus diisi", new List<string> { "SubCategory" });
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
         }
 
-        public override Tuple<List<Buyer>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
+        public override Tuple<List<Buyer>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<Buyer> Query = this.DbContext.Buyers;
 
@@ -42,6 +42,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Address1 = b.Address1,
                     Address2 = b.Address2
                 });
+
+            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);

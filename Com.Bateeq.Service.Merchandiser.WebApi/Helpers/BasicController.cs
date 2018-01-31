@@ -13,11 +13,12 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
 {
     public abstract class BasicController<TDbContext, TService, TViewModel, TModel> : Controller
         where TDbContext : DbContext
+        where TViewModel : class
         where TService : BasicService<TDbContext, TModel>, IMap<TModel, TViewModel> 
         where TModel : StandardEntity, IValidatableObject
     {
-        private readonly TService Service;
-        private string ApiVersion;
+        protected TService Service { get; }
+        private string ApiVersion { get; set; }
 
         public BasicController(TService Service, string ApiVersion)
         {
@@ -26,11 +27,11 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
         }
 
         [HttpGet]
-        public IActionResult Get(int Page = 1, int Size = 25, string Order = "{}", [Bind(Prefix = "Select[]")]List<string> Select = null, string Keyword = null)
+        public IActionResult Get(int Page = 1, int Size = 25, string Order = "{}", [Bind(Prefix = "Select[]")]List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             try
             {
-                Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> Data = Service.ReadModel(Page, Size, Order, Select, Keyword);
+                Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> Data = Service.ReadModel(Page, Size, Order, Select, Keyword, Filter);
 
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)

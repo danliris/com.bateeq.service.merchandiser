@@ -12,6 +12,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Configs
         public void Configure(EntityTypeBuilder<Efficiency> builder)
         {
             builder.Property(m => m.Code).HasMaxLength(100);
+            builder.Property(m => m.Name).HasMaxLength(500);
         }
     }
 }

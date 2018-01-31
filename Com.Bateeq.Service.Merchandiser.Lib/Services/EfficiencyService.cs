@@ -9,6 +9,8 @@ using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -18,7 +20,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
         }
 
-        public override Tuple<List<Efficiency>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
+        public override Tuple<List<Efficiency>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<Efficiency> Query = this.DbContext.Efficiencies;
 
@@ -42,6 +44,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Value = b.Value
                 });
 
+            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
             
@@ -52,6 +57,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
 
+        public async Task<Efficiency> ReadModelByQuantity(int Quantity)
+        {
+            Efficiency result = await this.DbSet
+                .FirstOrDefaultAsync(eff => Quantity > 0 && eff.InitialRange <= Quantity && eff.FinalRange >= Quantity && eff._IsDeleted == false);
+            if (result == null)
+            {
+                return new Efficiency()
+                {
+                    Id = 0,
+                    Value = 0
+                };
+            }
+            return result;
+        }
+
         public override void OnCreating(Efficiency model)
         {
             do
@@ -59,8 +79,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 model.Code = CodeGenerator.GenerateCode();
             }
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
+            model.Name = model.InitialRange + " S/D " + model.FinalRange;
 
             base.OnCreating(model);
+        }
+
+        public override void OnUpdating(int id, Efficiency model)
+        {
+            model.Name = model.InitialRange + " S/D " + model.FinalRange;
+
+            base.OnUpdating(id, model);
         }
 
         public EfficiencyViewModel MapToViewModel(Efficiency model)
@@ -69,7 +97,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             PropertyCopier<Efficiency, EfficiencyViewModel>.Copy(model, viewModel);
             viewModel.InitialRange = model.InitialRange;
             viewModel.FinalRange = model.FinalRange;
-            viewModel.Value = model.Value;
+            viewModel.Value = model.Value * 100;
             return viewModel;
         }
 
@@ -79,7 +107,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             PropertyCopier<EfficiencyViewModel, Efficiency>.Copy(viewModel, model);
             model.InitialRange = (int)viewModel.InitialRange;
             model.FinalRange = (int)viewModel.FinalRange;
-            model.Value = (int)viewModel.Value;
+            model.Value = (double)viewModel.Value / 100;
             return model;
         }
     }

@@ -17,6 +17,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
 
             if (this.Rate == null)
                 yield return new ValidationResult("Tarif ongkos harus diisi", new List<string> { "Rate" });
+            else if (this.Rate <= 0)
+                yield return new ValidationResult("Tarif ongkos harus lebih besar dari 0", new List<string> { "Rate" });
         }
     }
 }

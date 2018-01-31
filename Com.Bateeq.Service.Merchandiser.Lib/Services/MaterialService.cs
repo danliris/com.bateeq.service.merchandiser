@@ -21,7 +21,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
         }
 
-        public override Tuple<List<Material>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
+        public override Tuple<List<Material>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<Material> Query = this.DbContext.Materials;
 
@@ -30,7 +30,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     "Code", "Name"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
-            
+
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "Name", "Description", "Category"
@@ -47,8 +47,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         Id = m.Category.Id,
                         Name = m.Category.Name,
                         SubCategory = m.Category.SubCategory
-                    }
+                    },
+                    CategoryId = m.CategoryId
                 });
+
+            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
@@ -60,10 +64,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
 
+        public async Task<List<Material>> ReadModelOnCategory(int Id)
+        {
+            return await this.DbSet
+                .Where(m => m.CategoryId.Equals(Id) && m._IsDeleted == false)
+                .ToListAsync();
+        }
+
         public override async Task<Material> ReadModelById(int Id)
         {
             return await this.DbSet
-                .Where(m => m.Id.Equals(Id))
+                .Where(m => m.Id.Equals(Id) && m._IsDeleted == false)
                 .Include(m => m.Category)
                 .FirstOrDefaultAsync();
         }

@@ -23,11 +23,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<Efficiency> Efficiencies { get; set; }
         public DbSet<SizeRange> SizeRanges { get; set; }
         public DbSet<RelatedSize> RelatedSizes { get; set; }
+        public DbSet<CostCalculationRetail> CostCalculationRetails { get; set; }
+        public DbSet<CostCalculationRetail_Material> CostCalculationRetail_Materials { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
             modelBuilder.ApplyConfiguration(new CategoryConfig());
             modelBuilder.ApplyConfiguration(new MaterialConfig());
             modelBuilder.ApplyConfiguration(new UOMConfig());
@@ -37,6 +39,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
             modelBuilder.ApplyConfiguration(new EfficiencyConfig());
             modelBuilder.ApplyConfiguration(new SizeRangeConfig());
             modelBuilder.ApplyConfiguration(new RelatedSizeConfig());
+            modelBuilder.ApplyConfiguration(new CostCalculationRetailConfig());
+            modelBuilder.ApplyConfiguration(new CostCalculationRetail_MaterialConfig());
         }
     }
 }

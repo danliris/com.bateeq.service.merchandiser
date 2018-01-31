@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180129060816_add4")]
+    partial class add4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,25 +162,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<double>("HPP");
 
-                    b.Property<double>("OLCalculatedRate");
-
                     b.Property<int>("OLId");
 
                     b.Property<double>("OLRate");
-
-                    b.Property<double>("OTL1CalculatedRate");
 
                     b.Property<int>("OTL1Id");
 
                     b.Property<double>("OTL1Rate");
 
-                    b.Property<double>("OTL2CalculatedRate");
-
                     b.Property<int>("OTL2Id");
 
                     b.Property<double>("OTL2Rate");
-
-                    b.Property<double>("OTL3CalculatedRate");
 
                     b.Property<int>("OTL3Id");
 
@@ -401,7 +394,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<double>("Value");
+                    b.Property<int>("Value");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()

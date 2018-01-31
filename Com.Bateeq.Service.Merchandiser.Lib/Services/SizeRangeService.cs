@@ -21,7 +21,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
         }
 
-        public override Tuple<List<SizeRange>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null)
+        public override Tuple<List<SizeRange>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<SizeRange> Query = this.DbContext.SizeRanges;
 
@@ -54,6 +54,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         })
                         .ToList()
                 });
+
+            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
@@ -155,10 +158,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
             while (this.DbSet.Any(sr => sr.Code.Equals(model.Code)));
 
-            RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
-            foreach (RelatedSize relatedSize in model.RelatedSizes)
+            if (model.RelatedSizes.Count > 0)
             {
-                relatedSizeService.OnCreating(relatedSize);
+                RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
+                foreach (RelatedSize relatedSize in model.RelatedSizes)
+                {
+                    relatedSizeService.OnCreating(relatedSize);
+                }
             }
 
             base.OnCreating(model);

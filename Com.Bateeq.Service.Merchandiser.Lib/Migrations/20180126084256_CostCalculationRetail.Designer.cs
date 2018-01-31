@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180126084256_CostCalculationRetail")]
+    partial class CostCalculationRetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,33 +158,26 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<int>("EfficiencyId");
 
-                    b.Property<double>("EfficiencyValue");
+                    b.Property<string>("EfficiencyName")
+                        .HasMaxLength(500);
 
                     b.Property<double>("HPP");
 
-                    b.Property<double>("OLCalculatedRate");
+                    b.Property<double>("OLCost");
 
                     b.Property<int>("OLId");
 
-                    b.Property<double>("OLRate");
-
-                    b.Property<double>("OTL1CalculatedRate");
+                    b.Property<double>("OTL1Cost");
 
                     b.Property<int>("OTL1Id");
 
-                    b.Property<double>("OTL1Rate");
-
-                    b.Property<double>("OTL2CalculatedRate");
+                    b.Property<double>("OTL2Cost");
 
                     b.Property<int>("OTL2Id");
 
-                    b.Property<double>("OTL2Rate");
-
-                    b.Property<double>("OTL3CalculatedRate");
+                    b.Property<double>("OTL3Cost");
 
                     b.Property<int>("OTL3Id");
-
-                    b.Property<double>("OTL3Rate");
 
                     b.Property<double>("Proposed20");
 
@@ -244,21 +238,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<double>("SH_Sewing");
 
-                    b.Property<string>("SeasonId")
-                        .HasMaxLength(100);
+                    b.Property<int>("SeasonId");
 
                     b.Property<string>("SeasonName")
                         .HasMaxLength(500);
-
-                    b.Property<int>("SerialNumber");
 
                     b.Property<int>("SizeRangeId");
 
                     b.Property<string>("SizeRangeName")
                         .HasMaxLength(500);
 
-                    b.Property<string>("StyleId")
-                        .HasMaxLength(100);
+                    b.Property<int>("StyleId");
 
                     b.Property<string>("StyleName")
                         .HasMaxLength(500);
@@ -401,7 +391,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<double>("Value");
+                    b.Property<int>("Value");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()

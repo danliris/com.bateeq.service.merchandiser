@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180129035618_add2")]
+    partial class add2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,25 +162,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<double>("HPP");
 
-                    b.Property<double>("OLCalculatedRate");
-
                     b.Property<int>("OLId");
 
                     b.Property<double>("OLRate");
-
-                    b.Property<double>("OTL1CalculatedRate");
 
                     b.Property<int>("OTL1Id");
 
                     b.Property<double>("OTL1Rate");
 
-                    b.Property<double>("OTL2CalculatedRate");
-
                     b.Property<int>("OTL2Id");
 
                     b.Property<double>("OTL2Rate");
-
-                    b.Property<double>("OTL3CalculatedRate");
 
                     b.Property<int>("OTL3Id");
 
@@ -244,21 +237,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<double>("SH_Sewing");
 
-                    b.Property<string>("SeasonId")
-                        .HasMaxLength(100);
+                    b.Property<string>("SeasonId");
 
                     b.Property<string>("SeasonName")
                         .HasMaxLength(500);
-
-                    b.Property<int>("SerialNumber");
 
                     b.Property<int>("SizeRangeId");
 
                     b.Property<string>("SizeRangeName")
                         .HasMaxLength(500);
 
-                    b.Property<string>("StyleId")
-                        .HasMaxLength(100);
+                    b.Property<string>("StyleId");
 
                     b.Property<string>("StyleName")
                         .HasMaxLength(500);
@@ -401,7 +390,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<double>("Value");
+                    b.Property<int>("Value");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()

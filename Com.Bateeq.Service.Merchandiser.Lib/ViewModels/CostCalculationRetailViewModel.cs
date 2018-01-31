@@ -21,7 +21,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double? SH_Finishing { get; set; }
 
         public DateTime DeliveryDate { get; set; }
-        public double? Quantity { get; set; }
+        public int? Quantity { get; set; }
         public EfficiencyVM Efficiency { get; set; }
         public double? Risk { get; set; }
         public string Description { get; set; }
@@ -67,7 +67,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
             public CategoryVM Category { get; set; }
             public MaterialVM Material { get; set; }
             public string Description { get; set; }
-            public int? Quantity { get; set; }
+            public double? Quantity { get; set; }
             public UOMQuantityVM UOMQuantity { get; set; }
             public double? Price { get; set; }
             public UOMPriceVM UOMPrice { get; set; }

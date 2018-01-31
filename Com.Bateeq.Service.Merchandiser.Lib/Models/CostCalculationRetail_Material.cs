@@ -17,7 +17,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public int MaterialId { get; set; }
         public string MaterialName { get; set; }
         public string Description { get; set; }
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
         public int UOMQuantityId { get; set; }
         public string UOMQuantityName { get; set; }
         public double Price { get; set; }

@@ -8,7 +8,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public int? Rate { get; set; }
+        public double? Rate { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

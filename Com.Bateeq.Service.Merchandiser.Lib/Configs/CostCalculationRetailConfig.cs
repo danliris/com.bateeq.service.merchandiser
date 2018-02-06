@@ -19,9 +19,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Configs
             builder.Property(c => c.SeasonId).HasMaxLength(100);
             builder.Ignore(c => c.SeasonCode);
             builder.Property(c => c.SeasonName).HasMaxLength(500);
+            builder.Property(c => c.CounterId).HasMaxLength(100);
+            builder.Property(c => c.CounterName).HasMaxLength(500);
             builder.Property(c => c.BuyerName).HasMaxLength(500);
             builder.Property(c => c.SizeRangeName).HasMaxLength(500);
             builder.Property(c => c.Description).HasMaxLength(3000);
+            builder.Property(c => c.SelectedRounding).HasMaxLength(20);
             builder
                 .HasMany(c => c.CostCalculationRetail_Materials)
                 .WithOne(cm => cm.CostCalculationRetail)

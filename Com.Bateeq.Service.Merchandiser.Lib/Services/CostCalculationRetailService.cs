@@ -286,11 +286,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     PropertyCopier<CostCalculationRetail_Material, CostCalculationRetailViewModel.CostCalculationRetail_MaterialVM>.Copy(costCalculationRetail_Material, costCalculationRetail_MaterialVM);
 
                     costCalculationRetail_MaterialVM.Id = costCalculationRetail_Material.Id;
+                    
                     CostCalculationRetailViewModel.CostCalculationRetail_MaterialVM.CategoryVM categoryVM = new CostCalculationRetailViewModel.CostCalculationRetail_MaterialVM.CategoryVM()
                     {
-                        Id = costCalculationRetail_Material.CategoryId,
-                        Name = costCalculationRetail_Material.CategoryName
+                        Id = costCalculationRetail_Material.CategoryId
                     };
+                    string[] names = costCalculationRetail_Material.CategoryName.Split(new[] { " - " }, StringSplitOptions.None);
+                    categoryVM.Name = names[0];
+                    try
+                    {
+                        categoryVM.SubCategory = names[1];
+                    }
+                    catch(IndexOutOfRangeException)
+                    {
+                        categoryVM.SubCategory = null;
+                    }
                     costCalculationRetail_MaterialVM.Category = categoryVM;
                     CostCalculationRetailViewModel.CostCalculationRetail_MaterialVM.MaterialVM materialVM = new CostCalculationRetailViewModel.CostCalculationRetail_MaterialVM.MaterialVM()
                     {
@@ -397,7 +407,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 PropertyCopier<CostCalculationRetailViewModel.CostCalculationRetail_MaterialVM, CostCalculationRetail_Material>.Copy(costCalculationRetail_MaterialVM, costCalculationRetail_Material);
 
                 costCalculationRetail_Material.CategoryId = costCalculationRetail_MaterialVM.Category.Id != null ? (int)costCalculationRetail_MaterialVM.Category.Id : 0;
-                costCalculationRetail_Material.CategoryName = costCalculationRetail_MaterialVM.Category.Name + " - " + costCalculationRetail_MaterialVM.Category.SubCategory;
+                costCalculationRetail_Material.CategoryName = costCalculationRetail_MaterialVM.Category.SubCategory != null ?costCalculationRetail_MaterialVM.Category.Name + " - " + costCalculationRetail_MaterialVM.Category.SubCategory : costCalculationRetail_MaterialVM.Category.Name;
                 costCalculationRetail_Material.MaterialId = costCalculationRetail_MaterialVM.Material.Id != null ? (int)costCalculationRetail_MaterialVM.Material.Id : 0;
                 costCalculationRetail_Material.MaterialName = costCalculationRetail_MaterialVM.Material.Name;
                 costCalculationRetail_Material.Quantity = costCalculationRetail_MaterialVM.Quantity != null ? (double)costCalculationRetail_MaterialVM.Quantity : 0;

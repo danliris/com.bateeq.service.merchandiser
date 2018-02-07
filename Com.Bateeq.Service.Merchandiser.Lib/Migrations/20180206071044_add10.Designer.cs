@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180206071044_add10")]
+    partial class add10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,9 +256,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<string>("SeasonName")
                         .HasMaxLength(500);
-
-                    b.Property<string>("SelectedRounding")
-                        .HasMaxLength(20);
 
                     b.Property<int>("SerialNumber");
 

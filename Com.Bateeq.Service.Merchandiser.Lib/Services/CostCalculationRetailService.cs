@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
+using Com.Moonlay.NetCore.Lib.Service;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -27,13 +28,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             List<string> SearchAttributes = new List<string>()
                 {
-                    "Article", "RO"
+                    "Article", "RO", "Style", "Counter"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "RO", "Article", "Style", "_CreatedUtc"
+                    "Id", "Code", "RO", "Article", "Style", "Counter"
                 };
             Query = Query
                 .Select(ccr => new CostCalculationRetail
@@ -44,7 +45,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Article = ccr.Article,
                     StyleId = ccr.StyleId,
                     StyleName = ccr.StyleName,
-                    _CreatedUtc = ccr._CreatedUtc
+                    CounterId = ccr.StyleId,
+                    CounterName = ccr.CounterName
                 });
 
             Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
@@ -73,8 +75,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         .Max(d => d.SerialNumber);
                     Model.SerialNumber = latestSN != 0 ? ++latestSN : 1;
                     Model.RO = String.Format("{0}{1:D4}", Model.SeasonCode, Model.SerialNumber);
-                    created =  await this.CreateAsync(Model);
+                    created = await this.CreateAsync(Model);
                     transaction.Commit();
+                }
+                catch (ServiceValidationExeption e)
+                {
+                    throw new ServiceValidationExeption(e.ValidationContext, e.ValidationResults);
+
                 }
                 catch (Exception)
                 {
@@ -208,6 +215,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.SizeRange.Id = model.SizeRangeId;
             viewModel.SizeRange.Name = model.SizeRangeName;
 
+            viewModel.Counter = new CostCalculationRetailViewModel.CounterVM();
+            viewModel.Counter._id = model.CounterId;
+            viewModel.Counter.name = model.CounterName;
+
             viewModel.SH_Cutting = model.SH_Cutting;
             viewModel.SH_Sewing = model.SH_Sewing;
             viewModel.SH_Finishing = model.SH_Finishing;
@@ -326,6 +337,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.SeasonId = viewModel.Season._id;
             model.SeasonCode = viewModel.Season.code;
             model.SeasonName = viewModel.Season.name;
+            model.CounterId = viewModel.Counter._id;
+            model.CounterName = viewModel.Counter.name;
             model.BuyerId = viewModel.Buyer.Id != null ? (int)viewModel.Buyer.Id : 0;
             model.BuyerName = viewModel.Buyer.Name;
             model.SizeRangeId = viewModel.SizeRange.Id != null ? (int)viewModel.SizeRange.Id : 0;

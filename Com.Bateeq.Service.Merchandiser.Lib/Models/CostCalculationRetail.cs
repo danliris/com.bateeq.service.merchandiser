@@ -1,8 +1,11 @@
 ﻿using Com.Moonlay.Models;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Com.Bateeq.Service.Merchandiser.Lib.Services;
+using System.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 {
@@ -17,6 +20,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public string SeasonId { get; set; }
         public string SeasonCode { get; set; }
         public string SeasonName { get; set; }
+        public string CounterId { get; set; }
+        public string CounterName { get; set; }
         public int BuyerId { get; set; }
         public string BuyerName { get; set; }
         public int SizeRangeId { get; set; }
@@ -71,10 +76,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public double Rounding29 { get; set; }
         public double Rounding30 { get; set; }
         public double RoundingOthers { get; set; }
+        public string SelectedRounding { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return new List<ValidationResult>();
+            CostCalculationRetailService service = validationContext.GetService<CostCalculationRetailService>();
+
+            if (service.DbSet.Count(r => r.Id != this.Id && r.Article.Equals(this.Article) && r._IsDeleted.Equals(false)) > 0)
+                yield return new ValidationResult("Nama Artikel sudah ada", new List<string> { "Article" });
         }
     }
 }

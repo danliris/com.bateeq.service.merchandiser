@@ -13,6 +13,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public string Article { get; set; }
         public StyleVM Style { get; set; }
         public SeasonVM Season { get; set; }
+        public CounterVM Counter { get; set; }
         public BuyerVM Buyer { get; set; }
 
         public SizeRangeVM SizeRange { get; set; }
@@ -59,6 +60,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double? Rounding29 { get; set; }
         public double? Rounding30 { get; set; }
         public double? RoundingOthers { get; set; }
+        public string SelectedRounding { get; set; }
 
         public class CostCalculationRetail_MaterialVM
         {
@@ -103,6 +105,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         }
 
         public class SeasonVM
+        {
+            public string _id { get; set; }
+            public string code { get; set; }
+            public string name { get; set; }
+        }
+
+        public class CounterVM
         {
             public string _id { get; set; }
             public string code { get; set; }
@@ -165,6 +174,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
                 yield return new ValidationResult("Season harus diisi", new List<string> { "Season" });
             if (this.Buyer == null || this.Buyer.Id == 0)
                 yield return new ValidationResult("Buyer harus diisi", new List<string> { "Buyer" });
+            if (this.Counter == null || string.IsNullOrWhiteSpace(this.Counter._id))
+                yield return new ValidationResult("Konter harus diisi", new List<string> { "Counter" });
             if (this.SizeRange == null || this.SizeRange.Id == 0)
                 yield return new ValidationResult("Size Range harus diisi", new List<string> { "SizeRange" });
             if (this.SH_Cutting == null)
@@ -181,7 +192,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
                 yield return new ValidationResult("SH Finishing harus lebih besar dari 0", new List<string> { "SH_Finishing" });
             if (this.DeliveryDate == null || this.DeliveryDate == DateTime.MinValue)
                 yield return new ValidationResult("Delivery Date harus diisi", new List<string> { "DeliveryDate" });
-            else if (this.DeliveryDate < DateTime.Now.ToUniversalTime())
+            else if (this.DeliveryDate < DateTime.Today)
                 yield return new ValidationResult("Delivery Date harus lebih besar dari sekarang", new List<string> { "DeliveryDate" });
             if (this.Quantity == null)
                 yield return new ValidationResult("Kuantitas harus diisi", new List<string> { "Quantity" });

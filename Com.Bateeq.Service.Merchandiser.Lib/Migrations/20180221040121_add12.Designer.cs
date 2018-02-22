@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180221040121_add12")]
+    partial class add12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,38 +142,31 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("Article")
-                        .HasMaxLength(500);
+                    b.Property<string>("Article");
 
                     b.Property<int>("BuyerId");
 
-                    b.Property<string>("BuyerName")
-                        .HasMaxLength(500);
+                    b.Property<string>("BuyerName");
 
-                    b.Property<string>("Code")
-                        .HasMaxLength(100);
+                    b.Property<string>("Code");
 
-                    b.Property<double>("CommissionPortion");
+                    b.Property<double>("Commission");
 
-                    b.Property<double>("CommissionRate");
-
-                    b.Property<string>("Commodity")
-                        .HasMaxLength(500);
+                    b.Property<string>("Commodity");
 
                     b.Property<DateTime>("ConfirmDate");
 
                     b.Property<double>("ConfirmPrice");
 
-                    b.Property<string>("ConvectionId")
-                        .HasMaxLength(100);
+                    b.Property<string>("ConvectionCode");
 
-                    b.Property<string>("ConvectionName")
-                        .HasMaxLength(500);
+                    b.Property<string>("ConvectionId");
+
+                    b.Property<string>("ConvectionName");
 
                     b.Property<DateTime>("DeliveryDate");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(3000);
+                    b.Property<string>("Description");
 
                     b.Property<int>("EfficiencyId");
 
@@ -210,8 +204,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<int>("Quantity");
 
-                    b.Property<string>("RO")
-                        .HasMaxLength(100);
+                    b.Property<string>("RO");
 
                     b.Property<int>("RateDollarId");
 
@@ -219,23 +212,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<double>("Risk");
 
-                    b.Property<double>("SMV_Cutting");
+                    b.Property<int>("SMV_Cutting");
 
-                    b.Property<double>("SMV_Finishing");
+                    b.Property<int>("SMV_Finishing");
 
-                    b.Property<double>("SMV_Sewing");
+                    b.Property<int>("SMV_Sewing");
 
-                    b.Property<double>("SMV_Total");
+                    b.Property<int>("SMV_Total");
 
-                    b.Property<string>("Section")
-                        .HasMaxLength(500);
+                    b.Property<string>("Section");
 
                     b.Property<int>("SerialNumber");
 
                     b.Property<int>("SizeRangeId");
 
-                    b.Property<string>("SizeRangeName")
-                        .HasMaxLength(500);
+                    b.Property<string>("SizeRangeName");
 
                     b.Property<int>("THRId");
 
@@ -295,23 +286,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<string>("CategoryName")
-                        .HasMaxLength(500);
+                    b.Property<string>("CategoryName");
 
-                    b.Property<string>("Code")
-                        .HasMaxLength(100);
+                    b.Property<string>("Code");
 
                     b.Property<double>("Conversion");
 
                     b.Property<int>("CostCalculationGarmentId");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(3000);
+                    b.Property<string>("Description");
 
                     b.Property<int>("MaterialId");
 
-                    b.Property<string>("MaterialName")
-                        .HasMaxLength(500);
+                    b.Property<string>("MaterialName");
 
                     b.Property<double>("Price");
 
@@ -325,13 +312,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<int>("UOMPriceId");
 
-                    b.Property<string>("UOMPriceName")
-                        .HasMaxLength(500);
+                    b.Property<string>("UOMPriceName");
 
                     b.Property<int>("UOMQuantityId");
 
-                    b.Property<string>("UOMQuantityName")
-                        .HasMaxLength(500);
+                    b.Property<string>("UOMQuantityName");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()

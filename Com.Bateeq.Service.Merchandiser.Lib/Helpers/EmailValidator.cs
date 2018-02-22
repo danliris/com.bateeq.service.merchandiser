@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
-    public static class EmailValidation
+    public static class EmailValidator
     {
         /// &lt;summary>
         /// Regular expression, which is used to validate an E-Mail address.

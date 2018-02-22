@@ -1,4 +1,4 @@
-﻿using Com.Bateeq.Service.Merchandiser.Lib.Models;
+﻿    using Com.Bateeq.Service.Merchandiser.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -365,9 +365,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.OLRate = viewModel.OL.Rate != null ? (double)viewModel.OL.Rate : 0;
             model.OLCalculatedRate = viewModel.OL.CalculatedRate != null ? (double)viewModel.OL.CalculatedRate : 0;
             model.OTL1Id = viewModel.OTL1.Id != null ? (int)viewModel.OTL1.Id : 0;
-            model.OTL1Rate = viewModel.OL.Rate != null ? (double)viewModel.OTL1.Rate : 0;
-            model.OTL1CalculatedRate = viewModel.OL.CalculatedRate != null ? (double)viewModel.OTL1.CalculatedRate : 0;
+            model.OTL1Rate = viewModel.OTL1.Rate != null ? (double)viewModel.OTL1.Rate : 0;
+            model.OTL1CalculatedRate = viewModel.OTL1.CalculatedRate != null ? (double)viewModel.OTL1.CalculatedRate : 0;
             model.OTL2Id = viewModel.OTL2.Id != null ? (int)viewModel.OTL2.Id : 0;
+            model.OTL2Rate = viewModel.OTL2.Rate != null ? (double)viewModel.OTL2.Rate : 0;
             model.OTL2CalculatedRate = viewModel.OTL2.CalculatedRate != null ? (double)viewModel.OTL2.CalculatedRate : 0;
             model.OTL3Id = viewModel.OTL3.Id != null ? (int)viewModel.OTL3.Id : 0;
             model.OTL3Rate = viewModel.OTL3.Rate != null ? (double)viewModel.OTL3.Rate : 0;

@@ -46,7 +46,9 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                 .AddTransient<SizeRangeService>()
                 .AddTransient<RelatedSizeService>()
                 .AddTransient<CostCalculationRetailService>()
-                .AddTransient<CostCalculationRetail_MaterialService>();
+                .AddTransient<CostCalculationRetail_MaterialService>()
+                .AddTransient<CostCalculationGarmentService>()
+                .AddTransient<CostCalculationGarment_MaterialService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>

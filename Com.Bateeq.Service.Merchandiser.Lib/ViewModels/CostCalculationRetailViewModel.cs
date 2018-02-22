@@ -193,7 +193,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
             if (this.DeliveryDate == null || this.DeliveryDate == DateTime.MinValue)
                 yield return new ValidationResult("Delivery Date harus diisi", new List<string> { "DeliveryDate" });
             else if (this.DeliveryDate < DateTime.Today)
-                yield return new ValidationResult("Delivery Date harus lebih besar dari sekarang", new List<string> { "DeliveryDate" });
+                yield return new ValidationResult("Delivery Date harus lebih besar dari hari ini", new List<string> { "DeliveryDate" });
             if (this.Quantity == null)
                 yield return new ValidationResult("Kuantitas harus diisi", new List<string> { "Quantity" });
             else if (this.Quantity <= 0)

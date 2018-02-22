@@ -19,7 +19,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
 
             if (string.IsNullOrWhiteSpace(this.Email))
                 yield return new ValidationResult("Email Pembeli harus diisi", new List<string> { "Email" });
-            else if (!EmailValidation.IsValidEmail(this.Email))
+            else if (!EmailValidator.IsValidEmail(this.Email))
                 yield return new ValidationResult("Format Email tidak benar", new List<string> { "Email" });
         }
     }

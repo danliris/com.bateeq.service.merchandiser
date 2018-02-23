@@ -6,14 +6,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
     public static class PercentageConverter
     {
-        public static double ToFraction(double number)
+        public static double ToFraction(dynamic number)
         {
-            return number / 100;
+            try
+            {
+                return (double)number / 100; 
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
-        public static double ToPercent(double number)
+        public static double ToPercent(dynamic number)
         {
-            return number * 100;
+            try
+            {
+                return (double)number * 100;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
     }
 }

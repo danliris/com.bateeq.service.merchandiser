@@ -11,158 +11,56 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public string RO { get; set; }
 
         public string Article { get; set; }
-        public StyleVM Style { get; set; }
-        public SeasonVM Season { get; set; }
-        public CounterVM Counter { get; set; }
-        public BuyerVM Buyer { get; set; }
+        public ArticleStyleViewModel Style { get; set; }
+        public ArticleSeasonViewModel Season { get; set; }
+        public ArticleCounterViewModel Counter { get; set; }
+        public BuyerViewModel Buyer { get; set; }
 
-        public SizeRangeVM SizeRange { get; set; }
+        public SizeRangeViewModel SizeRange { get; set; }
         public double? SH_Cutting { get; set; }
         public double? SH_Sewing { get; set; }
         public double? SH_Finishing { get; set; }
 
         public DateTime DeliveryDate { get; set; }
         public int? Quantity { get; set; }
-        public EfficiencyVM Efficiency { get; set; }
-        public double? Risk { get; set; }
+        public EfficiencyViewModel Efficiency { get; set; }
+        public double Risk { get; set; }
         public string Description { get; set; }
 
-        public OLVM OL { get; set; }
-        public OTL1VM OTL1 { get; set; }
-        public OTL2VM OTL2 { get; set; }
-        public OTL3VM OTL3 { get; set; }
+        public OTLCalculatedViewModel OL { get; set; }
+        public OTLCalculatedViewModel OTL1 { get; set; }
+        public OTLCalculatedViewModel OTL2 { get; set; }
+        public OTLCalculatedViewModel OTL3 { get; set; }
 
-        public List<CostCalculationRetail_MaterialVM> CostCalculationRetail_Materials { get; set; }
-        public double? HPP { get; set; }
-        public double? WholesalePrice { get; set; }
+        public List<CostCalculationRetail_MaterialViewModel> CostCalculationRetail_Materials { get; set; }
+        public double HPP { get; set; }
+        public double WholesalePrice { get; set; }
                      
-        public double? Proposed20 { get; set; }
-        public double? Proposed21 { get; set; }
-        public double? Proposed22 { get; set; }
-        public double? Proposed23 { get; set; }
-        public double? Proposed24 { get; set; }
-        public double? Proposed25 { get; set; }
-        public double? Proposed26 { get; set; }
-        public double? Proposed27 { get; set; }
-        public double? Proposed28 { get; set; }
-        public double? Proposed29 { get; set; }
-        public double? Proposed30 { get; set; }
+        public double Proposed20 { get; set; }
+        public double Proposed21 { get; set; }
+        public double Proposed22 { get; set; }
+        public double Proposed23 { get; set; }
+        public double Proposed24 { get; set; }
+        public double Proposed25 { get; set; }
+        public double Proposed26 { get; set; }
+        public double Proposed27 { get; set; }
+        public double Proposed28 { get; set; }
+        public double Proposed29 { get; set; }
+        public double Proposed30 { get; set; }
                      
-        public double? Rounding20 { get; set; }
-        public double? Rounding21 { get; set; }
-        public double? Rounding22 { get; set; }
-        public double? Rounding23 { get; set; }
-        public double? Rounding24 { get; set; }
-        public double? Rounding25 { get; set; }
-        public double? Rounding26 { get; set; }
-        public double? Rounding27 { get; set; }
-        public double? Rounding28 { get; set; }
-        public double? Rounding29 { get; set; }
-        public double? Rounding30 { get; set; }
+        public double Rounding20 { get; set; }
+        public double Rounding21 { get; set; }
+        public double Rounding22 { get; set; }
+        public double Rounding23 { get; set; }
+        public double Rounding24 { get; set; }
+        public double Rounding25 { get; set; }
+        public double Rounding26 { get; set; }
+        public double Rounding27 { get; set; }
+        public double Rounding28 { get; set; }
+        public double Rounding29 { get; set; }
+        public double Rounding30 { get; set; }
         public double? RoundingOthers { get; set; }
         public string SelectedRounding { get; set; }
-
-        public class CostCalculationRetail_MaterialVM
-        {
-            public int? Id { get; set; }
-            public string Code { get; set; }
-            public CategoryVM Category { get; set; }
-            public MaterialVM Material { get; set; }
-            public string Description { get; set; }
-            public double? Quantity { get; set; }
-            public UOMQuantityVM UOMQuantity { get; set; }
-            public double? Price { get; set; }
-            public UOMPriceVM UOMPrice { get; set; }
-            public double? Conversion { get; set; }
-            public double? Total { get; set; }
-            public class CategoryVM
-            {
-                public int? Id { get; set; }
-                public string Name { get; set; }
-                public string SubCategory { get; set; }
-            }
-            public class MaterialVM
-            {
-                public int? Id { get; set; }
-                public string Name { get; set; }
-            }
-            public class UOMQuantityVM
-            {
-                public int? Id { get; set; }
-                public string Name { get; set; }
-            }
-            public class UOMPriceVM
-            {
-                public int? Id { get; set; }
-                public string Name { get; set; }
-            }
-        }
-        
-        public class StyleVM
-        {
-            public string _id { get; set; }
-            public string name { get; set; }
-        }
-
-        public class SeasonVM
-        {
-            public string _id { get; set; }
-            public string code { get; set; }
-            public string name { get; set; }
-        }
-
-        public class CounterVM
-        {
-            public string _id { get; set; }
-            public string code { get; set; }
-            public string name { get; set; }
-        }
-
-        public class BuyerVM
-        {
-            public int? Id { get; set; }
-            public string Name { get; set; }
-        }
-
-        public class SizeRangeVM
-        {
-            public int? Id { get; set; }
-            public string Name { get; set; }
-        }
-
-        public class EfficiencyVM
-        {
-            public int? Id { get; set; }
-            public double? Value { get; set; }
-        }
-
-        public class OLVM
-        {
-            public int? Id { get; set; }
-            public double? Rate { get; set; }
-            public double? CalculatedRate { get; set; }
-        }
-
-        public class OTL1VM
-        {
-            public int? Id { get; set; }
-            public double? Rate { get; set; }
-            public double? CalculatedRate { get; set; }
-        }
-
-        public class OTL2VM
-        {
-            public int? Id { get; set; }
-            public double? Rate { get; set; }
-            public double? CalculatedRate { get; set; }
-        }
-
-        public class OTL3VM
-        {
-            public int? Id { get; set; }
-            public double? Rate { get; set; }
-            public double? CalculatedRate { get; set; }
-        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -208,7 +106,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
                 yield return new ValidationResult("Tabel Cost Calculation Retail Material dibawah harus diisi", new List<string> { "CostCalculationRetail_MaterialTable" });
             else
             {
-                foreach (CostCalculationRetail_MaterialVM costCalculation_Material in this.CostCalculationRetail_Materials)
+                foreach (CostCalculationRetail_MaterialViewModel costCalculation_Material in this.CostCalculationRetail_Materials)
                 {
                     costCalculationRetail_MaterialsError += "{";
                     if (costCalculation_Material.Category == null || costCalculation_Material.Category.Id == 0)

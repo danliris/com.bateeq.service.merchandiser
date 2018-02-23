@@ -292,6 +292,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.OTL2.Rate = model.OTL2Rate;
             viewModel.OTL2.CalculatedRate = model.OTL2CalculatedRate;
 
+            viewModel.NETFOBP = PercentageConverter.ToPercent((double)model.NETFOBP);
+
             return viewModel;
         }
 
@@ -355,6 +357,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.OTL2Id = viewModel.OTL2.Id;
             model.OTL2Rate = viewModel.OTL2.Rate != null ? (double)viewModel.OTL2.Rate : 0;
             model.OTL2CalculatedRate = viewModel.OTL2.CalculatedRate != null ? (double)viewModel.OTL2.CalculatedRate : 0;
+
+            model.NETFOBP = PercentageConverter.ToFraction(viewModel.NETFOBP);
 
             return model;
         }

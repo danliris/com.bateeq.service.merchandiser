@@ -73,7 +73,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         .Where(d => d.ConvectionId.Equals(Model.ConvectionId))
                         .DefaultIfEmpty()
                         .Max(d => d.SerialNumber);
-                    Model.SerialNumber = latestSN != 0 ? ++latestSN : 1;
+                    Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
                     Model.RO = String.Format("{0}{1:D4}", Model.ConvectionCode, Model.SerialNumber);
                     created = await this.CreateAsync(Model);
                     transaction.Commit();
@@ -306,8 +306,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.ConvectionCode = viewModel.Convection.code;
             model.ConvectionName = viewModel.Convection.name;
 
-            model.FabricAllowance = viewModel.FabricAllowance != null ? PercentageConverter.ToFraction((double)viewModel.FabricAllowance) : 0;
-            model.AccessoriesAllowance = viewModel.AccessoriesAllowance != null ? PercentageConverter.ToFraction((double)viewModel.AccessoriesAllowance) : 0;
+            model.FabricAllowance = PercentageConverter.ToFraction(viewModel.FabricAllowance);
+            model.AccessoriesAllowance = PercentageConverter.ToFraction(viewModel.AccessoriesAllowance);
 
             model.SizeRangeId = viewModel.SizeRange.Id;
             model.SizeRangeName = viewModel.SizeRange.Name;
@@ -316,7 +316,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.BuyerName = viewModel.Buyer.Name;
 
             model.EfficiencyId = viewModel.Efficiency.Id;
-            model.EfficiencyValue = viewModel.Efficiency.Value != null ? PercentageConverter.ToFraction((double)viewModel.Efficiency.Value) : 0;
+            model.EfficiencyValue = PercentageConverter.ToFraction(viewModel.Efficiency.Value);
 
             model.WageId = viewModel.Wage.Id;
             model.WageRate = viewModel.Wage.Rate != null ? (double)viewModel.Wage.Rate : 0;
@@ -342,12 +342,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 CostCalculationGarment_Material.UOMQuantityName = CostCalculationGarment_MaterialVM.UOMQuantity.Name;
                 CostCalculationGarment_Material.UOMPriceId = CostCalculationGarment_MaterialVM.UOMPrice.Id;
                 CostCalculationGarment_Material.UOMPriceName = CostCalculationGarment_MaterialVM.UOMPrice.Name;
-                CostCalculationGarment_Material.ShippingFeePortion = CostCalculationGarment_MaterialVM.ShippingFeePortion != null ? PercentageConverter.ToFraction((double)CostCalculationGarment_MaterialVM.ShippingFeePortion) : 0;
+                CostCalculationGarment_Material.ShippingFeePortion = PercentageConverter.ToFraction(CostCalculationGarment_MaterialVM.ShippingFeePortion);
 
                 model.CostCalculationGarment_Materials.Add(CostCalculationGarment_Material);
             }
 
-            model.CommissionPortion = viewModel.CommissionPortion != null ? PercentageConverter.ToFraction((double)viewModel.CommissionPortion) : 0;
+            model.CommissionPortion = PercentageConverter.ToFraction(viewModel.CommissionPortion);
             model.Risk = PercentageConverter.ToFraction(viewModel.Risk);
 
             model.OTL1Id = viewModel.OTL1.Id;

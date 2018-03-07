@@ -103,7 +103,24 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
                     return BadRequest(Result);
                 }
 
-                await Service.UpdateModel(Id, model);
+                using (var transaction = this.Service.DbContext.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        await Service.UpdateModel(Id, model);
+                        transaction.Commit();
+                    }
+                    catch (ServiceValidationExeption e)
+                    {
+                        transaction.Rollback();
+                        throw new ServiceValidationExeption(e.ValidationContext, e.ValidationResults);
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(e.Message, e.InnerException);
+                    }
+                }
 
                 return NoContent();
             }
@@ -148,7 +165,24 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
                 this.Validate(ViewModel);
                 TModel model = Service.MapToModel(ViewModel);
 
-                await Service.CreateModel(model);
+                using (var transaction = this.Service.DbContext.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        await Service.CreateModel(model);
+                        transaction.Commit();
+                    }
+                    catch (ServiceValidationExeption e)
+                    {
+                        transaction.Rollback();
+                        throw new ServiceValidationExeption(e.ValidationContext, e.ValidationResults);
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(e.Message, e.InnerException);
+                    }
+                }
 
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, General.CREATED_STATUS_CODE, General.OK_MESSAGE)
@@ -181,7 +215,19 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
 
             try
             {
-                await Service.DeleteModel(Id);
+                using (var transaction = this.Service.DbContext.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        await Service.DeleteModel(Id);
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(e.Message, e.InnerException);
+                    }
+                }
 
                 return NoContent();
             }

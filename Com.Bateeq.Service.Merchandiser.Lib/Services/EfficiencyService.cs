@@ -29,7 +29,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     "InitialRange", "FinalRange", "Value"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
-            
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "InitialRange", "FinalRange", "Value"
@@ -43,9 +46,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     FinalRange = b.FinalRange,
                     Value = b.Value
                 });
-
-            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);

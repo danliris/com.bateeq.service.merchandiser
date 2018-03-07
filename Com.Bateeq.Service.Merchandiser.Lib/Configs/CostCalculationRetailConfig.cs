@@ -30,6 +30,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Configs
                 .WithOne(cm => cm.CostCalculationRetail)
                 .HasForeignKey(cm => cm.CostCalculationRetailId)
                 .IsRequired();
+            builder
+                .HasOne(c => c.RO_Retail)
+                .WithOne(ro => ro.CostCalculationRetail)
+                .HasForeignKey<RO_Retail>(ro => ro.CostCalculationRetailId)
+                .IsRequired();
         }
     }
 }

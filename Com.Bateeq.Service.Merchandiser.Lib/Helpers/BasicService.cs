@@ -19,26 +19,59 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
         {
         }
 
+        public void Validate(TModel model)
+        {
+            List<ValidationResult> validationResults = new List<ValidationResult>();
+            ValidationContext validationContext = new ValidationContext(model, this.ServiceProvider, null);
+
+            if (!Validator.TryValidateObject(model, validationContext, validationResults, true))
+                throw new ServiceValidationExeption(validationContext, validationResults);
+        }
+
         public abstract Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}");
 
-        public virtual async Task<int> CreateModel(TModel Model)
+        public virtual async Task<int> CreateModel(TModel model)
         {
-            return await this.CreateAsync(Model);
+            return await this.CreateAsync(model);
         }
 
-        public virtual async Task<TModel> ReadModelById(int Id)
+        public void Creating(TModel model)
         {
-            return await this.GetAsync(Id);
+            this.DbSet.Add(model);
+            this.OnCreating(model);
+            this.Validate(model);
         }
 
-        public virtual async Task<int> UpdateModel(int Id, TModel Model)
+        public virtual async Task<TModel> ReadModelById(int id)
         {
-            return await this.UpdateAsync(Id, Model);
+            return await this.GetAsync(id);
         }
 
-        public virtual async Task<int> DeleteModel(int Id)
+        public virtual async Task<int> UpdateModel(int id, TModel model)
         {
-            return await this.DeleteAsync(Id);
+            return await this.UpdateAsync(id, model);
+        }
+
+        public void Updating(int id, TModel model)
+        {
+            this.DbContext.Entry(model).State = EntityState.Modified;
+            this.OnUpdating(id, model);
+            this.Validate(model);
+        }
+
+        public virtual async Task<int> DeleteModel(int id)
+        {
+            return await this.DeleteAsync(id);
+        }
+
+        public void Deleting(int id)
+        {
+            TModel entity = this.Get(id);
+            if (entity == null)
+            {
+                throw new Exception();
+            }
+            this.OnDeleting(entity);
         }
 
         public virtual IQueryable<TModel> ConfigureSearch(IQueryable<TModel> Query, List<string> SearchAttributes, string Keyword)
@@ -51,30 +84,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
             return Query;
         }
 
-        public virtual IQueryable<TModel> ConfigureFilter(IQueryable<TModel> Query, Dictionary<string, string> FilterDictionary)
+        public virtual IQueryable<TModel> ConfigureFilter(IQueryable<TModel> Query, Dictionary<string, object> FilterDictionary)
         {
             if (FilterDictionary != null && !FilterDictionary.Count.Equals(0))
             {
                 foreach (var f in FilterDictionary)
                 {
                     string Key = f.Key;
-                    string Value = f.Value;
-                    BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
-                    PropertyInfo propInfo = typeof(TModel).GetProperty(Key, IgnoreCase);
-                    Object propValue = new Object();
-                    if (propInfo == null || String.IsNullOrEmpty(Value))
-                        propValue = null;
-                    if (propInfo.PropertyType.IsEnum)
-                    {
-                        Type enumType = propInfo.PropertyType;
-                        if (Enum.IsDefined(enumType, Value))
-                            propValue = Enum.Parse(enumType, Value);
-                    }
-                    if (propInfo.PropertyType == typeof(Uri))
-                        propValue = new Uri(Convert.ToString(Value));
-                    else
-                        propValue = Convert.ChangeType(Value, propInfo.PropertyType);
-                    Query = Query.Where(m => propInfo.GetValue(m).Equals(propValue));
+                    object Value = f.Value;
+                    string filterQuery = string.Concat(string.Empty, Key, " == @0");
+
+                    Query = Query.Where(filterQuery, Value);
                 }
             }
             return Query;

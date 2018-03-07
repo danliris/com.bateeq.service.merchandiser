@@ -25,6 +25,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public string UOMPriceName { get; set; }
         public double Conversion { get; set; }
         public double Total { get; set; }
+        public string Information { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             return new List<ValidationResult>();

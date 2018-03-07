@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180305073710_add17")]
+    partial class add17
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -581,8 +582,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(3000);
 
-                    b.Property<string>("Information")
-                        .HasMaxLength(500);
+                    b.Property<string>("Information");
 
                     b.Property<int>("MaterialId");
 
@@ -896,8 +896,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<string>("Instruction")
                         .HasMaxLength(3000);
-
-                    b.Property<string>("SizeQuantityTotal");
 
                     b.Property<int>("Total");
 

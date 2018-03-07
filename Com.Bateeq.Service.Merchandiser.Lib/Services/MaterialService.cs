@@ -31,6 +31,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "Name", "Description", "Category"
@@ -50,9 +53,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     },
                     CategoryId = m.CategoryId
                 });
-
-            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Com.Moonlay.EntityFrameworkCore;
+﻿using Com.Moonlay.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Models;
 using Com.Bateeq.Service.Merchandiser.Lib.Configs;
@@ -27,6 +24,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<CostCalculationRetail_Material> CostCalculationRetail_Materials { get; set; }
         public DbSet<CostCalculationGarment> CostCalculationGarments { get; set; }
         public DbSet<CostCalculationGarment_Material> CostCalculationGarment_Materials { get; set; }
+        public DbSet<RO_Retail> RO_Retails { get; set; }
+        public DbSet<RO_Retail_SizeBreakdown> RO_RetailSizeBreakdowns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +44,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
             modelBuilder.ApplyConfiguration(new CostCalculationRetail_MaterialConfig());
             modelBuilder.ApplyConfiguration(new CostCalculationGarmentConfig());
             modelBuilder.ApplyConfiguration(new CostCalculationGarment_MaterialConfig());
+            modelBuilder.ApplyConfiguration(new RO_RetailConfig());
+            modelBuilder.ApplyConfiguration(new RO_Retail_SizeBreakdownConfig());
         }
     }
 }

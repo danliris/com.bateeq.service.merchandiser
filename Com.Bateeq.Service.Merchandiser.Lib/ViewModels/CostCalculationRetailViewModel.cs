@@ -62,6 +62,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double? RoundingOthers { get; set; }
         public string SelectedRounding { get; set; }
 
+        public int? RO_RetailId { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrWhiteSpace(this.Article))

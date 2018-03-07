@@ -9,6 +9,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
     public class CostCalculationRetail_MaterialViewModel : BasicViewModel
     {
         public string Code { get; set; }
+        public int CostCalculationRetailId { get; set; }
         public CategoryViewModel Category { get; set; }
         public MaterialViewModel Material { get; set; }
         public string Description { get; set; }
@@ -18,5 +19,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public UOMViewModel UOMPrice { get; set; }
         public double? Conversion { get; set; }
         public double Total { get; set; }
+        public string Information { get; set; }
     }
 }

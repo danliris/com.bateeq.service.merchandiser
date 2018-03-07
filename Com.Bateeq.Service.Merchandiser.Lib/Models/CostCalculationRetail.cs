@@ -78,6 +78,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public double RoundingOthers { get; set; }
         public string SelectedRounding { get; set; }
 
+        public int? RO_RetailId { get; set; }
+        public virtual RO_Retail RO_Retail { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             CostCalculationRetailService service = validationContext.GetService<CostCalculationRetailService>();

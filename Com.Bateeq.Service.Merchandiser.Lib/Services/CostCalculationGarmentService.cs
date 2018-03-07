@@ -32,6 +32,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "RO", "Article", "Convection", "Quantity", "ConfirmPrice"
@@ -49,9 +52,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     ConfirmPrice = ccg.ConfirmPrice
                 });
 
-            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
-
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
 
@@ -64,30 +64,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> CreateModel(CostCalculationGarment Model)
         {
-            int created = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    int latestSN = this.DbSet
-                        .Where(d => d.ConvectionId.Equals(Model.ConvectionId))
-                        .DefaultIfEmpty()
-                        .Max(d => d.SerialNumber);
-                    Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
-                    Model.RO = String.Format("{0}{1:D4}", Model.ConvectionCode, Model.SerialNumber);
-                    created = await this.CreateAsync(Model);
-                    transaction.Commit();
-                }
-                catch (ServiceValidationExeption e)
-                {
-                    throw new ServiceValidationExeption(e.ValidationContext, e.ValidationResults);
-
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
-            }
+            int latestSN = this.DbSet
+                .Where(d => d.ConvectionId.Equals(Model.ConvectionId))
+                .DefaultIfEmpty()
+                .Max(d => d.SerialNumber);
+            Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
+            Model.RO = String.Format("{0}{1:D4}", Model.ConvectionCode, Model.SerialNumber);
+            int created = await this.CreateAsync(Model);
             return created;
         }
 
@@ -103,39 +86,26 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
 
-            int updated = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+            HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
+                .Where(p => p.CostCalculationGarmentId.Equals(Id))
+                .Select(p => p.Id));
+            int updated = await this.UpdateAsync(Id, Model);
+
+            foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
             {
-                try
+                CostCalculationGarment_Material model = Model.CostCalculationGarment_Materials.FirstOrDefault(prop => prop.Id.Equals(CostCalculationGarment_Material));
+
+                if (model == null)
                 {
-                    HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
-                        .Where(p => p.CostCalculationGarmentId.Equals(Id))
-                        .Select(p => p.Id));
-                    updated = await this.UpdateAsync(Id, Model);
-
-                    foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
-                    {
-                        CostCalculationGarment_Material model = Model.CostCalculationGarment_Materials.FirstOrDefault(prop => prop.Id.Equals(CostCalculationGarment_Material));
-
-                        if (model == null)
-                        {
-                            await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
-                        }
-                    }
-
-                    foreach (CostCalculationGarment_Material CostCalculationGarment_Material in Model.CostCalculationGarment_Materials)
-                    {
-                        if (CostCalculationGarment_Material.Id.Equals(0))
-                        {
-                            await CostCalculationGarment_MaterialService.CreateModel(CostCalculationGarment_Material);
-                        }
-                    }
-
-                    transaction.Commit();
+                    await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
                 }
-                catch (Exception)
+            }
+
+            foreach (CostCalculationGarment_Material CostCalculationGarment_Material in Model.CostCalculationGarment_Materials)
+            {
+                if (CostCalculationGarment_Material.Id.Equals(0))
                 {
-                    transaction.Rollback();
+                    await CostCalculationGarment_MaterialService.CreateModel(CostCalculationGarment_Material);
                 }
             }
 
@@ -146,27 +116,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
 
-            int deleted = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+            int deleted = await this.DeleteAsync(Id);
+            HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
+                .Where(p => p.CostCalculationGarmentId.Equals(Id))
+                .Select(p => p.Id));
+
+            foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
             {
-                try
-                {
-                    deleted = await this.DeleteAsync(Id);
-
-                    HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
-                        .Where(p => p.CostCalculationGarmentId.Equals(Id))
-                        .Select(p => p.Id));
-                    foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
-                    {
-                        await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
-                    }
-
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
+                await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
             }
 
             return deleted;

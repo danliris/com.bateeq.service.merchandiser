@@ -29,7 +29,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     "Name", "SubCategory"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
-            
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "Name", "SubCategory"
@@ -43,12 +46,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     SubCategory = b.SubCategory
                 });
 
-            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
-
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
-            
+
             Pageable<Category> pageable = new Pageable<Category>(Query, Page - 1, Size);
             List<Category> Data = pageable.Data.ToList<Category>();
             int TotalData = pageable.TotalCount;
@@ -60,27 +60,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             MaterialService materialService = this.ServiceProvider.GetService<MaterialService>();
 
-            int deleted = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+            int deleted = await this.DeleteAsync(Id);
+            HashSet<int> deletedMaterials = new HashSet<int>(materialService.DbSet
+                .Where(p => p.CategoryId.Equals(Id))
+                .Select(p => p.Id));
+
+            foreach (int deletedMaterial in deletedMaterials)
             {
-                try
-                {
-                    deleted = await this.DeleteAsync(Id);
-
-                    HashSet<int> deletedMaterials = new HashSet<int>(materialService.DbSet
-                        .Where(p => p.CategoryId.Equals(Id))
-                        .Select(p => p.Id));
-                    foreach (int deletedMaterial in deletedMaterials)
-                    {
-                        await materialService.DeleteModel(deletedMaterial);
-                    }
-
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
+                await materialService.DeleteModel(deletedMaterial);
             }
 
             return deleted;

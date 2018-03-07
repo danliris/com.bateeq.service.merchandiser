@@ -30,7 +30,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     "Code", "Name"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
-            
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "Name", "RelatedSizes"
@@ -46,7 +49,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         {
                             Id = rs.Id,
                             Size = new Size
-                            { 
+                            {
                                 Id = rs.Size.Id,
                                 Code = rs.Size.Code,
                                 Name = rs.Size.Name
@@ -55,19 +58,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         .ToList()
                 });
 
-            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
-
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
-            
+
             Pageable<SizeRange> pageable = new Pageable<SizeRange>(Query, Page - 1, Size);
             List<SizeRange> Data = pageable.Data.ToList<SizeRange>();
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
-        
+
         public override async Task<SizeRange> ReadModelById(int id)
         {
             return await this.DbSet
@@ -80,40 +80,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         public override async Task<int> UpdateModel(int Id, SizeRange Model)
         {
             RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
-            
-            int updated = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+
+            int updated = await this.UpdateAsync(Id, Model);
+
+            HashSet<int> relatedSizes = new HashSet<int>(relatedSizeService.DbSet
+                .Where(p => p.SizeRangeId.Equals(Id))
+                .Select(p => p.Id));
+
+            foreach (int relatedSize in relatedSizes)
             {
-                try
+                RelatedSize rs = Model.RelatedSizes.FirstOrDefault(prop => prop.Id.Equals(relatedSize));
+
+                if (rs == null)
                 {
-                    HashSet<int> relatedSizes = new HashSet<int>(relatedSizeService.DbSet
-                        .Where(p => p.SizeRangeId.Equals(Id))
-                        .Select(p => p.Id));
-                    updated = await this.UpdateAsync(Id, Model);
-
-                    foreach (int relatedSize in relatedSizes)
-                    {
-                        RelatedSize rs = Model.RelatedSizes.FirstOrDefault(prop => prop.Id.Equals(relatedSize));
-
-                        if (rs == null)
-                        {
-                            await relatedSizeService.DeleteModel(relatedSize);
-                        }
-                    }
-
-                    foreach (RelatedSize relatedSize in Model.RelatedSizes)
-                    {
-                        if (relatedSize.Id.Equals(0))
-                        {
-                            await relatedSizeService.CreateModel(relatedSize);
-                        }
-                    }
-
-                    transaction.Commit();
+                    await relatedSizeService.DeleteModel(relatedSize);
                 }
-                catch (Exception)
+            }
+
+            foreach (RelatedSize relatedSize in Model.RelatedSizes)
+            {
+                if (relatedSize.Id.Equals(0))
                 {
-                    transaction.Rollback();
+                    await relatedSizeService.CreateModel(relatedSize);
                 }
             }
 
@@ -124,27 +112,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
 
-            int deleted = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+            int deleted = await this.DeleteAsync(Id);
+            HashSet<int> deletedRelatedSizes = new HashSet<int>(relatedSizeService.DbSet
+                .Where(p => p.SizeRangeId.Equals(Id))
+                .Select(p => p.Id));
+
+            foreach (int relatedSize in deletedRelatedSizes)
             {
-                try
-                {
-                    deleted = await this.DeleteAsync(Id);
-
-                    HashSet<int> deletedRelatedSizes = new HashSet<int>(relatedSizeService.DbSet
-                        .Where(p => p.SizeRangeId.Equals(Id))
-                        .Select(p => p.Id));
-                    foreach (int relatedSize in deletedRelatedSizes)
-                    {
-                        await relatedSizeService.DeleteModel(relatedSize);
-                    }
-
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
+                await relatedSizeService.DeleteModel(relatedSize);
             }
 
             return deleted;
@@ -173,17 +148,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         public SizeRangeViewModel MapToViewModel(SizeRange model)
         {
             SizeRangeViewModel viewModel = new SizeRangeViewModel();
-            viewModel.RelatedSizes = new List<SizeRangeViewModel.RelatedSizeVM>();
+            viewModel.RelatedSizes = new List<RelatedSizeViewModel>();
             PropertyCopier<SizeRange, SizeRangeViewModel>.Copy(model, viewModel);
             SizeService sizeService = this.ServiceProvider.GetService<SizeService>();
             foreach (RelatedSize relatedSize in model.RelatedSizes)
             {
-                SizeRangeViewModel.RelatedSizeVM relatedSizeVM = new SizeRangeViewModel.RelatedSizeVM();
-                PropertyCopier<RelatedSize, SizeRangeViewModel.RelatedSizeVM>.Copy(relatedSize, relatedSizeVM);
-                SizeRangeViewModel.RelatedSizeVM.SizeVM sizeVM = new SizeRangeViewModel.RelatedSizeVM.SizeVM();
-                sizeVM.Id = relatedSize.Size.Id;
-                sizeVM.Code = relatedSize.Size.Code;
-                sizeVM.Name = relatedSize.Size.Name;
+                RelatedSizeViewModel relatedSizeVM = new RelatedSizeViewModel();
+                PropertyCopier<RelatedSize, RelatedSizeViewModel>.Copy(relatedSize, relatedSizeVM);
+                SizeViewModel sizeVM = new SizeViewModel();
+                PropertyCopier<Size, SizeViewModel>.Copy(relatedSize.Size, sizeVM);
                 relatedSizeVM.Size = sizeVM;
                 viewModel.RelatedSizes.Add(relatedSizeVM);
             }
@@ -195,10 +168,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             SizeRange model = new SizeRange();
             model.RelatedSizes = new List<RelatedSize>();
             PropertyCopier<SizeRangeViewModel, SizeRange>.Copy(viewModel, model);
-            foreach (SizeRangeViewModel.RelatedSizeVM relatedSizeVM in viewModel.RelatedSizes)
+            foreach (RelatedSizeViewModel relatedSizeVM in viewModel.RelatedSizes)
             {
                 RelatedSize relatedSize = new RelatedSize();
-                PropertyCopier<SizeRangeViewModel.RelatedSizeVM, RelatedSize>.Copy(relatedSizeVM, relatedSize);
+                PropertyCopier<RelatedSizeViewModel, RelatedSize>.Copy(relatedSizeVM, relatedSize);
                 relatedSize.SizeId = relatedSizeVM.Size.Id;
                 model.RelatedSizes.Add(relatedSize);
             }

@@ -1,4 +1,4 @@
-﻿    using Com.Bateeq.Service.Merchandiser.Lib.Models;
+﻿using Com.Bateeq.Service.Merchandiser.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +28,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             List<string> SearchAttributes = new List<string>()
                 {
-                    "Article", "RO", "Style", "Counter"
+                    "Article", "RO"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
 
             List<string> SelectedFields = new List<string>()
                 {
@@ -49,9 +52,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     CounterName = ccr.CounterName
                 });
 
-            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
-
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
 
@@ -64,31 +64,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> CreateModel(CostCalculationRetail Model)
         {
-            int created = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    int latestSN = this.DbSet
-                        .Where(d => d.SeasonId.Equals(Model.SeasonId))
-                        .DefaultIfEmpty()
-                        .Max(d => d.SerialNumber);
-                    Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
-                    Model.RO = String.Format("{0}{1:D4}", Model.SeasonCode, Model.SerialNumber);
-                    created = await this.CreateAsync(Model);
-                    transaction.Commit();
-                }
-                catch (ServiceValidationExeption e)
-                {
-                    throw new ServiceValidationExeption(e.ValidationContext, e.ValidationResults);
+            int latestSN = this.DbSet
+                .Where(d => d.SeasonId.Equals(Model.SeasonId))
+                .DefaultIfEmpty()
+                .Max(d => d.SerialNumber);
+            Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
+            Model.RO = String.Format("{0}{1:D4}", Model.SeasonCode, Model.SerialNumber);
 
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
-            }
-            return created;
+            return await this.CreateAsync(Model);
         }
 
         public override async Task<CostCalculationRetail> ReadModelById(int id)
@@ -103,39 +86,34 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
 
-            int updated = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+            int updated = await this.UpdateAsync(Id, Model);
+
+            if (Model.CostCalculationRetail_Materials != null)
             {
-                try
+                HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
+                    .Where(p => p.CostCalculationRetailId.Equals(Id))
+                    .Select(p => p.Id));
+
+                foreach (int costCalculationRetail_Material in costCalculationRetail_Materials)
                 {
-                    HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
-                        .Where(p => p.CostCalculationRetailId.Equals(Id))
-                        .Select(p => p.Id));
-                    updated = await this.UpdateAsync(Id, Model);
+                    CostCalculationRetail_Material model = Model.CostCalculationRetail_Materials.FirstOrDefault(prop => prop.Id.Equals(costCalculationRetail_Material));
 
-                    foreach (int costCalculationRetail_Material in costCalculationRetail_Materials)
+                    if (model == null)
                     {
-                        CostCalculationRetail_Material model = Model.CostCalculationRetail_Materials.FirstOrDefault(prop => prop.Id.Equals(costCalculationRetail_Material));
-
-                        if (model == null)
-                        {
-                            await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
-                        }
+                        await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
                     }
-
-                    foreach (CostCalculationRetail_Material costCalculationRetail_Material in Model.CostCalculationRetail_Materials)
+                    else
                     {
-                        if (costCalculationRetail_Material.Id.Equals(0))
-                        {
-                            await costCalculationRetail_MaterialService.CreateModel(costCalculationRetail_Material);
-                        }
+                        await costCalculationRetail_MaterialService.UpdateModel(costCalculationRetail_Material, model);
                     }
-
-                    transaction.Commit();
                 }
-                catch (Exception)
+
+                foreach (CostCalculationRetail_Material costCalculationRetail_Material in Model.CostCalculationRetail_Materials)
                 {
-                    transaction.Rollback();
+                    if (costCalculationRetail_Material.Id.Equals(0))
+                    {
+                        await costCalculationRetail_MaterialService.CreateModel(costCalculationRetail_Material);
+                    }
                 }
             }
 
@@ -147,28 +125,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
 
             int deleted = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+            deleted = await this.DeleteAsync(Id);
+
+            HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
+                .Where(p => p.CostCalculationRetailId.Equals(Id))
+                .Select(p => p.Id));
+            foreach (int costCalculationRetail_Material in costCalculationRetail_Materials)
             {
-                try
-                {
-                    deleted = await this.DeleteAsync(Id);
-
-                    HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
-                        .Where(p => p.CostCalculationRetailId.Equals(Id))
-                        .Select(p => p.Id));
-                    foreach (int costCalculationRetail_Material in costCalculationRetail_Materials)
-                    {
-                        await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
-                    }
-
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
+                await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
             }
-
             return deleted;
         }
 
@@ -214,6 +179,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.SizeRange.Id = model.SizeRangeId;
             viewModel.SizeRange.Name = model.SizeRangeName;
 
+            try
+            {
+                // Get Related Size of particular Size Range if possible
+                SizeRangeService sizeRangeService = this.ServiceProvider.GetService<SizeRangeService>();
+                viewModel.SizeRange.RelatedSizes = new List<RelatedSizeViewModel>();
+                Task<SizeRange> sizeRange = sizeRangeService.ReadModelById(model.SizeRangeId);
+                sizeRange.Wait();
+                foreach (RelatedSize rs in sizeRange.Result.RelatedSizes)
+                {
+                    RelatedSizeViewModel relatedSizeVM = new RelatedSizeViewModel();
+                    PropertyCopier<RelatedSize, RelatedSizeViewModel>.Copy(rs, relatedSizeVM);
+                    SizeViewModel sizeVM = new SizeViewModel();
+                    PropertyCopier<Size, SizeViewModel>.Copy(rs.Size, sizeVM);
+                    relatedSizeVM.Size = sizeVM;
+                    viewModel.SizeRange.RelatedSizes.Add(relatedSizeVM);
+                }
+            }
+            catch (Exception)
+            {
+                // If cannot get Related Size, do nothing
+            }
+
             viewModel.Counter = new ArticleCounterViewModel();
             viewModel.Counter._id = model.CounterId;
             viewModel.Counter.name = model.CounterName;
@@ -252,7 +239,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 {
                     CostCalculationRetail_MaterialViewModel costCalculationRetail_MaterialVM = new CostCalculationRetail_MaterialViewModel();
                     PropertyCopier<CostCalculationRetail_Material, CostCalculationRetail_MaterialViewModel>.Copy(costCalculationRetail_Material, costCalculationRetail_MaterialVM);
-                    
+
                     CategoryViewModel categoryVM = new CategoryViewModel()
                     {
                         Id = costCalculationRetail_Material.CategoryId
@@ -263,7 +250,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     {
                         categoryVM.SubCategory = names[1];
                     }
-                    catch(IndexOutOfRangeException)
+                    catch (IndexOutOfRangeException)
                     {
                         categoryVM.SubCategory = null;
                     }
@@ -275,14 +262,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         Name = costCalculationRetail_Material.MaterialName
                     };
                     costCalculationRetail_MaterialVM.Material = materialVM;
-                    
+
                     UOMViewModel uomQuantityVM = new UOMViewModel()
                     {
                         Id = costCalculationRetail_Material.UOMQuantityId,
                         Name = costCalculationRetail_Material.UOMQuantityName
                     };
                     costCalculationRetail_MaterialVM.UOMQuantity = uomQuantityVM;
-                    
+
                     UOMViewModel uomPriceVM = new UOMViewModel()
                     {
                         Id = costCalculationRetail_Material.UOMPriceId,
@@ -339,7 +326,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 PropertyCopier<CostCalculationRetail_MaterialViewModel, CostCalculationRetail_Material>.Copy(costCalculationRetail_MaterialVM, costCalculationRetail_Material);
 
                 costCalculationRetail_Material.CategoryId = costCalculationRetail_MaterialVM.Category.Id;
-                costCalculationRetail_Material.CategoryName = costCalculationRetail_MaterialVM.Category.SubCategory != null ?costCalculationRetail_MaterialVM.Category.Name + " - " + costCalculationRetail_MaterialVM.Category.SubCategory : costCalculationRetail_MaterialVM.Category.Name;
+                costCalculationRetail_Material.CategoryName = costCalculationRetail_MaterialVM.Category.SubCategory != null ? costCalculationRetail_MaterialVM.Category.Name + " - " + costCalculationRetail_MaterialVM.Category.SubCategory : costCalculationRetail_MaterialVM.Category.Name;
                 costCalculationRetail_Material.MaterialId = costCalculationRetail_MaterialVM.Material.Id;
                 costCalculationRetail_Material.MaterialName = costCalculationRetail_MaterialVM.Material.Name;
                 costCalculationRetail_Material.UOMQuantityId = costCalculationRetail_MaterialVM.UOMQuantity.Id;

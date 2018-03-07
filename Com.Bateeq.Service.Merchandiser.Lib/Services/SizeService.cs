@@ -29,7 +29,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     "Code", "Name"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
-            
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "Name"
@@ -42,12 +45,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Name = b.Name
                 });
 
-            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
-
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
-            
+
             Pageable<Size> pageable = new Pageable<Size>(Query, Page - 1, Size);
             List<Size> Data = pageable.Data.ToList<Size>();
             int TotalData = pageable.TotalCount;
@@ -59,27 +59,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
 
-            int deleted = 0;
-            using (var transaction = this.DbContext.Database.BeginTransaction())
+            int deleted = await this.DeleteAsync(Id);
+            HashSet<int> deletedRelatedSizes = new HashSet<int>(relatedSizeService.DbSet
+                .Where(p => p.SizeRangeId.Equals(Id))
+                .Select(p => p.Id));
+
+            foreach (int relatedSize in deletedRelatedSizes)
             {
-                try
-                {
-                    deleted = await this.DeleteAsync(Id);
-
-                    HashSet<int> deletedRelatedSizes = new HashSet<int>(relatedSizeService.DbSet
-                        .Where(p => p.SizeRangeId.Equals(Id))
-                        .Select(p => p.Id));
-                    foreach (int relatedSize in deletedRelatedSizes)
-                    {
-                        await relatedSizeService.DeleteModel(relatedSize);
-                    }
-
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                }
+                await relatedSizeService.DeleteModel(relatedSize);
             }
 
             return deleted;

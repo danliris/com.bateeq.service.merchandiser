@@ -8,20 +8,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public List<RelatedSizeVM> RelatedSizes { get; set; }
-
-        public class RelatedSizeVM
-        {
-            public int Id { get; set; }
-            public SizeVM Size { get; set; }
-
-            public class SizeVM
-            {
-                public int Id { get; set; }
-                public string Code { get; set; }
-                public string Name { get; set; }
-            }
-        }
+        public List<RelatedSizeViewModel> RelatedSizes { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

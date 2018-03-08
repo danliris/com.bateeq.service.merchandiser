@@ -99,6 +99,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 {
                     await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
                 }
+                else
+                {
+                    await CostCalculationGarment_MaterialService.UpdateModel(CostCalculationGarment_Material, model);
+                }
             }
 
             foreach (CostCalculationGarment_Material CostCalculationGarment_Material in Model.CostCalculationGarment_Materials)

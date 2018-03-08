@@ -37,7 +37,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "CostCalculationRetail", "Total"
+                    "Id", "Code", "CostCalculationRetail", "Total", "Color"
                 };
             Query = Query
                 .Select(ro => new RO_Retail
@@ -53,6 +53,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         CounterId = ro.CostCalculationRetail.CounterId,
                         CounterName = ro.CostCalculationRetail.CounterName,
                     },
+                    ColorId = ro.ColorId,
+                    ColorName = ro.ColorName,
                     Total = ro.Total
                 });
 

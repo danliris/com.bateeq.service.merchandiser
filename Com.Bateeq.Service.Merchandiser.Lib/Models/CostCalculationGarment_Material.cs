@@ -29,6 +29,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public double ShippingFeePortion { get; set; }
         public double TotalShippingFee { get; set; }
         public double BudgetQuantity { get; set; }
+        public string Information { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             return new List<ValidationResult>();

@@ -46,6 +46,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double NETFOBP { get; set; }
         public string Description { get; set; }
 
+        public int? RO_RetailId { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrWhiteSpace(this.Article))

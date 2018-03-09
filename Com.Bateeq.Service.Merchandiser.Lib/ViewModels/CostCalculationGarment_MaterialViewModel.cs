@@ -23,5 +23,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double? ShippingFeePortion { get; set; }
         public double TotalShippingFee { get; set; }
         public double BudgetQuantity { get; set; }
+        public string Information { get; set; }
     }
 }

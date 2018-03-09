@@ -26,6 +26,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<CostCalculationGarment_Material> CostCalculationGarment_Materials { get; set; }
         public DbSet<RO_Retail> RO_Retails { get; set; }
         public DbSet<RO_Retail_SizeBreakdown> RO_RetailSizeBreakdowns { get; set; }
+        public DbSet<RO_Garment> RO_Garments { get; set; }
+        public DbSet<RO_Garment_SizeBreakdown> RO_Garment_SizeBreakdowns { get; set; }
+        public DbSet<RO_Garment_SizeBreakdown_Detail> RO_Garment_SizeBreakdown_Details { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +49,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
             modelBuilder.ApplyConfiguration(new CostCalculationGarment_MaterialConfig());
             modelBuilder.ApplyConfiguration(new RO_RetailConfig());
             modelBuilder.ApplyConfiguration(new RO_Retail_SizeBreakdownConfig());
+            modelBuilder.ApplyConfiguration(new RO_GarmentConfig());
+            modelBuilder.ApplyConfiguration(new RO_Garment_SizeBreakdownConfig());
+            modelBuilder.ApplyConfiguration(new RO_Garment_SizeBreakdown_DetailConfig());
         }
     }
 }

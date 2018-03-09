@@ -28,7 +28,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             List<string> SearchAttributes = new List<string>()
                 {
-                    "RO", "Article", "Convection", "Quantity", "ConfirmPrice"
+                    "RO", "Article"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 
@@ -91,25 +91,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .Select(p => p.Id));
             int updated = await this.UpdateAsync(Id, Model);
 
-            foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
+            if (Model.CostCalculationGarment_Materials != null)
             {
-                CostCalculationGarment_Material model = Model.CostCalculationGarment_Materials.FirstOrDefault(prop => prop.Id.Equals(CostCalculationGarment_Material));
+                foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
+                {
+                    CostCalculationGarment_Material model = Model.CostCalculationGarment_Materials.FirstOrDefault(prop => prop.Id.Equals(CostCalculationGarment_Material));
 
-                if (model == null)
-                {
-                    await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
+                    if (model == null)
+                    {
+                        await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
+                    }
+                    else
+                    {
+                        await CostCalculationGarment_MaterialService.UpdateModel(CostCalculationGarment_Material, model);
+                    }
                 }
-                else
-                {
-                    await CostCalculationGarment_MaterialService.UpdateModel(CostCalculationGarment_Material, model);
-                }
-            }
 
-            foreach (CostCalculationGarment_Material CostCalculationGarment_Material in Model.CostCalculationGarment_Materials)
-            {
-                if (CostCalculationGarment_Material.Id.Equals(0))
+                foreach (CostCalculationGarment_Material CostCalculationGarment_Material in Model.CostCalculationGarment_Materials)
                 {
-                    await CostCalculationGarment_MaterialService.CreateModel(CostCalculationGarment_Material);
+                    if (CostCalculationGarment_Material.Id.Equals(0))
+                    {
+                        await CostCalculationGarment_MaterialService.CreateModel(CostCalculationGarment_Material);
+                    }
                 }
             }
 

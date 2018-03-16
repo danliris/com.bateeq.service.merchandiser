@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180315093512_addImage2")]
+    partial class addImage2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -900,8 +901,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                         .HasMaxLength(100);
 
                     b.Property<int>("CostCalculationGarmentId");
-
-                    b.Property<string>("ImagesPath");
 
                     b.Property<string>("Instruction")
                         .HasMaxLength(3000);

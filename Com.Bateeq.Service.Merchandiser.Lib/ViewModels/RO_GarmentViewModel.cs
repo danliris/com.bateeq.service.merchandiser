@@ -13,6 +13,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public List<RO_Garment_SizeBreakdownViewModel> RO_Garment_SizeBreakdowns { get; set; }
         public string Instruction { get; set; }
         public int Total { get; set; }
+        public List<string> ImagesFile { get; set; }
+        public List<string> ImagesType { get; set; }
+        public List<string> ImagesPath { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

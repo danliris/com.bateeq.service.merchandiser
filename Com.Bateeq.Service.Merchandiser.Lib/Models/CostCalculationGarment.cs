@@ -62,6 +62,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public double FreightCost { get; set; }
         public double NETFOBP { get; set; }
         public string Description { get; set; }
+        public string ImageFile { get; set; }
+        public string ImageType { get; set; }
+        public string ImagePath { get; set; }
         public int? RO_GarmentId  { get; set; }
         public virtual RO_Garment RO_Garment { get; set; }
 

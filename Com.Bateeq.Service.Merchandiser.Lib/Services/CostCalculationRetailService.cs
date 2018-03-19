@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Com.Moonlay.NetCore.Lib.Service;
+using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -20,6 +21,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
     {
         public CostCalculationRetailService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+        }
+        private AzureImageService AzureImageService
+        {
+            get { return this.ServiceProvider.GetService<AzureImageService>(); }
         }
 
         public override Tuple<List<CostCalculationRetail>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -70,21 +75,31 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .Max(d => d.SerialNumber);
             Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
             Model.RO = String.Format("{0}{1:D4}", Model.SeasonCode, Model.SerialNumber);
+            int created = await this.CreateAsync(Model);
+            
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
+            await this.UpdateAsync(Model.Id, Model);
 
-            return await this.CreateAsync(Model);
+            return created;
         }
 
         public override async Task<CostCalculationRetail> ReadModelById(int id)
         {
-            return await this.DbSet
+            CostCalculationRetail read = await this.DbSet
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.CostCalculationRetail_Materials)
                 .FirstOrDefaultAsync();
+            
+            read.ImageFile = await this.AzureImageService.DownloadImage(read.GetType().Name, read.ImagePath);
+
+            return read;
         }
 
         public override async Task<int> UpdateModel(int Id, CostCalculationRetail Model)
         {
             CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
+            
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
 
             int updated = await this.UpdateAsync(Id, Model);
 
@@ -124,9 +139,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
 
-            int deleted = 0;
-            deleted = await this.DeleteAsync(Id);
-
             HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
                 .Where(p => p.CostCalculationRetailId.Equals(Id))
                 .Select(p => p.Id));
@@ -134,7 +146,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             {
                 await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
             }
-            return deleted;
+
+            CostCalculationRetail deleted = await this.GetAsync(Id);
+            await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
+
+            return await this.DeleteAsync(Id);
         }
 
         public override void OnCreating(CostCalculationRetail model)

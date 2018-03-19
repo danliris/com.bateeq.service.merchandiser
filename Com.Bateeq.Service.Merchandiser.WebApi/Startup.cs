@@ -9,6 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 using IdentityServer4.AccessTokenValidation;
 using IdentityModel;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.IO;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
+using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi
 {
@@ -34,6 +42,9 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                     options.AssumeDefaultVersionWhenUnspecified = true;
                     options.DefaultApiVersion = new ApiVersion(1, 0);
                 });
+
+            services
+                .AddTransient<AzureImageService>();
 
             services
                 .AddTransient<CategoryService>()

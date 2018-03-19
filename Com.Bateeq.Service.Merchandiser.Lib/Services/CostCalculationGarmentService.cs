@@ -13,6 +13,7 @@ using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Com.Moonlay.NetCore.Lib.Service;
 using System.Reflection;
+using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -20,6 +21,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
     {
         public CostCalculationGarmentService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+        }
+
+        private AzureImageService AzureImageService
+        {
+            get { return this.ServiceProvider.GetService<AzureImageService>(); }
         }
 
         public override Tuple<List<CostCalculationGarment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -71,28 +77,39 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
             Model.RO = String.Format("{0}{1:D4}", Model.ConvectionCode, Model.SerialNumber);
             int created = await this.CreateAsync(Model);
+            
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
+
+            await this.UpdateAsync(Model.Id, Model);
+
             return created;
         }
 
         public override async Task<CostCalculationGarment> ReadModelById(int id)
         {
-            return await this.DbSet
+            CostCalculationGarment read = await this.DbSet
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.CostCalculationGarment_Materials)
                 .FirstOrDefaultAsync();
+
+            read.ImageFile = await this.AzureImageService.DownloadImage(read.GetType().Name, read.ImagePath);
+            
+            return read;
         }
 
         public override async Task<int> UpdateModel(int Id, CostCalculationGarment Model)
         {
             CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
+            
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
 
-            HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
-                .Where(p => p.CostCalculationGarmentId.Equals(Id))
-                .Select(p => p.Id));
             int updated = await this.UpdateAsync(Id, Model);
 
             if (Model.CostCalculationGarment_Materials != null)
             {
+                HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
+                    .Where(p => p.CostCalculationGarmentId.Equals(Id))
+                    .Select(p => p.Id));
                 foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
                 {
                     CostCalculationGarment_Material model = Model.CostCalculationGarment_Materials.FirstOrDefault(prop => prop.Id.Equals(CostCalculationGarment_Material));
@@ -123,7 +140,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
 
-            int deleted = await this.DeleteAsync(Id);
             HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
                 .Where(p => p.CostCalculationGarmentId.Equals(Id))
                 .Select(p => p.Id));
@@ -133,7 +149,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
             }
 
-            return deleted;
+            CostCalculationGarment deleted = await this.GetAsync(Id);
+            await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
+
+            return await this.DeleteAsync(Id);
         }
 
         public override void OnCreating(CostCalculationGarment model)

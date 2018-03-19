@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Com.Moonlay.NetCore.Lib.Service;
 using Microsoft.EntityFrameworkCore;
+using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -20,6 +21,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
     {
         public RO_GarmentService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+        }
+
+        private AzureImageService AzureImageService
+        {
+            get { return this.ServiceProvider.GetService<AzureImageService>(); }
         }
 
         public override Tuple<List<RO_Garment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -73,6 +79,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             int created = await this.CreateAsync(Model);
 
+            Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesType, Model.ImagesPath);
+
+            await this.UpdateAsync(Model.Id, Model);
+
             CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
             costCalculationGarment.RO_GarmentId = Model.Id;
             await costCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
@@ -102,19 +112,25 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<RO_Garment> ReadModelById(int id)
         {
-            return await this.DbSet
+            RO_Garment read = await this.DbSet
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.RO_Garment_SizeBreakdowns)
                     .ThenInclude(sb => sb.RO_Garment_SizeBreakdown_Details)
                 .Include(d => d.CostCalculationGarment)
                     .ThenInclude(ccg => ccg.CostCalculationGarment_Materials)
                 .FirstOrDefaultAsync();
+
+            read.ImagesFile = await this.AzureImageService.DownloadMultipleImages(read.GetType().Name, read.ImagesPath);
+
+            return read;
         }
 
         public override async Task<int> UpdateModel(int Id, RO_Garment Model)
         {
             CostCalculationGarment costCalculationGarment = Model.CostCalculationGarment;
             Model.CostCalculationGarment = null;
+            
+            Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesType, Model.ImagesPath);
 
             int updated = await this.UpdateAsync(Id, Model);
 
@@ -159,13 +175,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> DeleteModel(int Id)
         {
+            RO_Garment deletedImage = await this.GetAsync(Id);
+            await this.AzureImageService.RemoveMultipleImage(deletedImage.GetType().Name, deletedImage.ImagesPath);
+
             int deleted = await this.DeleteAsync(Id);
 
             CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
             CostCalculationGarment costCalculationGarment = costCalculationGarmentService.DbSet
                 .FirstOrDefault(p => p.RO_GarmentId.Equals(Id));
             costCalculationGarment.RO_GarmentId = null;
-
             await costCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
 
             return deleted;
@@ -190,6 +208,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             RO_GarmentViewModel viewModel = new RO_GarmentViewModel();
             PropertyCopier<RO_Garment, RO_GarmentViewModel>.Copy(model, viewModel);
+            viewModel.ImagesPath = model.ImagesPath != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesPath) : null;
 
             CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
             viewModel.CostCalculationGarment = costCalculationGarmentService.MapToViewModel(model.CostCalculationGarment);
@@ -212,6 +231,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             RO_Garment model = new RO_Garment();
             PropertyCopier<RO_GarmentViewModel, RO_Garment>.Copy(viewModel, model);
+            model.ImagesPath = viewModel.ImagesPath != null ? JsonConvert.SerializeObject(viewModel.ImagesPath) : null;
 
             CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
             model.CostCalculationGarmentId = viewModel.CostCalculationGarment.Id;

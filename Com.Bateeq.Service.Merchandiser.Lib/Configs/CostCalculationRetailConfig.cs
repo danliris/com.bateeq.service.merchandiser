@@ -25,6 +25,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Configs
             builder.Property(c => c.SizeRangeName).HasMaxLength(500);
             builder.Property(c => c.Description).HasMaxLength(3000);
             builder.Property(c => c.SelectedRounding).HasMaxLength(20);
+            builder.Ignore(c => c.ImageFile);
+            builder.Ignore(c => c.ImageType);
             builder
                 .HasMany(c => c.CostCalculationRetail_Materials)
                 .WithOne(cm => cm.CostCalculationRetail)

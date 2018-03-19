@@ -77,10 +77,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
             Model.RO = String.Format("{0}{1:D4}", Model.ConvectionCode, Model.SerialNumber);
             int created = await this.CreateAsync(Model);
-
-            string fileName = ImageHelper.GenerateFileName(Model.Id, Model._CreatedUtc);
-            byte[] imageBytes = ImageHelper.ConvertFromBase64String(Model.ImageFile);
-            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, imageBytes, fileName, Model.ImageType);
+            
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
 
             await this.UpdateAsync(Model.Id, Model);
 
@@ -93,24 +91,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.CostCalculationGarment_Materials)
                 .FirstOrDefaultAsync();
-            if (read.ImagePath != null)
-            {
-                string fileName = ImageHelper.GetFileNameFromPath(read.ImagePath);
-                read.ImageFile = await this.AzureImageService.DownloadImage(read.GetType().Name, fileName, isAttachment: false);
-            }
+
+            read.ImageFile = await this.AzureImageService.DownloadImage(read.GetType().Name, read.ImagePath);
+            
             return read;
         }
 
         public override async Task<int> UpdateModel(int Id, CostCalculationGarment Model)
         {
             CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
-
-            string fileName = ImageHelper.GenerateFileName(Model.Id, Model._CreatedUtc);
-            byte[] imageBytes = ImageHelper.ConvertFromBase64String(Model.ImageFile);
-            if (imageBytes != null)
-            {
-                Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, imageBytes, fileName, Model.ImageType);
-            }
+            
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
 
             int updated = await this.UpdateAsync(Id, Model);
 
@@ -159,8 +150,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
 
             CostCalculationGarment deleted = await this.GetAsync(Id);
-            string fileName = ImageHelper.GetFileNameFromPath(deleted.ImagePath);
-            await this.AzureImageService.DeleteImage(deleted.GetType().Name, fileName);
+            await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
 
             return await this.DeleteAsync(Id);
         }

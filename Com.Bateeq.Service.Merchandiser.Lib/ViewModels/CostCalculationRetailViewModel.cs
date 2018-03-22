@@ -8,6 +8,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
     public class CostCalculationRetailViewModel : BasicViewModel, IValidatableObject
     {
         public string Code { get; set; }
+        public int SerialNumber { get; set; }
         public string RO { get; set; }
 
         public string Article { get; set; }

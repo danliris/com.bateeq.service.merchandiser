@@ -1,4 +1,5 @@
-﻿using Com.Moonlay.NetCore.Lib.Service;
+﻿using Com.Bateeq.Service.Merchandiser.Lib.Exceptions;
+using Com.Moonlay.NetCore.Lib.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -135,6 +136,12 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
             }
 
             Result.Add("error", Errors);
+            return Result;
+        }
+
+        public Dictionary<string, object> Fail(DbReferenceNotNullException e)
+        {
+            Result.Add("error", e.Message);
             return Result;
         }
 

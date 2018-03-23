@@ -14,6 +14,7 @@ using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Com.Moonlay.NetCore.Lib.Service;
 using System.Reflection;
 using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
+using Com.Bateeq.Service.Merchandiser.Lib.Exceptions;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -138,20 +139,27 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> DeleteModel(int Id)
         {
-            CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
-
-            HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
-                .Where(p => p.CostCalculationGarmentId.Equals(Id))
-                .Select(p => p.Id));
-
-            foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
-            {
-                await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
-            }
-
             CostCalculationGarment deleted = await this.GetAsync(Id);
-            await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
+            if (deleted.RO_GarmentId != null)
+            {
+                throw new DbReferenceNotNullException("Cost Calculation Garment ini tidak bisa di delete karena masih terdaftar di RO");
+            }
+            else
+            {
+                CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
 
+                HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
+                    .Where(p => p.CostCalculationGarmentId.Equals(Id))
+                    .Select(p => p.Id));
+
+                foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
+                {
+                    await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
+                }
+                
+                await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
+            }
+            
             return await this.DeleteAsync(Id);
         }
 

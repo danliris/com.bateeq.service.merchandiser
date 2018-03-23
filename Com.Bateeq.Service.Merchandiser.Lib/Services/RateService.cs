@@ -13,15 +13,15 @@ using System.Threading.Tasks;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
-    public class OTLService : BasicService<MerchandiserDbContext, OTL>, IMap<OTL, OTLViewModel>
+    public class RateService : BasicService<MerchandiserDbContext, Rate>, IMap<Rate, RateViewModel>
     {
-        public OTLService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public RateService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
         
-        public override Tuple<List<OTL>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        public override Tuple<List<Rate>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            IQueryable<OTL> Query = this.DbContext.OTLs;
+            IQueryable<Rate> Query = this.DbContext.Rates;
 
             List<string> SearchAttributes = new List<string>()
                 {
@@ -34,28 +34,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name", "Rate"
+                    "Id", "Code", "Name", "Value"
                 };
             Query = Query
-                .Select(b => new OTL
+                .Select(b => new Rate
                 {
                     Id = b.Id,
                     Code = b.Code,
                     Name = b.Name,
-                    Rate = b.Rate
+                    Value = b.Value
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
 
-            Pageable<OTL> pageable = new Pageable<OTL>(Query, Page - 1, Size);
-            List<OTL> Data = pageable.Data.ToList<OTL>();
+            Pageable<Rate> pageable = new Pageable<Rate>(Query, Page - 1, Size);
+            List<Rate> Data = pageable.Data.ToList<Rate>();
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
 
-        public override void OnCreating(OTL model)
+        public override void OnCreating(Rate model)
         {
             do
             {
@@ -66,19 +66,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             base.OnCreating(model);
         }
 
-        public OTLViewModel MapToViewModel(OTL model)
+        public RateViewModel MapToViewModel(Rate model)
         {
-            OTLViewModel viewModel = new OTLViewModel();
-            PropertyCopier<OTL, OTLViewModel>.Copy(model, viewModel);
-            viewModel.Rate = model.Rate;
+            RateViewModel viewModel = new RateViewModel();
+            PropertyCopier<Rate, RateViewModel>.Copy(model, viewModel);
+            viewModel.Value = model.Value;
             return viewModel;
         }
 
-        public OTL MapToModel(OTLViewModel viewModel)
+        public Rate MapToModel(RateViewModel viewModel)
         {
-            OTL model = new OTL();
-            PropertyCopier<OTLViewModel, OTL>.Copy(viewModel, model);
-            model.Rate = (double)viewModel.Rate;
+            Rate model = new Rate();
+            PropertyCopier<RateViewModel, Rate>.Copy(viewModel, model);
+            model.Value = (double)viewModel.Value;
             return model;
         }
     }

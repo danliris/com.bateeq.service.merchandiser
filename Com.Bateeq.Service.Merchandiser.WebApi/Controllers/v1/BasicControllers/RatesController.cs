@@ -9,11 +9,11 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
 {
     [Produces("application/json")]
     [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/OTLs")]
-    public class OTLsController : BasicController<MerchandiserDbContext, OTLService, OTLViewModel, OTL>
+    [Route("v{version:apiVersion}/rates")]
+    public class RatesController : BasicController<MerchandiserDbContext, RateService, RateViewModel, Rate>
     {
         private static readonly string ApiVersion = "1.0";
-        public OTLsController(OTLService service) : base(service, ApiVersion)
+        public RatesController(RateService service) : base(service, ApiVersion)
         {
         }
     }

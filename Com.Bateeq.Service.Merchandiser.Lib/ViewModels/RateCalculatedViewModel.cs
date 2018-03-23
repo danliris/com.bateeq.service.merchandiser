@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
 {
-    public class OTLCalculatedViewModel : OTLViewModel
+    public class RateCalculatedViewModel : RateViewModel
     {
-        public double? CalculatedRate { get; set; }
+        public double? CalculatedValue { get; set; }
     }
 }

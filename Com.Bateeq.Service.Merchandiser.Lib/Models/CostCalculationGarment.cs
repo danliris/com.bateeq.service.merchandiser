@@ -43,8 +43,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public int THRId { get; set; }
         public double THRRate { get; set; }
         public double ConfirmPrice { get; set; }
-        public int RateDollarId { get; set; }
-        public double RateDollarRate { get; set; }
+        public int RateId { get; set; }
+        public double RateValue { get; set; }
         public ICollection<CostCalculationGarment_Material> CostCalculationGarment_Materials { get; set; }
         public double Freight { get; set; }
         public double Insurance { get; set; }

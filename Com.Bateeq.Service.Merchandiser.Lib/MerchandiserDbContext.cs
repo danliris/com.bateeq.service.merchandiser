@@ -15,7 +15,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<Material> Materials { get; set; }
         public DbSet<UOM> UOMs { get; set; }
         public DbSet<Size> Sizes { get; set; }
-        public DbSet<OTL> OTLs { get; set; }
+        public DbSet<Rate> Rates { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
         public DbSet<Efficiency> Efficiencies { get; set; }
         public DbSet<SizeRange> SizeRanges { get; set; }
@@ -38,7 +38,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
             modelBuilder.ApplyConfiguration(new MaterialConfig());
             modelBuilder.ApplyConfiguration(new UOMConfig());
             modelBuilder.ApplyConfiguration(new SizeConfig());
-            modelBuilder.ApplyConfiguration(new OTLConfig());
+            modelBuilder.ApplyConfiguration(new RateConfig());
             modelBuilder.ApplyConfiguration(new BuyerConfig());
             modelBuilder.ApplyConfiguration(new EfficiencyConfig());
             modelBuilder.ApplyConfiguration(new SizeRangeConfig());

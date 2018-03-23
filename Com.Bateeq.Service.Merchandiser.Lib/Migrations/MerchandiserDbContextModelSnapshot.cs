@@ -217,9 +217,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<int?>("RO_GarmentId");
 
-                    b.Property<int>("RateDollarId");
+                    b.Property<int>("RateId");
 
-                    b.Property<double>("RateDollarRate");
+                    b.Property<double>("RateValue");
 
                     b.Property<double>("Risk");
 
@@ -782,7 +782,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.ToTable("Materials");
                 });
 
-            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.OTL", b =>
+            modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.Rate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -795,7 +795,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<double>("Rate");
+                    b.Property<double>("Value");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -831,7 +831,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OTLs");
+                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("Com.Bateeq.Service.Merchandiser.Lib.Models.RelatedSize", b =>

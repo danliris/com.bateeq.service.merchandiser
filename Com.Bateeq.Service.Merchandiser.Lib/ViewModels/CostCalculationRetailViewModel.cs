@@ -28,10 +28,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double Risk { get; set; }
         public string Description { get; set; }
 
-        public OTLCalculatedViewModel OL { get; set; }
-        public OTLCalculatedViewModel OTL1 { get; set; }
-        public OTLCalculatedViewModel OTL2 { get; set; }
-        public OTLCalculatedViewModel OTL3 { get; set; }
+        public RateCalculatedViewModel OL { get; set; }
+        public RateCalculatedViewModel OTL1 { get; set; }
+        public RateCalculatedViewModel OTL2 { get; set; }
+        public RateCalculatedViewModel OTL3 { get; set; }
 
         public List<CostCalculationRetail_MaterialViewModel> CostCalculationRetail_Materials { get; set; }
         public double HPP { get; set; }

@@ -51,7 +51,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                 .AddTransient<MaterialService>()
                 .AddTransient<UOMService>()
                 .AddTransient<SizeService>()
-                .AddTransient<OTLService>()
+                .AddTransient<RateService>()
                 .AddTransient<BuyerService>()
                 .AddTransient<EfficiencyService>()
                 .AddTransient<SizeRangeService>()

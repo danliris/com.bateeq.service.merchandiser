@@ -7,18 +7,18 @@ using System.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 {
-    public class OTL : StandardEntity, IValidatableObject
+    public class Rate : StandardEntity, IValidatableObject
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public double Rate { get; set; }
+        public double Value { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            OTLService service = validationContext.GetService<OTLService>();
+            RateService service = validationContext.GetService<RateService>();
 
             if (service.DbSet.Count(r => r.Id != this.Id && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
-                yield return new ValidationResult("Nama OTL sudah ada", new List<string> { "Name" });
+                yield return new ValidationResult("Nama Rate sudah ada", new List<string> { "Name" });
         }
     }
 }

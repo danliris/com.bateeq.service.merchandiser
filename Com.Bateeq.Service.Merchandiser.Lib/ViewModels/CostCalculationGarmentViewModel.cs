@@ -9,6 +9,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
     public class CostCalculationGarmentViewModel : BasicViewModel, IValidatableObject
     {
         public string Code { get; set; }
+        public int SerialNumber { get; set; }
         public string RO { get; set; }
         public string Article { get; set; }
         public ArticleSeasonViewModel Convection { get; set; }
@@ -28,17 +29,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public BuyerViewModel Buyer { get; set; }
         public EfficiencyViewModel Efficiency { get; set; }
         public double Index { get; set; }
-        public OTLViewModel Wage { get; set; }
-        public OTLViewModel THR { get; set; }
+        public RateViewModel Wage { get; set; }
+        public RateViewModel THR { get; set; }
         public double? ConfirmPrice { get; set; }
-        public OTLViewModel RateDollar { get; set; }
+        public RateViewModel Rate { get; set; }
         public List<CostCalculationGarment_MaterialViewModel> CostCalculationGarment_Materials { get; set; }
         public double? Freight { get; set; }
         public double? Insurance { get; set; }
         public double? CommissionPortion { get; set; }
         public double CommissionRate { get; set; }
-        public OTLCalculatedViewModel OTL1 { get; set; }
-        public OTLCalculatedViewModel OTL2 { get; set; }
+        public RateCalculatedViewModel OTL1 { get; set; }
+        public RateCalculatedViewModel OTL2 { get; set; }
         public double Risk { get; set; }
         public double ProductionCost { get; set; }
         public double NETFOB { get; set; }
@@ -69,10 +70,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
                 yield return new ValidationResult("Delivery Date harus diisi", new List<string> { "DeliveryDate" });
             else if (this.DeliveryDate < DateTime.Today)
                 yield return new ValidationResult("Delivery Date harus lebih besar dari hari ini", new List<string> { "DeliveryDate" });
-            if (this.ConfirmDate == null || this.ConfirmDate == DateTime.MinValue)
-                yield return new ValidationResult("Confirm Date harus diisi", new List<string> { "ConfirmDate" });
-            else if (this.ConfirmDate < DateTime.Today)
-                yield return new ValidationResult("Confirm Date harus lebih besar dari hari ini", new List<string> { "ConfirmDate" });
             if (this.SMV_Cutting == null)
                 yield return new ValidationResult("SMV Cutting harus diisi", new List<string> { "SMV_Cutting" });
             else if (this.SMV_Cutting <= 0)

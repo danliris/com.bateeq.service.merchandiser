@@ -7,35 +7,35 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Com.Bateeq.Service.Merchandiser.Test.Services.OTL
+namespace Com.Bateeq.Service.Merchandiser.Test.Services.Rate
 {
     [Collection("ServiceProviderFixture collection")]
-    public class OTLBasicTest : BasicServiceTest<MerchandiserDbContext, OTLService, Models.OTL>
+    public class OTLBasicTest : BasicServiceTest<MerchandiserDbContext, RateService, Models.Rate>
     {
-        private static readonly string[] createAttrAssertions = { "Name", "Rate" };
-        private static readonly string[] updateAttrAssertions = { "Name", "Rate" };
+        private static readonly string[] createAttrAssertions = { "Name", "Value" };
+        private static readonly string[] updateAttrAssertions = { "Name", "Value" };
         private static readonly string[] existAttrCriteria = {};
 
         public OTLBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
         {
         }
 
-        public override void EmptyCreateModel(Models.OTL model)
+        public override void EmptyCreateModel(Models.Rate model)
         {
         }
 
-        public override void EmptyUpdateModel(Models.OTL model)
+        public override void EmptyUpdateModel(Models.Rate model)
         {
         }
 
-        public override Models.OTL GenerateTestModel()
+        public override Models.Rate GenerateTestModel()
         {
             string guid = Guid.NewGuid().ToString();
-            return new Models.OTL()
+            return new Models.Rate()
             {
                 Code = guid,
                 Name = string.Format("TEST OTL {0}", guid),
-                Rate = 100000
+                Value = 100000
             };
         }
     }

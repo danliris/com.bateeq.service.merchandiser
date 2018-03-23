@@ -14,6 +14,7 @@ using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Com.Moonlay.NetCore.Lib.Service;
 using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
+using Com.Bateeq.Service.Merchandiser.Lib.Exceptions;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -137,18 +138,26 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> DeleteModel(int Id)
         {
-            CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
-
-            HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
-                .Where(p => p.CostCalculationRetailId.Equals(Id))
-                .Select(p => p.Id));
-            foreach (int costCalculationRetail_Material in costCalculationRetail_Materials)
-            {
-                await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
-            }
-
             CostCalculationRetail deleted = await this.GetAsync(Id);
-            await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
+
+            if (deleted.RO_RetailId != null)
+            {
+                throw new DbReferenceNotNullException("Cost Calculation Retail ini tidak bisa di delete karena masih terdaftar di RO");
+            }
+            else
+            {
+                CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
+
+                HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
+                    .Where(p => p.CostCalculationRetailId.Equals(Id))
+                    .Select(p => p.Id));
+                foreach (int costCalculationRetail_Material in costCalculationRetail_Materials)
+                {
+                    await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
+                }
+                
+                await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
+            }
 
             return await this.DeleteAsync(Id);
         }
@@ -227,25 +236,25 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             viewModel.Risk = PercentageConverter.ToPercent(model.Risk);
 
-            viewModel.OL = new OTLCalculatedViewModel();
+            viewModel.OL = new RateCalculatedViewModel();
             viewModel.OL.Id = model.OLId;
-            viewModel.OL.Rate = model.OLRate;
-            viewModel.OL.CalculatedRate = model.OLCalculatedRate;
+            viewModel.OL.Value = model.OLRate;
+            viewModel.OL.CalculatedValue = model.OLCalculatedRate;
 
-            viewModel.OTL1 = new OTLCalculatedViewModel();
+            viewModel.OTL1 = new RateCalculatedViewModel();
             viewModel.OTL1.Id = model.OTL1Id;
-            viewModel.OTL1.Rate = model.OTL1Rate;
-            viewModel.OTL1.CalculatedRate = model.OTL1CalculatedRate;
+            viewModel.OTL1.Value = model.OTL1Rate;
+            viewModel.OTL1.CalculatedValue = model.OTL1CalculatedRate;
 
-            viewModel.OTL2 = new OTLCalculatedViewModel();
+            viewModel.OTL2 = new RateCalculatedViewModel();
             viewModel.OTL2.Id = model.OTL2Id;
-            viewModel.OTL2.Rate = model.OTL2Rate;
-            viewModel.OTL2.CalculatedRate = model.OTL2CalculatedRate;
+            viewModel.OTL2.Value = model.OTL2Rate;
+            viewModel.OTL2.CalculatedValue = model.OTL2CalculatedRate;
 
-            viewModel.OTL3 = new OTLCalculatedViewModel();
+            viewModel.OTL3 = new RateCalculatedViewModel();
             viewModel.OTL3.Id = model.OTL3Id;
-            viewModel.OTL3.Rate = model.OTL3Rate;
-            viewModel.OTL3.CalculatedRate = model.OTL3CalculatedRate;
+            viewModel.OTL3.Value = model.OTL3Rate;
+            viewModel.OTL3.CalculatedValue = model.OTL3CalculatedRate;
 
             viewModel.CostCalculationRetail_Materials = new List<CostCalculationRetail_MaterialViewModel>();
 
@@ -322,17 +331,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.Risk = PercentageConverter.ToFraction(viewModel.Risk);
 
             model.OLId = viewModel.OL.Id;
-            model.OLRate = viewModel.OL.Rate != null ? (double)viewModel.OL.Rate : 0;
-            model.OLCalculatedRate = viewModel.OL.CalculatedRate != null ? (double)viewModel.OL.CalculatedRate : 0;
+            model.OLRate = viewModel.OL.Value != null ? (double)viewModel.OL.Value : 0;
+            model.OLCalculatedRate = viewModel.OL.CalculatedValue != null ? (double)viewModel.OL.CalculatedValue : 0;
             model.OTL1Id = viewModel.OTL1.Id;
-            model.OTL1Rate = viewModel.OTL1.Rate != null ? (double)viewModel.OTL1.Rate : 0;
-            model.OTL1CalculatedRate = viewModel.OTL1.CalculatedRate != null ? (double)viewModel.OTL1.CalculatedRate : 0;
+            model.OTL1Rate = viewModel.OTL1.Value != null ? (double)viewModel.OTL1.Value : 0;
+            model.OTL1CalculatedRate = viewModel.OTL1.CalculatedValue != null ? (double)viewModel.OTL1.CalculatedValue : 0;
             model.OTL2Id = viewModel.OTL2.Id;
-            model.OTL2Rate = viewModel.OTL2.Rate != null ? (double)viewModel.OTL2.Rate : 0;
-            model.OTL2CalculatedRate = viewModel.OTL2.CalculatedRate != null ? (double)viewModel.OTL2.CalculatedRate : 0;
+            model.OTL2Rate = viewModel.OTL2.Value != null ? (double)viewModel.OTL2.Value : 0;
+            model.OTL2CalculatedRate = viewModel.OTL2.CalculatedValue != null ? (double)viewModel.OTL2.CalculatedValue : 0;
             model.OTL3Id = viewModel.OTL3.Id;
-            model.OTL3Rate = viewModel.OTL3.Rate != null ? (double)viewModel.OTL3.Rate : 0;
-            model.OTL3CalculatedRate = viewModel.OTL3.CalculatedRate != null ? (double)viewModel.OTL3.CalculatedRate : 0;
+            model.OTL3Rate = viewModel.OTL3.Value != null ? (double)viewModel.OTL3.Value : 0;
+            model.OTL3CalculatedRate = viewModel.OTL3.CalculatedValue != null ? (double)viewModel.OTL3.CalculatedValue : 0;
 
             model.CostCalculationRetail_Materials = new List<CostCalculationRetail_Material>();
 

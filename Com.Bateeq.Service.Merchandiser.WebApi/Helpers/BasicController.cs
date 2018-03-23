@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using Com.Moonlay.NetCore.Lib.Service;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
+using Com.Bateeq.Service.Merchandiser.Lib.Exceptions;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
 {
@@ -222,6 +223,11 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
                         await Service.DeleteModel(Id);
                         transaction.Commit();
                     }
+                    catch (DbReferenceNotNullException e)
+                    {
+                        transaction.Rollback();
+                        throw new DbReferenceNotNullException(e.Message);
+                    }
                     catch (Exception e)
                     {
                         transaction.Rollback();
@@ -230,6 +236,13 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
                 }
 
                 return NoContent();
+            }
+            catch (DbReferenceNotNullException e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.BAD_REQUEST_STATUS_CODE, General.BAD_REQUEST_MESSAGE)
+                    .Fail(e);
+                return BadRequest(Result);
             }
             catch (Exception e)
             {

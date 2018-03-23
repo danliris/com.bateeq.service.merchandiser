@@ -24,8 +24,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public string UOMPriceName { get; set; }
         public double Conversion { get; set; }
         public double Total { get; set; }
-        public bool isFabricCMT { get; set; }
-        public double? CMT_Price { get; set; }
+        public bool isFabricCM { get; set; }
+        public double? CM_Price { get; set; }
         public double ShippingFeePortion { get; set; }
         public double TotalShippingFee { get; set; }
         public double BudgetQuantity { get; set; }

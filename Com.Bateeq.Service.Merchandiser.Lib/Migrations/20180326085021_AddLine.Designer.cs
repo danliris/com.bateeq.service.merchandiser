@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180326085021_AddLine")]
+    partial class AddLine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

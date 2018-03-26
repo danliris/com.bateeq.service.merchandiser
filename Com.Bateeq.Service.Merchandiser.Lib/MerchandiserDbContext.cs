@@ -29,6 +29,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
         public DbSet<RO_Garment> RO_Garments { get; set; }
         public DbSet<RO_Garment_SizeBreakdown> RO_Garment_SizeBreakdowns { get; set; }
         public DbSet<RO_Garment_SizeBreakdown_Detail> RO_Garment_SizeBreakdown_Details { get; set; }
+        public DbSet<Line> Lines { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +53,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib
             modelBuilder.ApplyConfiguration(new RO_GarmentConfig());
             modelBuilder.ApplyConfiguration(new RO_Garment_SizeBreakdownConfig());
             modelBuilder.ApplyConfiguration(new RO_Garment_SizeBreakdown_DetailConfig());
+            modelBuilder.ApplyConfiguration(new LineConfig());
         }
     }
 }

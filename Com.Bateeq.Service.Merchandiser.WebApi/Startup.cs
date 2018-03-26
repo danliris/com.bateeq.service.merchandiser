@@ -17,6 +17,8 @@ using System.IO;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi
 {
@@ -66,15 +68,19 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                 .AddTransient<RO_Garment_SizeBreakdownService>()
                 .AddTransient<RO_Garment_SizeBreakdown_DetailService>();
 
+            var Secret = Configuration.GetValue<string>("Secret") ?? Configuration["Secret"];
+            var Key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
+
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
+                .AddJwtBearer(options =>
                 {
-                    options.ApiName = "com.bateeq.service.merchandiser";
-                    options.ApiSecret = "secret";
-                    options.Authority = "https://localhost:44350";
-                    options.RequireHttpsMetadata = false;
-                    options.NameClaimType = JwtClaimTypes.Name;
-                    options.RoleClaimType = JwtClaimTypes.Role;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ValidateLifetime = false,
+                        IssuerSigningKey = Key
+                    };
                 });
 
             services

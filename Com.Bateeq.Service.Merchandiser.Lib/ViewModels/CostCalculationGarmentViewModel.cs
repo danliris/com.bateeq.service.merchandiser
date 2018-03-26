@@ -12,7 +12,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public int SerialNumber { get; set; }
         public string RO { get; set; }
         public string Article { get; set; }
-        public ArticleSeasonViewModel Convection { get; set; }
+        public LineViewModel Line { get; set; }
         public string Commodity { get; set; }
         public double? FabricAllowance { get; set; }
         public double? AccessoriesAllowance { get; set; }
@@ -56,7 +56,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         {
             if (string.IsNullOrWhiteSpace(this.Article))
                 yield return new ValidationResult("Nama Artikel harus diisi", new List<string> { "Article" });
-            if (this.Convection == null || string.IsNullOrWhiteSpace(this.Convection._id))
+            if (this.Line == null || this.Line.Id == 0)
                 yield return new ValidationResult("Konveksi harus diisi", new List<string> { "Convection" });
             if (this.Quantity == null)
                 yield return new ValidationResult("Kuantitas harus diisi", new List<string> { "Quantity" });

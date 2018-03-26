@@ -56,8 +56,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         Code = ro.CostCalculationGarment.Code,
                         RO = ro.CostCalculationGarment.RO,
                         Article = ro.CostCalculationGarment.Article,
-                        ConvectionId = ro.CostCalculationGarment.ConvectionId,
-                        ConvectionName = ro.CostCalculationGarment.ConvectionName
+                        LineId = ro.CostCalculationGarment.LineId,
+                        LineName = ro.CostCalculationGarment.LineName
                     },
                     Total = ro.Total
                 });

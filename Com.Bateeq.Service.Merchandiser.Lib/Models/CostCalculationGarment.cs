@@ -16,9 +16,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public int SerialNumber { get; set; }
         public string RO { get; set; }
         public string Article { get; set; }
-        public string ConvectionId { get; set; }
-        public string ConvectionCode { get; set; }
-        public string ConvectionName { get; set; }
+        public int LineId { get; set; }
+        public string LineCode { get; set; }
+        public string LineName { get; set; }
         public string Commodity { get; set; }
         public double FabricAllowance { get; set; }
         public double AccessoriesAllowance { get; set; }

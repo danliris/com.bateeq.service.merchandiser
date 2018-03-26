@@ -44,7 +44,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "RO", "Article", "Convection", "Quantity", "ConfirmPrice"
+                    "Id", "Code", "RO", "Article", "Line", "Quantity", "ConfirmPrice"
                 };
             Query = Query
                 .Select(ccg => new CostCalculationGarment
@@ -53,8 +53,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     Code = ccg.Code,
                     RO = ccg.RO,
                     Article = ccg.Article,
-                    ConvectionId = ccg.ConvectionId,
-                    ConvectionName = ccg.ConvectionName,
+                    LineId = ccg.LineId,
+                    LineName = ccg.LineName,
                     Quantity = ccg.Quantity,
                     ConfirmPrice = ccg.ConfirmPrice
                 });
@@ -72,11 +72,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         public override async Task<int> CreateModel(CostCalculationGarment Model)
         {
             int latestSN = this.DbSet
-                .Where(d => d.ConvectionId.Equals(Model.ConvectionId))
+                .Where(d => d.LineId.Equals(Model.LineId))
                 .DefaultIfEmpty()
                 .Max(d => d.SerialNumber);
             Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
-            Model.RO = String.Format("{0}{1:D4}", Model.ConvectionCode, Model.SerialNumber);
+            Model.RO = String.Format("{0}{1:D4}", Model.LineCode, Model.SerialNumber);
             int created = await this.CreateAsync(Model);
             
             Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
@@ -188,9 +188,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             CostCalculationGarmentViewModel viewModel = new CostCalculationGarmentViewModel();
             PropertyCopier<CostCalculationGarment, CostCalculationGarmentViewModel>.Copy(model, viewModel);
 
-            viewModel.Convection = new ArticleSeasonViewModel();
-            viewModel.Convection._id = model.ConvectionId;
-            viewModel.Convection.name = model.ConvectionName;
+            viewModel.Line = new LineViewModel();
+            viewModel.Line.Id = model.LineId;
+            viewModel.Line.Name = model.LineName;
 
             viewModel.FabricAllowance = PercentageConverter.ToPercent(model.FabricAllowance);
             viewModel.AccessoriesAllowance = PercentageConverter.ToPercent(model.AccessoriesAllowance);
@@ -293,9 +293,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             CostCalculationGarment model = new CostCalculationGarment();
             PropertyCopier<CostCalculationGarmentViewModel, CostCalculationGarment>.Copy(viewModel, model);
 
-            model.ConvectionId = viewModel.Convection._id;
-            model.ConvectionCode = viewModel.Convection.code;
-            model.ConvectionName = viewModel.Convection.name;
+            model.LineId = viewModel.Line.Id;
+            model.LineCode = viewModel.Line.Code;
+            model.LineName = viewModel.Line.Name;
 
             model.FabricAllowance = PercentageConverter.ToFraction(viewModel.FabricAllowance);
             model.AccessoriesAllowance = PercentageConverter.ToFraction(viewModel.AccessoriesAllowance);

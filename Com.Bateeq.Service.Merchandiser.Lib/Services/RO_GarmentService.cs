@@ -56,8 +56,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                         Code = ro.CostCalculationGarment.Code,
                         RO = ro.CostCalculationGarment.RO,
                         Article = ro.CostCalculationGarment.Article,
-                        ConvectionId = ro.CostCalculationGarment.ConvectionId,
-                        ConvectionName = ro.CostCalculationGarment.ConvectionName
+                        LineId = ro.CostCalculationGarment.LineId,
+                        LineName = ro.CostCalculationGarment.LineName
                     },
                     Total = ro.Total
                 });
@@ -120,6 +120,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     .ThenInclude(ccg => ccg.CostCalculationGarment_Materials)
                 .FirstOrDefaultAsync();
 
+            read.CostCalculationGarment.ImageFile = await this.AzureImageService.DownloadImage(read.CostCalculationGarment.GetType().Name, read.CostCalculationGarment.ImagePath);
             read.ImagesFile = await this.AzureImageService.DownloadMultipleImages(read.GetType().Name, read.ImagesPath);
 
             return read;

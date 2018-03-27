@@ -11,9 +11,10 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    partial class MerchandiserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180326085021_AddLine")]
+    partial class AddLine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,6 +164,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
                     b.Property<double>("ConfirmPrice");
 
+                    b.Property<string>("ConvectionId")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("ConvectionName")
+                        .HasMaxLength(500);
+
                     b.Property<DateTime>("DeliveryDate");
 
                     b.Property<string>("Description")
@@ -185,12 +192,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     b.Property<double>("Insurance");
 
                     b.Property<int>("LeadTime");
-
-                    b.Property<int>("LineId")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("LineName")
-                        .HasMaxLength(500);
 
                     b.Property<double>("NETFOB");
 

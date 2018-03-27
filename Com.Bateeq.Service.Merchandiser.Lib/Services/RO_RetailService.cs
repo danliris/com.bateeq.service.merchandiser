@@ -121,6 +121,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     .ThenInclude(ccr => ccr.CostCalculationRetail_Materials)
                 .FirstOrDefaultAsync();
 
+            read.CostCalculationRetail.ImageFile = await this.AzureImageService.DownloadImage(read.CostCalculationRetail.GetType().Name, read.CostCalculationRetail.ImagePath);
             read.ImagesFile = await this.AzureImageService.DownloadMultipleImages(read.GetType().Name, read.ImagesPath);
 
             return read;

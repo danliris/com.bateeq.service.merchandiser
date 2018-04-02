@@ -7,12 +7,14 @@ using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
 {
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/materials")]
+    [Authorize]
     public class MaterialsController : BasicController<MerchandiserDbContext, MaterialService, MaterialViewModel, Material>
     {
         private static readonly string ApiVersion = "1.0";

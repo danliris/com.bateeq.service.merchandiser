@@ -143,6 +143,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
 
             base.OnCreating(model);
+            model._CreatedAgent = "Service";
+            model._CreatedBy = this.Username;
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
         }
 
         public SizeRangeViewModel MapToViewModel(SizeRange model)

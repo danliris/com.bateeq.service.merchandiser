@@ -27,7 +27,12 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.Efficiency
 
         protected EfficiencyService Service
         {
-            get { return this.ServiceProvider.GetService<EfficiencyService>(); }
+            get
+            {
+                EfficiencyService service = (EfficiencyService)this.ServiceProvider.GetService<EfficiencyService>();
+                service.Username = "unit_test";
+                return service;
+            }
         }
 
         protected MerchandiserDbContext DbContext

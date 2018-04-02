@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Com.Bateeq.Service.Merchandiser.Lib.Models;
 using System.Collections.Generic;
 
-namespace Com.Bateeq.Service.Merchandiser.Test.Service.Size
+namespace Com.Bateeq.Service.Merchandiser.Test.Service.SizeRange
 {
     [Collection("ServiceProviderFixture collection")]
     public class SizeRangeBasicTest : BasicServiceTest<MerchandiserDbContext, SizeRangeService, Models.SizeRange>
@@ -26,6 +26,11 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Size
         protected SizeServiceDataUtil SizeDataUtil
         {
             get { return this.ServiceProvider.GetService<SizeServiceDataUtil>(); }
+        }
+
+        protected RelatedSizeServiceDataUtil RelatedSizeDataUtil
+        {
+            get { return this.ServiceProvider.GetService<RelatedSizeServiceDataUtil>(); }
         }
 
         public override void EmptyCreateModel(Models.SizeRange model)
@@ -45,12 +50,10 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Service.Size
             Models.SizeRange model = new Models.SizeRange();
             model.Code = guid;
             model.Name = string.Format("TEST SIZE RANGE {0}", guid);
-            RelatedSize relatedSize = new RelatedSize
-            {
-                SizeId = testSize.Result.Id
-            };
+            //Task<RelatedSize> relatedSize = Task.Run(() => this.RelatedSizeDataUtil.GetTestRelatedSize(testSize.Id));
+            //relatedSize.Wait();
             model.RelatedSizes = new List<RelatedSize>();
-            model.RelatedSizes.Add(relatedSize);
+            //model.RelatedSizes.Add(relatedSize.Result);
 
             return model;
         }

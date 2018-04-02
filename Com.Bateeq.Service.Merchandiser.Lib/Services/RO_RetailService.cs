@@ -110,6 +110,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
 
             base.OnCreating(model);
+            model._CreatedAgent = "Service";
+            model._CreatedBy = this.Username;
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
         }
 
         public override async Task<RO_Retail> ReadModelById(int id)
@@ -173,6 +177,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
 
             base.OnUpdating(id, model);
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
         }
 
         public override async Task<int> DeleteModel(int Id)
@@ -205,6 +211,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
 
             base.OnDeleting(model);
+            model._DeletedAgent = "Service";
+            model._DeletedBy = this.Username;
         }
 
         public RO_RetailViewModel MapToViewModel(RO_Retail model)

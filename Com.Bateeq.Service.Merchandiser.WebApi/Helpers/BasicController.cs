@@ -9,6 +9,7 @@ using Com.Moonlay.NetCore.Lib.Service;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using Com.Bateeq.Service.Merchandiser.Lib.Exceptions;
+using System.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
 {
@@ -89,6 +90,9 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
             try
             {
                 this.Validate(ViewModel);
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+                Service.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
+
                 TModel model = Service.MapToModel(ViewModel);
 
                 if (!ModelState.IsValid)
@@ -163,7 +167,11 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
         {
             try
             {
+                Service.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
                 this.Validate(ViewModel);
+
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
                 TModel model = Service.MapToModel(ViewModel);
 
                 using (var transaction = this.Service.DbContext.Database.BeginTransaction())
@@ -220,6 +228,8 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
                 {
                     try
                     {
+                        Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+                        Service.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
                         await Service.DeleteModel(Id);
                         transaction.Commit();
                     }

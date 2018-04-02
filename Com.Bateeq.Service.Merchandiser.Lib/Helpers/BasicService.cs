@@ -15,6 +15,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
         where TDbContext : DbContext
         where TModel : StandardEntity, IValidatableObject
     {
+        public string Username { get; set; }
+        public string Token { get; set; }
         public BasicService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
@@ -42,6 +44,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
             this.Validate(model);
         }
 
+        public override void OnCreating(TModel model)
+        {
+            base.OnCreating(model);
+            model._CreatedAgent = "Service";
+            model._CreatedBy = this.Username;
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
+        }
+
         public virtual async Task<TModel> ReadModelById(int id)
         {
             return await this.GetAsync(id);
@@ -59,6 +70,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
             this.Validate(model);
         }
 
+        public override void OnUpdating(int id, TModel model)
+        {
+            base.OnUpdating(id, model);
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
+        }
+
         public virtual async Task<int> DeleteModel(int id)
         {
             return await this.DeleteAsync(id);
@@ -72,6 +90,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
                 throw new Exception();
             }
             this.OnDeleting(entity);
+        }
+
+        public override void OnDeleting(TModel model)
+        {
+            base.OnDeleting(model);
+            model._DeletedAgent = "Service";
+            model._DeletedBy = this.Username;
         }
 
         public virtual IQueryable<TModel> ConfigureSearch(IQueryable<TModel> Query, List<string> SearchAttributes, string Keyword)

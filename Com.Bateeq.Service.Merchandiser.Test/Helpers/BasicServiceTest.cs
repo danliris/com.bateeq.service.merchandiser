@@ -32,7 +32,12 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
 
         protected TService Service
         {
-            get { return this.ServiceProvider.GetService<TService>(); }
+            get
+            {
+                TService service = (TService)this.ServiceProvider.GetService<TService>();
+                service.Username = "unit_test";
+                return service;
+            }
         }
 
         protected TDbContext DbContext
@@ -47,12 +52,12 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
             TModel similarTestModel = new TModel();
             foreach (string arg in this.CreateAttrAssertions)
             {
-                string createAttr = (string) model.GetType().GetProperty(arg).GetValue(model, null);
+                string createAttr = (string)model.GetType().GetProperty(arg).GetValue(model, null);
                 similarTestModel.GetType().GetProperty(arg).SetValue(similarTestModel, createAttr);
             }
             foreach (string arg in this.ExistAttrCriteria)
             {
-                string existAttr = (string) model.GetType().GetProperty(arg).GetValue(model, null);
+                string existAttr = (string)model.GetType().GetProperty(arg).GetValue(model, null);
                 similarTestModel.GetType().GetProperty(arg).SetValue(similarTestModel, existAttr);
             }
             return similarTestModel;
@@ -88,7 +93,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
                 Assert.NotNull(assertionInstance);
             }
         }
-        
+
         public virtual async Task<TModel> GetCreatedTestData(TService service)
         {
             TModel testModel = this.GenerateTestModel();
@@ -122,7 +127,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
             {
                 await service.CreateModel(testData);
             }
-            catch(ServiceValidationExeption ex)
+            catch (ServiceValidationExeption ex)
             {
                 this.AssertCreateEmpty(ex);
             }
@@ -163,7 +168,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
         {
             TService service = this.Service;
             TModel createdData = await this.GetCreatedTestData(service);
-            
+
             TModel data = await service.ReadModelById(createdData.Id);
             Assert.NotNull(data);
         }
@@ -210,10 +215,10 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Helpers
 
             TModel data = await service.GetAsync(createdData.Id);
             Assert.NotNull(data);
-            
+
             int affectedResult = await service.DeleteModel(data.Id);
             Assert.True(affectedResult == 1);
-            
+
             data = await service.GetAsync(createdData.Id);
             Assert.Null(data);
         }

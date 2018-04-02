@@ -26,7 +26,12 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.Material
 
         protected MaterialService Service
         {
-            get { return this.ServiceProvider.GetService<MaterialService>(); }
+            get
+            {
+                MaterialService service = (MaterialService)this.ServiceProvider.GetService<MaterialService>();
+                service.Username = "unit_test";
+                return service;
+            }
         }
 
         protected CategoryServiceDataUtil CategoryDataUtil

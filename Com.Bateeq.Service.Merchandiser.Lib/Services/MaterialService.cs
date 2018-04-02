@@ -88,6 +88,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             base.OnCreating(model);
+            model._CreatedAgent = "Service";
+            model._CreatedBy = this.Username;
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
         }
 
         public MaterialViewModel MapToViewModel(Material model)

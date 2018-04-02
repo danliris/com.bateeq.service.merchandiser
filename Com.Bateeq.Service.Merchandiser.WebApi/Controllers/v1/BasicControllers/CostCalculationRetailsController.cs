@@ -4,10 +4,6 @@ using Com.Bateeq.Service.Merchandiser.Lib.Services;
 using Com.Bateeq.Service.Merchandiser.Lib.Models;
 using Com.Bateeq.Service.Merchandiser.Lib;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
-using Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates;
-using System.IO;
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers

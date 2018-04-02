@@ -25,7 +25,12 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.UOM
 
         protected UOMService Service
         {
-            get { return this.ServiceProvider.GetService<UOMService>(); }
+            get
+            {
+                UOMService service = (UOMService)this.ServiceProvider.GetService<UOMService>();
+                service.Username = "unit test";
+                return service;
+            }
         }
 
         protected MerchandiserDbContext DbContext

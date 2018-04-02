@@ -25,7 +25,12 @@ namespace Com.Bateeq.Service.Merchandiser.Test.Services.Buyer
 
         protected BuyerService Service
         {
-            get { return this.ServiceProvider.GetService<BuyerService>(); }
+            get
+            {
+                BuyerService service = (BuyerService)this.ServiceProvider.GetService<BuyerService>();
+                service.Username = "unit_test";
+                return service;
+            }
         }
 
         protected MerchandiserDbContext DbContext

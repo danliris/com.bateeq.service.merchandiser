@@ -16,6 +16,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.DataUtils
         {
             this.DbContext = dbContext;
             this.SizeService = sizeService;
+            this.SizeService.Username = "unit test";
         }
 
         public Task<Size> GetTestSize()

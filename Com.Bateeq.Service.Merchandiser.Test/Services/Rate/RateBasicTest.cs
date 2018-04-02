@@ -10,13 +10,13 @@ using Xunit;
 namespace Com.Bateeq.Service.Merchandiser.Test.Services.Rate
 {
     [Collection("ServiceProviderFixture collection")]
-    public class OTLBasicTest : BasicServiceTest<MerchandiserDbContext, RateService, Models.Rate>
+    public class RateBasicTest : BasicServiceTest<MerchandiserDbContext, RateService, Models.Rate>
     {
         private static readonly string[] createAttrAssertions = { "Name", "Value" };
         private static readonly string[] updateAttrAssertions = { "Name", "Value" };
         private static readonly string[] existAttrCriteria = {};
 
-        public OTLBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
+        public RateBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
         {
         }
 

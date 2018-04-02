@@ -16,6 +16,7 @@ namespace Com.Bateeq.Service.Merchandiser.Test.DataUtils
         {
             this.DbContext = dbContext;
             this.CategoryService = categoryService;
+            this.CategoryService.Username = "unit test";
         }
         
         public Task<Category> GetTestCategory()

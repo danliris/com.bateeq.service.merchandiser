@@ -46,6 +46,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
         }
 
+        private CostCalculationRetail_MaterialService CostCalculationRetail_MaterialService
+        {
+            get
+            {
+                CostCalculationRetail_MaterialService service = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
+                service.Username = this.Username;
+                return service;
+            }
+        }
+
         public override Tuple<List<RO_Retail>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<RO_Retail> Query = this.DbContext.RO_Retails;
@@ -199,8 +209,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             CostCalculationRetail costCalculationRetail = this.CostCalculationRetailService.DbSet
                 .FirstOrDefault(p => p.RO_RetailId.Equals(Id));
             costCalculationRetail.RO_RetailId = null;
-
             await this.CostCalculationRetailService.UpdateModel(costCalculationRetail.Id, costCalculationRetail);
+
+            List<CostCalculationRetail_Material> costCalculationRetail_Materials = this.CostCalculationRetail_MaterialService.DbSet.Where(p => p.CostCalculationRetailId.Equals(costCalculationRetail.Id)).ToList();
+            foreach(CostCalculationRetail_Material costCalculationRetail_Material in costCalculationRetail_Materials)
+            {
+                costCalculationRetail_Material.Information = null;
+                await this.CostCalculationRetail_MaterialService.UpdateModel(costCalculationRetail_Material.Id, costCalculationRetail_Material);
+            }
 
             return deleted;
         }

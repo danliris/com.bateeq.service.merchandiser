@@ -1,0 +1,8 @@
+FROM microsoft/aspnetcore-build:2.0.2-stretch
+WORKDIR /app
+
+COPY Com.Bateeq.Service.Merchandiser.WebApi/*.csproj .
+RUN dotnet restore
+
+COPY Com.Bateeq.Service.Merchandiser.WebApi/. .
+RUN dotnet publish --output /out/ --configuration Release

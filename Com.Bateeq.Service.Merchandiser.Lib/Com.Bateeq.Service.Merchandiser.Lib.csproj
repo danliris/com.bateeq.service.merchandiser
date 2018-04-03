@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="Com.Moonlay.EntityFrameworkCore" Version="1.0.0-alpha-10122017-003" />
+    <PackageReference Include="Com.Moonlay.NetCore.Lib" Version="1.0.0-alpha-20171102-001" />
+    <PackageReference Include="iTextSharp" Version="5.5.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="MlkPwgen" Version="0.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.7.12" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.1.0" />
+  </ItemGroup>
+
+</Project>

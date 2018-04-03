@@ -1,0 +1,203 @@
+﻿using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
+using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
+{
+    public class AzureImageService : AzureStorageService
+    {
+        public AzureImageService(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+
+        public string GetFileNameFromPath(string imagePath)
+        {
+            string[] filePath = imagePath.Split('/');
+            return filePath[filePath.Length - 1];
+        }
+
+        public string GenerateFileName(int id, DateTime _createdUtc)
+        {
+            return String.Format("IMG_{0}_{1}", id, TimestampGenerator.GenerateTimestamp(_createdUtc));
+        }
+
+        public string GenerateFileName(int id, DateTime _createdUtc, int index)
+        {
+            return String.Format("IMG_{0}_{1}_{2}", id, index, TimestampGenerator.GenerateTimestamp(_createdUtc));
+        }
+
+        public async Task<string> DownloadImage(string moduleName, string imagePath)
+        {
+            if (imagePath != null)
+            {
+                string imageName = this.GetFileNameFromPath(imagePath);
+                return await this.DownloadBase64Image(moduleName, imageName);
+            }
+            return null;
+        }
+
+        public async Task<List<string>> DownloadMultipleImages(string moduleName, string imagesPath)
+        {
+            if (imagesPath != null)
+            {
+                List<Task<string>> downloadTasks = new List<Task<string>>();
+                if (imagesPath != null)
+                {
+                    List<string> imagesPathList = JsonConvert.DeserializeObject<List<string>>(imagesPath);
+                    foreach (string imagePath in imagesPathList)
+                    {
+                        string fileName = this.GetFileNameFromPath(imagePath);
+                        downloadTasks.Add(this.DownloadImage(moduleName, fileName));
+                    }
+                }
+                string[] files = await Task.WhenAll(downloadTasks);
+                return files.ToList<string>();
+            }
+            return null;
+        }
+
+        private async Task<string> DownloadBase64Image(string moduleName, string imageName)
+        {
+            string imageSrc = string.Empty;
+
+            try
+            {
+                CloudBlobContainer container = this.StorageContainer;
+                CloudBlobDirectory dir = container.GetDirectoryReference(moduleName);
+
+                CloudBlockBlob blob = dir.GetBlockBlobReference(imageName);
+                await blob.FetchAttributesAsync();
+                
+                byte[] imageBytes = new byte[blob.Properties.Length];
+                await blob.DownloadToByteArrayAsync(imageBytes, 0);
+
+                string imageBase64 = Convert.ToBase64String(imageBytes);
+                imageSrc = "data:" + blob.Properties.ContentType + ";base64," + imageBase64;
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is StorageException))
+                {
+                    throw new Exception(ex.Message, ex.InnerException);
+                }
+            }
+
+            return imageSrc;
+        }
+        
+        public async Task<string> UploadImage(string moduleName, int id, DateTime _createdUtc, string imageBase64, string imageExtension)
+        {
+            string imageName = this.GenerateFileName(id, _createdUtc);
+            return await this.UploadBase64Image(moduleName, imageBase64, imageName, imageExtension);
+        }
+
+        public async Task<string> UploadMultipleImage(string moduleName, int id, DateTime _createdUtc, List<string> imagesBase64, List<string> imagesExtension, string beforeImagePaths)
+        {
+            List<Task<string>> uploadTasks = new List<Task<string>>();
+
+            for (int i = 0; i < imagesBase64.Count; i++)
+            {
+                string imageBase64 = imagesBase64[i];
+                string imageName = this.GenerateFileName(id, _createdUtc, i);
+                string imageExtension = imagesExtension[i];
+                uploadTasks.Add(this.UploadBase64Image(moduleName, imageBase64, imageName, imageExtension));
+            }
+
+            string[] afterPaths = await Task.WhenAll(uploadTasks);
+
+            if (beforeImagePaths != null)
+            {
+                List<string> beforePaths = JsonConvert.DeserializeObject<List<string>>(beforeImagePaths);
+                string imagesPath = JsonConvert.SerializeObject(await this.RemoveLeftoverImage(moduleName, beforePaths, afterPaths.ToList<string>()));
+                return imagesPath;
+            }
+
+            return JsonConvert.SerializeObject(afterPaths.ToList<string>());
+        }
+
+        private async Task<List<string>> RemoveLeftoverImage(string moduleName, List<string> before, List<string> after)
+        {
+            List<string> final = after;
+            if (after.Count < before.Count)
+            {
+                int index = after.Count;
+                int count = before.Count - index;
+                for (int i = index; i < before.Count; i++)
+                {
+                    string fileName = this.GetFileNameFromPath(before[i]);
+                    await this.RemoveBase64Image(moduleName, fileName);
+                }
+            }
+            return final;
+        }
+
+        private async Task<string> UploadBase64Image(string moduleName, string imageBase64, string imageName, string imageExtension)
+        {
+            string path = null;
+
+            try
+            {
+                byte[] imageBytes = Convert.FromBase64String(imageBase64);
+                if (imageBytes != null)
+                {
+                    CloudBlobContainer container = this.StorageContainer;
+                    CloudBlobDirectory dir = container.GetDirectoryReference(moduleName);
+
+                    CloudBlockBlob blob = dir.GetBlockBlobReference(imageName);
+                    blob.Properties.ContentType = imageExtension;
+                    await blob.UploadFromByteArrayAsync(imageBytes, 0, imageBytes.Length);
+                    path = "/" + this.StorageContainer.Name + "/" + moduleName + "/" + imageName;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is ArgumentNullException) && !(ex is FormatException))
+                {
+                    throw new Exception(ex.Message, ex.InnerException);
+                }
+            }
+
+            return path;
+        }
+
+        public async Task RemoveImage(string moduleName, string imagePath)
+        {
+            if (imagePath != null)
+            {
+                string fileName = this.GetFileNameFromPath(imagePath);
+                await this.RemoveBase64Image(moduleName, fileName);
+            }
+        }
+
+        public async Task RemoveMultipleImage(string moduleName, string imagesPath)
+        {
+            if (imagesPath != null)
+            {
+                List<Task> removeTasks = new List<Task>();
+                List<string> imagesPathList = JsonConvert.DeserializeObject<List<string>>(imagesPath);
+                foreach (string imagePath in imagesPathList)
+                {
+                    string fileName = this.GetFileNameFromPath(imagePath);
+                    removeTasks.Add(this.RemoveBase64Image(moduleName, fileName));
+                }
+                await Task.WhenAll(removeTasks);
+            }
+        }
+
+        private async Task RemoveBase64Image(string moduleName, string fileName)
+        {
+            CloudBlobContainer container = this.StorageContainer;
+            CloudBlobDirectory dir = container.GetDirectoryReference(moduleName);
+
+            CloudBlockBlob blob = dir.GetBlockBlobReference(fileName);
+            await blob.DeleteIfExistsAsync();
+        }
+    }
+}

@@ -9,9 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Reflection;
 using System.Threading.Tasks;
-using Com.Moonlay.NetCore.Lib.Service;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
 
@@ -26,6 +24,26 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         private AzureImageService AzureImageService
         {
             get { return this.ServiceProvider.GetService<AzureImageService>(); }
+        }
+
+        private RO_Garment_SizeBreakdownService RO_Garment_SizeBreakdownService
+        {
+            get
+            {
+                RO_Garment_SizeBreakdownService service = this.ServiceProvider.GetService<RO_Garment_SizeBreakdownService>();
+                service.Username = this.Username;
+                return service;
+            }
+        }
+
+        private CostCalculationGarmentService CostCalculationGarmentService
+        {
+            get
+            {
+                CostCalculationGarmentService service = this.ServiceProvider.GetService<CostCalculationGarmentService>();
+                service.Username = this.Username;
+                return service;
+            }
         }
 
         public override Tuple<List<RO_Garment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -82,10 +100,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesType, Model.ImagesPath);
 
             await this.UpdateAsync(Model.Id, Model);
-
-            CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
+            
             costCalculationGarment.RO_GarmentId = Model.Id;
-            await costCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
+            await this.CostCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
 
             return created;
         }
@@ -100,18 +117,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             if (model.RO_Garment_SizeBreakdowns.Count > 0)
             {
-                RO_Garment_SizeBreakdownService RO_Garment_SizeBreakdownService = this.ServiceProvider.GetService<RO_Garment_SizeBreakdownService>();
                 foreach (RO_Garment_SizeBreakdown RO_Garment_SizeBreakdown in model.RO_Garment_SizeBreakdowns)
                 {
-                    RO_Garment_SizeBreakdownService.Creating(RO_Garment_SizeBreakdown);
+                    this.RO_Garment_SizeBreakdownService.Creating(RO_Garment_SizeBreakdown);
                 }
             }
 
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public override async Task<RO_Garment> ReadModelById(int id)
@@ -138,18 +150,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesType, Model.ImagesPath);
 
             int updated = await this.UpdateAsync(Id, Model);
-
-            CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
+            
             costCalculationGarment.RO_GarmentId = Model.Id;
-            await costCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
+            await this.CostCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
 
             return updated;
         }
 
         public override void OnUpdating(int id, RO_Garment model)
         {
-            RO_Garment_SizeBreakdownService RO_Garment_SizeBreakdownService = this.ServiceProvider.GetService<RO_Garment_SizeBreakdownService>();
-            HashSet<int> RO_Garment_SizeBreakdowns = new HashSet<int>(RO_Garment_SizeBreakdownService.DbSet
+            HashSet<int> RO_Garment_SizeBreakdowns = new HashSet<int>(this.RO_Garment_SizeBreakdownService.DbSet
                 .Where(p => p.RO_GarmentId.Equals(id))
                 .Select(p => p.Id));
 
@@ -159,11 +169,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
                 if (childModel == null)
                 {
-                    RO_Garment_SizeBreakdownService.Deleting(RO_Garment_SizeBreakdown);
+                    this.RO_Garment_SizeBreakdownService.Deleting(RO_Garment_SizeBreakdown);
                 }
                 else
                 {
-                    RO_Garment_SizeBreakdownService.Updating(RO_Garment_SizeBreakdown, childModel);
+                    this.RO_Garment_SizeBreakdownService.Updating(RO_Garment_SizeBreakdown, childModel);
                 }
             }
 
@@ -171,13 +181,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             {
                 if (RO_Garment_SizeBreakdown.Id.Equals(0))
                 {
-                    RO_Garment_SizeBreakdownService.Creating(RO_Garment_SizeBreakdown);
+                    this.RO_Garment_SizeBreakdownService.Creating(RO_Garment_SizeBreakdown);
                 }
             }
 
             base.OnUpdating(id, model);
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public override async Task<int> DeleteModel(int Id)
@@ -186,31 +194,27 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             await this.AzureImageService.RemoveMultipleImage(deletedImage.GetType().Name, deletedImage.ImagesPath);
 
             int deleted = await this.DeleteAsync(Id);
-
-            CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
-            CostCalculationGarment costCalculationGarment = costCalculationGarmentService.DbSet
+            
+            CostCalculationGarment costCalculationGarment = this.CostCalculationGarmentService.DbSet
                 .FirstOrDefault(p => p.RO_GarmentId.Equals(Id));
             costCalculationGarment.RO_GarmentId = null;
-            await costCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
+            await this.CostCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
 
             return deleted;
         }
 
         public override void OnDeleting(RO_Garment model)
         {
-            RO_Garment_SizeBreakdownService RO_Garment_SizeBreakdownService = this.ServiceProvider.GetService<RO_Garment_SizeBreakdownService>();
-            HashSet<int> RO_Garment_SizeBreakdowns = new HashSet<int>(RO_Garment_SizeBreakdownService.DbSet
+            HashSet<int> RO_Garment_SizeBreakdowns = new HashSet<int>(this.RO_Garment_SizeBreakdownService.DbSet
                 .Where(p => p.RO_GarmentId.Equals(model.Id))
                 .Select(p => p.Id));
 
             foreach (int RO_Garment_SizeBreakdown in RO_Garment_SizeBreakdowns)
             {
-                RO_Garment_SizeBreakdownService.Deleting(RO_Garment_SizeBreakdown);
+                this.RO_Garment_SizeBreakdownService.Deleting(RO_Garment_SizeBreakdown);
             }
 
             base.OnDeleting(model);
-            model._DeletedAgent = "Service";
-            model._DeletedBy = this.Username;
         }
 
         public RO_GarmentViewModel MapToViewModel(RO_Garment model)
@@ -218,17 +222,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             RO_GarmentViewModel viewModel = new RO_GarmentViewModel();
             PropertyCopier<RO_Garment, RO_GarmentViewModel>.Copy(model, viewModel);
             viewModel.ImagesPath = model.ImagesPath != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesPath) : null;
-
-            CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
-            viewModel.CostCalculationGarment = costCalculationGarmentService.MapToViewModel(model.CostCalculationGarment);
+            
+            viewModel.CostCalculationGarment = this.CostCalculationGarmentService.MapToViewModel(model.CostCalculationGarment);
 
             viewModel.RO_Garment_SizeBreakdowns = new List<RO_Garment_SizeBreakdownViewModel>();
-            RO_Garment_SizeBreakdownService RO_GarmentSizeBreakdownService = this.ServiceProvider.GetService<RO_Garment_SizeBreakdownService>();
             if (model.RO_Garment_SizeBreakdowns != null)
             {
                 foreach (RO_Garment_SizeBreakdown sizeBreakdown in model.RO_Garment_SizeBreakdowns)
                 {
-                    RO_Garment_SizeBreakdownViewModel sizeBreakdownVM = RO_GarmentSizeBreakdownService.MapToViewModel(sizeBreakdown);
+                    RO_Garment_SizeBreakdownViewModel sizeBreakdownVM = this.RO_Garment_SizeBreakdownService.MapToViewModel(sizeBreakdown);
                     viewModel.RO_Garment_SizeBreakdowns.Add(sizeBreakdownVM);
                 }
             }
@@ -241,16 +243,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             RO_Garment model = new RO_Garment();
             PropertyCopier<RO_GarmentViewModel, RO_Garment>.Copy(viewModel, model);
             model.ImagesPath = viewModel.ImagesPath != null ? JsonConvert.SerializeObject(viewModel.ImagesPath) : null;
-
-            CostCalculationGarmentService costCalculationGarmentService = this.ServiceProvider.GetService<CostCalculationGarmentService>();
+            
             model.CostCalculationGarmentId = viewModel.CostCalculationGarment.Id;
-            model.CostCalculationGarment = costCalculationGarmentService.MapToModel(viewModel.CostCalculationGarment);
+            model.CostCalculationGarment = this.CostCalculationGarmentService.MapToModel(viewModel.CostCalculationGarment);
 
             model.RO_Garment_SizeBreakdowns = new List<RO_Garment_SizeBreakdown>();
-            RO_Garment_SizeBreakdownService RO_Garment_SizeBreakdownService = this.ServiceProvider.GetService<RO_Garment_SizeBreakdownService>();
             foreach (RO_Garment_SizeBreakdownViewModel sizeBreakdownVM in viewModel.RO_Garment_SizeBreakdowns)
             {
-                RO_Garment_SizeBreakdown sizeBreakdown = RO_Garment_SizeBreakdownService.MapToModel(sizeBreakdownVM);
+                RO_Garment_SizeBreakdown sizeBreakdown = this.RO_Garment_SizeBreakdownService.MapToModel(sizeBreakdownVM);
                 model.RO_Garment_SizeBreakdowns.Add(sizeBreakdown);
             }
 

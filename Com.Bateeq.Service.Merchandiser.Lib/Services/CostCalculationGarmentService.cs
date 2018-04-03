@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
-using Com.Moonlay.NetCore.Lib.Service;
-using System.Reflection;
 using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
 using Com.Bateeq.Service.Merchandiser.Lib.Exceptions;
 
@@ -27,6 +25,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         private AzureImageService AzureImageService
         {
             get { return this.ServiceProvider.GetService<AzureImageService>(); }
+        }
+
+        private CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService
+        {
+            get
+            {
+                CostCalculationGarment_MaterialService service = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
+                service.Username = this.Username;
+                return service;
+            }
         }
 
         public override Tuple<List<CostCalculationGarment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -100,15 +108,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> UpdateModel(int Id, CostCalculationGarment Model)
         {
-            CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
-            
             Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
 
             int updated = await this.UpdateAsync(Id, Model);
 
             if (Model.CostCalculationGarment_Materials != null)
             {
-                HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
+                HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(this.CostCalculationGarment_MaterialService.DbSet
                     .Where(p => p.CostCalculationGarmentId.Equals(Id))
                     .Select(p => p.Id));
                 foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
@@ -117,11 +123,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
                     if (model == null)
                     {
-                        await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
+                        await this.CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
                     }
                     else
                     {
-                        await CostCalculationGarment_MaterialService.UpdateModel(CostCalculationGarment_Material, model);
+                        await this.CostCalculationGarment_MaterialService.UpdateModel(CostCalculationGarment_Material, model);
                     }
                 }
 
@@ -129,7 +135,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 {
                     if (CostCalculationGarment_Material.Id.Equals(0))
                     {
-                        await CostCalculationGarment_MaterialService.CreateModel(CostCalculationGarment_Material);
+                        await this.CostCalculationGarment_MaterialService.CreateModel(CostCalculationGarment_Material);
                     }
                 }
             }
@@ -140,21 +146,20 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         public override async Task<int> DeleteModel(int Id)
         {
             CostCalculationGarment deleted = await this.GetAsync(Id);
+
             if (deleted.RO_GarmentId != null)
             {
                 throw new DbReferenceNotNullException("Cost Calculation Garment ini tidak bisa di delete karena masih terdaftar di RO");
             }
             else
             {
-                CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
-
-                HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(CostCalculationGarment_MaterialService.DbSet
+                HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(this.CostCalculationGarment_MaterialService.DbSet
                     .Where(p => p.CostCalculationGarmentId.Equals(Id))
                     .Select(p => p.Id));
 
                 foreach (int CostCalculationGarment_Material in CostCalculationGarment_Materials)
                 {
-                    await CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
+                    await this.CostCalculationGarment_MaterialService.DeleteModel(CostCalculationGarment_Material);
                 }
                 
                 await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
@@ -173,18 +178,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             if (model.CostCalculationGarment_Materials.Count > 0)
             {
-                CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
+                
                 foreach (CostCalculationGarment_Material CostCalculationGarment_Material in model.CostCalculationGarment_Materials)
                 {
-                    CostCalculationGarment_MaterialService.OnCreating(CostCalculationGarment_Material);
+                    this.CostCalculationGarment_MaterialService.OnCreating(CostCalculationGarment_Material);
                 }
             }
 
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public CostCalculationGarmentViewModel MapToViewModel(CostCalculationGarment model)

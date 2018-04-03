@@ -6,7 +6,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using System.Linq.Dynamic.Core;
-using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using System.Threading.Tasks;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
@@ -18,6 +17,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
     {
         public CategoryService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+        }
+
+        private MaterialService MaterialService
+        {
+            get
+            {
+                MaterialService service = this.ServiceProvider.GetService<MaterialService>();
+                service.Username = this.Username;
+                return service;
+            }
         }
 
         public override Tuple<List<Category>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -58,16 +67,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> DeleteModel(int Id)
         {
-            MaterialService materialService = this.ServiceProvider.GetService<MaterialService>();
-
             int deleted = await this.DeleteAsync(Id);
-            HashSet<int> deletedMaterials = new HashSet<int>(materialService.DbSet
+            HashSet<int> deletedMaterials = new HashSet<int>(this.MaterialService.DbSet
                 .Where(p => p.CategoryId.Equals(Id))
                 .Select(p => p.Id));
 
             foreach (int deletedMaterial in deletedMaterials)
             {
-                await materialService.DeleteModel(deletedMaterial);
+                await this.MaterialService.DeleteModel(deletedMaterial);
             }
 
             return deleted;
@@ -82,10 +89,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public CategoryViewModel MapToViewModel(Category model)

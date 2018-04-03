@@ -5,7 +5,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using System.Linq.Dynamic.Core;
-using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
@@ -65,10 +64,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public BuyerViewModel MapToViewModel(Buyer model)

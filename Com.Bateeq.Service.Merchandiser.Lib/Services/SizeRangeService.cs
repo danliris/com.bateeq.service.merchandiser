@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
     {
         public SizeRangeService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+        }
+
+        private RelatedSizeService RelatedSizeService
+        {
+            get
+            {
+                RelatedSizeService service = this.ServiceProvider.GetService<RelatedSizeService>();
+                service.Username = this.Username;
+                return service;
+            }
         }
 
         public override Tuple<List<SizeRange>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -79,11 +88,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> UpdateModel(int Id, SizeRange Model)
         {
-            RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
-
             int updated = await this.UpdateAsync(Id, Model);
 
-            HashSet<int> relatedSizes = new HashSet<int>(relatedSizeService.DbSet
+            HashSet<int> relatedSizes = new HashSet<int>(this.RelatedSizeService.DbSet
                 .Where(p => p.SizeRangeId.Equals(Id))
                 .Select(p => p.Id));
 
@@ -93,7 +100,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
                 if (rs == null)
                 {
-                    await relatedSizeService.DeleteModel(relatedSize);
+                    await this.RelatedSizeService.DeleteModel(relatedSize);
                 }
             }
 
@@ -101,7 +108,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             {
                 if (relatedSize.Id.Equals(0))
                 {
-                    await relatedSizeService.CreateModel(relatedSize);
+                    await this.RelatedSizeService.CreateModel(relatedSize);
                 }
             }
 
@@ -110,16 +117,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> DeleteModel(int Id)
         {
-            RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
-
             int deleted = await this.DeleteAsync(Id);
-            HashSet<int> deletedRelatedSizes = new HashSet<int>(relatedSizeService.DbSet
+            HashSet<int> deletedRelatedSizes = new HashSet<int>(this.RelatedSizeService.DbSet
                 .Where(p => p.SizeRangeId.Equals(Id))
                 .Select(p => p.Id));
 
             foreach (int relatedSize in deletedRelatedSizes)
             {
-                await relatedSizeService.DeleteModel(relatedSize);
+                await this.RelatedSizeService.DeleteModel(relatedSize);
             }
 
             return deleted;
@@ -135,18 +140,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             if (model.RelatedSizes.Count > 0)
             {
-                RelatedSizeService relatedSizeService = this.ServiceProvider.GetService<RelatedSizeService>();
                 foreach (RelatedSize relatedSize in model.RelatedSizes)
                 {
-                    relatedSizeService.OnCreating(relatedSize);
+                    this.RelatedSizeService.OnCreating(relatedSize);
                 }
             }
 
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public SizeRangeViewModel MapToViewModel(SizeRange model)
@@ -154,7 +154,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             SizeRangeViewModel viewModel = new SizeRangeViewModel();
             viewModel.RelatedSizes = new List<RelatedSizeViewModel>();
             PropertyCopier<SizeRange, SizeRangeViewModel>.Copy(model, viewModel);
-            SizeService sizeService = this.ServiceProvider.GetService<SizeService>();
             foreach (RelatedSize relatedSize in model.RelatedSizes)
             {
                 RelatedSizeViewModel relatedSizeVM = new RelatedSizeViewModel();

@@ -8,8 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -64,10 +62,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public RateViewModel MapToViewModel(Rate model)

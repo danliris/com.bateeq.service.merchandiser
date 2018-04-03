@@ -47,9 +47,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
         public override void OnCreating(TModel model)
         {
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
+            model._CreatedAgent = "merchandiser-service";
             model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
+            model._LastModifiedAgent = "merchandiser-service";
             model._LastModifiedBy = this.Username;
         }
 
@@ -73,7 +73,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
         public override void OnUpdating(int id, TModel model)
         {
             base.OnUpdating(id, model);
-            model._LastModifiedAgent = "Service";
+            model._LastModifiedAgent = "merchandiser-service";
             model._LastModifiedBy = this.Username;
         }
 
@@ -95,7 +95,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
         public override void OnDeleting(TModel model)
         {
             base.OnDeleting(model);
-            model._DeletedAgent = "Service";
+            model._DeletedAgent = "merchandiser-service";
             model._DeletedBy = this.Username;
         }
 

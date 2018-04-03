@@ -6,13 +6,11 @@ using Newtonsoft.Json;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Interfaces;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
-using Com.Moonlay.NetCore.Lib.Service;
 using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
 using Com.Bateeq.Service.Merchandiser.Lib.Exceptions;
 
@@ -26,6 +24,26 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         private AzureImageService AzureImageService
         {
             get { return this.ServiceProvider.GetService<AzureImageService>(); }
+        }
+
+        private CostCalculationRetail_MaterialService CostCalculationRetail_MaterialService
+        {
+            get
+            {
+                CostCalculationRetail_MaterialService service = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
+                service.Username = this.Username;
+                return service;
+            }
+        }
+
+        private SizeRangeService SizeRangeService
+        {
+            get
+            {
+                SizeRangeService service = this.ServiceProvider.GetService<SizeRangeService>();
+                service.Username = this.Username;
+                return service;
+            }
         }
 
         public override Tuple<List<CostCalculationRetail>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -98,15 +116,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> UpdateModel(int Id, CostCalculationRetail Model)
         {
-            CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
-            
             Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
 
             int updated = await this.UpdateAsync(Id, Model);
 
             if (Model.CostCalculationRetail_Materials != null)
             {
-                HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
+                HashSet<int> costCalculationRetail_Materials = new HashSet<int>(this.CostCalculationRetail_MaterialService.DbSet
                     .Where(p => p.CostCalculationRetailId.Equals(Id))
                     .Select(p => p.Id));
 
@@ -116,11 +132,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
                     if (model == null)
                     {
-                        await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
+                        await this.CostCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
                     }
                     else
                     {
-                        await costCalculationRetail_MaterialService.UpdateModel(costCalculationRetail_Material, model);
+                        await this.CostCalculationRetail_MaterialService.UpdateModel(costCalculationRetail_Material, model);
                     }
                 }
 
@@ -128,7 +144,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 {
                     if (costCalculationRetail_Material.Id.Equals(0))
                     {
-                        await costCalculationRetail_MaterialService.CreateModel(costCalculationRetail_Material);
+                        await this.CostCalculationRetail_MaterialService.CreateModel(costCalculationRetail_Material);
                     }
                 }
             }
@@ -146,14 +162,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
             else
             {
-                CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
-
-                HashSet<int> costCalculationRetail_Materials = new HashSet<int>(costCalculationRetail_MaterialService.DbSet
+                HashSet<int> costCalculationRetail_Materials = new HashSet<int>(this.CostCalculationRetail_MaterialService.DbSet
                     .Where(p => p.CostCalculationRetailId.Equals(Id))
                     .Select(p => p.Id));
                 foreach (int costCalculationRetail_Material in costCalculationRetail_Materials)
                 {
-                    await costCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
+                    await this.CostCalculationRetail_MaterialService.DeleteModel(costCalculationRetail_Material);
                 }
                 
                 await this.AzureImageService.RemoveImage(deleted.GetType().Name, deleted.ImagePath);
@@ -172,18 +186,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             if (model.CostCalculationRetail_Materials.Count > 0)
             {
-                CostCalculationRetail_MaterialService costCalculationRetail_MaterialService = this.ServiceProvider.GetService<CostCalculationRetail_MaterialService>();
                 foreach (CostCalculationRetail_Material costCalculationRetail_Material in model.CostCalculationRetail_Materials)
                 {
-                    costCalculationRetail_MaterialService.OnCreating(costCalculationRetail_Material);
+                    this.CostCalculationRetail_MaterialService.OnCreating(costCalculationRetail_Material);
                 }
             }
 
             base.OnCreating(model);
-            model._CreatedAgent = "Service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "Service";
-            model._LastModifiedBy = this.Username;
         }
 
         public CostCalculationRetailViewModel MapToViewModel(CostCalculationRetail model)
@@ -211,9 +220,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             try
             {
                 // Get Related Size of particular Size Range if possible
-                SizeRangeService sizeRangeService = this.ServiceProvider.GetService<SizeRangeService>();
                 viewModel.SizeRange.RelatedSizes = new List<RelatedSizeViewModel>();
-                Task<SizeRange> sizeRange = sizeRangeService.ReadModelById(model.SizeRangeId);
+                Task<SizeRange> sizeRange = this.SizeRangeService.ReadModelById(model.SizeRangeId);
                 sizeRange.Wait();
                 foreach (RelatedSize rs in sizeRange.Result.RelatedSizes)
                 {

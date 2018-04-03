@@ -46,6 +46,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
         }
 
+        private CostCalculationGarment_MaterialService CostCalculationGarment_MaterialService
+        {
+            get
+            {
+                CostCalculationGarment_MaterialService service = this.ServiceProvider.GetService<CostCalculationGarment_MaterialService>();
+                service.Username = this.Username;
+                return service;
+            }
+        }
+
         public override Tuple<List<RO_Garment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<RO_Garment> Query = this.DbContext.RO_Garments;
@@ -199,6 +209,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .FirstOrDefault(p => p.RO_GarmentId.Equals(Id));
             costCalculationGarment.RO_GarmentId = null;
             await this.CostCalculationGarmentService.UpdateModel(costCalculationGarment.Id, costCalculationGarment);
+
+            List<CostCalculationGarment_Material> costCalculationGarment_Materials = this.CostCalculationGarment_MaterialService.DbSet.Where(p => p.CostCalculationGarmentId.Equals(costCalculationGarment.Id)).ToList();
+            foreach (CostCalculationGarment_Material costCalculationGarment_Material in costCalculationGarment_Materials)
+            {
+                costCalculationGarment_Material.Information = null;
+                await this.CostCalculationGarment_MaterialService.UpdateModel(costCalculationGarment_Material.Id, costCalculationGarment_Material);
+            }
 
             return deleted;
         }

@@ -21,9 +21,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            RO_RetailService service = validationContext.GetService<RO_RetailService>();
+            RO_GarmentService service = validationContext.GetService<RO_GarmentService>();
 
-            if (service.DbSet.Count(ro => ro.Id != this.Id && ro.CostCalculationRetailId.Equals(this.CostCalculationGarmentId) && ro._IsDeleted.Equals(false)) > 0)
+            if (service.DbSet.Count(ro => ro.Id != this.Id && ro.CostCalculationGarmentId.Equals(this.CostCalculationGarmentId) && ro._IsDeleted.Equals(false)) > 0)
                 yield return new ValidationResult("Cost Calculation Garment telah terdaftar di RO", new List<string> { "CostCalculationGarment" });
         }
     }

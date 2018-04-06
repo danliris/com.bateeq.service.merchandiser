@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
@@ -15,6 +16,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
     {
         public AzureImageService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+        }
+
+        private string getBase64File(string encoded)
+        {
+            return encoded.Substring(encoded.IndexOf(',') + 1);
+        }
+
+        private string getBase64Type(string encoded)
+        {
+            Regex regex = new Regex(@"data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*");
+            string match = regex.Match(encoded).Groups[1].Value;
+
+            return match == null && match == String.Empty ? "image/jpeg" : match;
         }
 
         public string GetFileNameFromPath(string imagePath)
@@ -92,13 +106,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
             return imageSrc;
         }
         
-        public async Task<string> UploadImage(string moduleName, int id, DateTime _createdUtc, string imageBase64, string imageExtension)
+        public async Task<string> UploadImage(string moduleName, int id, DateTime _createdUtc, string imageBase64)
         {
             string imageName = this.GenerateFileName(id, _createdUtc);
-            return await this.UploadBase64Image(moduleName, imageBase64, imageName, imageExtension);
+            return await this.UploadBase64Image(moduleName, imageBase64, imageName);
         }
 
-        public async Task<string> UploadMultipleImage(string moduleName, int id, DateTime _createdUtc, List<string> imagesBase64, List<string> imagesExtension, string beforeImagePaths)
+        public async Task<string> UploadMultipleImage(string moduleName, int id, DateTime _createdUtc, List<string> imagesBase64, string beforeImagePaths)
         {
             List<Task<string>> uploadTasks = new List<Task<string>>();
 
@@ -106,8 +120,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
             {
                 string imageBase64 = imagesBase64[i];
                 string imageName = this.GenerateFileName(id, _createdUtc, i);
-                string imageExtension = imagesExtension[i];
-                uploadTasks.Add(this.UploadBase64Image(moduleName, imageBase64, imageName, imageExtension));
+                uploadTasks.Add(this.UploadBase64Image(moduleName, imageBase64, imageName));
             }
 
             string[] afterPaths = await Task.WhenAll(uploadTasks);
@@ -138,20 +151,22 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
             return final;
         }
 
-        private async Task<string> UploadBase64Image(string moduleName, string imageBase64, string imageName, string imageExtension)
+        private async Task<string> UploadBase64Image(string moduleName, string imageBase64, string imageName)
         {
             string path = null;
 
             try
             {
-                byte[] imageBytes = Convert.FromBase64String(imageBase64);
+                string imageFile = this.getBase64File(imageBase64);
+                string imageType = this.getBase64Type(imageBase64);
+                byte[] imageBytes = Convert.FromBase64String(imageFile);
                 if (imageBytes != null)
                 {
                     CloudBlobContainer container = this.StorageContainer;
                     CloudBlobDirectory dir = container.GetDirectoryReference(moduleName);
 
                     CloudBlockBlob blob = dir.GetBlockBlobReference(imageName);
-                    blob.Properties.ContentType = imageExtension;
+                    blob.Properties.ContentType = imageType;
                     await blob.UploadFromByteArrayAsync(imageBytes, 0, imageBytes.Length);
                     path = "/" + this.StorageContainer.Name + "/" + moduleName + "/" + imageName;
                 }

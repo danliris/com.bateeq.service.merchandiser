@@ -16,7 +16,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Configs
             builder.Property(c => c.ColorName).HasMaxLength(500);
             builder.Property(c => c.Instruction).HasMaxLength(3000);
             builder.Ignore(c => c.ImagesFile);
-            builder.Ignore(c => c.ImagesType);
 
             builder
                 .HasMany(ro => ro.RO_Retail_SizeBreakdowns)

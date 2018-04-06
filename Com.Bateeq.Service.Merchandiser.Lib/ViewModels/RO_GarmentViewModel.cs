@@ -14,7 +14,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public string Instruction { get; set; }
         public int Total { get; set; }
         public List<string> ImagesFile { get; set; }
-        public List<string> ImagesType { get; set; }
         public List<string> ImagesPath { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -78,7 +78,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public double RoundingOthers { get; set; }
         public string SelectedRounding { get; set; }
         public string ImageFile { get; set; }
-        public string ImageType { get; set; }
         public string ImagePath { get; set; }
 
         public int? RO_RetailId { get; set; }

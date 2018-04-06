@@ -87,7 +87,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             Model.RO = String.Format("{0}{1:D4}", Model.LineCode, Model.SerialNumber);
             int created = await this.CreateAsync(Model);
             
-            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile);
 
             await this.UpdateAsync(Model.Id, Model);
 
@@ -108,7 +108,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<int> UpdateModel(int Id, CostCalculationGarment Model)
         {
-            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile, Model.ImageType);
+            Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile);
 
             int updated = await this.UpdateAsync(Id, Model);
 

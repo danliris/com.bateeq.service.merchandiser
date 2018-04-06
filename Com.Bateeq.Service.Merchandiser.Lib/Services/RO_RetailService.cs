@@ -109,7 +109,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             int created = await this.CreateAsync(Model);
 
-            Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesType, Model.ImagesPath);
+            Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesPath);
 
             await this.UpdateAsync(Model.Id, Model);
 
@@ -158,7 +158,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             CostCalculationRetail costCalculationRetail = Model.CostCalculationRetail;
             Model.CostCalculationRetail = null;
 
-            Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesType, Model.ImagesPath);
+            Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesPath);
 
             int updated = await this.UpdateAsync(Id, Model);
             
@@ -205,9 +205,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             await this.AzureImageService.RemoveMultipleImage(deletedImage.GetType().Name, deletedImage.ImagesPath);
 
             int deleted = await this.DeleteAsync(Id);
-            
-            CostCalculationRetail costCalculationRetail = this.CostCalculationRetailService.DbSet
-                .FirstOrDefault(p => p.RO_RetailId.Equals(Id));
+
+            CostCalculationRetail costCalculationRetail = await this.CostCalculationRetailService.ReadModelById(deletedImage.CostCalculationRetailId);
             costCalculationRetail.RO_RetailId = null;
             await this.CostCalculationRetailService.UpdateModel(costCalculationRetail.Id, costCalculationRetail);
 

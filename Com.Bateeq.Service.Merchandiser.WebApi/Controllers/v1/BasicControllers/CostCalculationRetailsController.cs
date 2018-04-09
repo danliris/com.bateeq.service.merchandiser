@@ -5,6 +5,10 @@ using Com.Bateeq.Service.Merchandiser.Lib.Models;
 using Com.Bateeq.Service.Merchandiser.Lib;
 using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates;
+using System.IO;
+using System;
+using System.Collections.Generic;
 
 namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
 {
@@ -17,6 +21,31 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
         private static readonly string ApiVersion = "1.0";
         public CostCalculationRetailsController(CostCalculationRetailService service) : base(service, ApiVersion)
         {
+        }
+
+        [HttpGet("pdf/{id}")]
+        public IActionResult GetPDF([FromRoute]int Id)
+        {
+            try
+            {
+                var model = Service.ReadModelById(Id).Result;
+                var viewModel = Service.MapToViewModel(model);
+
+                CostCalculationRetailPdfTemplate PdfTemplate = new CostCalculationRetailPdfTemplate();
+                MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel);
+
+                return new FileStreamResult(stream, "application/pdf")
+                {
+                    FileDownloadName = "CostCalculationRetail_" + viewModel.RO + ".pdf"
+                };
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
         }
     }
 }

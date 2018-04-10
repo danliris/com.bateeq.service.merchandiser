@@ -180,7 +180,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             do
             {
-                model.Code = CodeGenerator.GenerateCode();
+                model.Code = Code.Generate();
             }
             while (this.DbSet.Any(sr => sr.Code.Equals(model.Code)));
 
@@ -246,7 +246,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.Efficiency.Id = model.EfficiencyId;
             viewModel.Efficiency.Value = model.EfficiencyValue;
 
-            viewModel.Risk = PercentageConverter.ToPercent(model.Risk);
+            viewModel.Risk = Percentage.ToPercent(model.Risk);
 
             viewModel.OL = new RateCalculatedViewModel();
             viewModel.OL.Id = model.OLId;
@@ -340,7 +340,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.SizeRangeName = viewModel.SizeRange.Name;
             model.EfficiencyId = viewModel.Efficiency.Id;
             model.EfficiencyValue = viewModel.Efficiency.Value != null ? (double)viewModel.Efficiency.Value : 0;
-            model.Risk = PercentageConverter.ToFraction(viewModel.Risk);
+            model.Risk = Percentage.ToFraction(viewModel.Risk);
 
             model.OLId = viewModel.OL.Id;
             model.OLRate = viewModel.OL.Value != null ? (double)viewModel.OL.Value : 0;

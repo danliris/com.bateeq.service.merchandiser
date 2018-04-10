@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
-    public static class PercentageConverter
+    public static class Percentage
     {
         public static double ToFraction(dynamic number)
         {

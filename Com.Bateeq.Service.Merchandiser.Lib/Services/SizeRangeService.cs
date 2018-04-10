@@ -134,7 +134,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             do
             {
-                model.Code = CodeGenerator.GenerateCode();
+                model.Code = Code.Generate();
             }
             while (this.DbSet.Any(sr => sr.Code.Equals(model.Code)));
 

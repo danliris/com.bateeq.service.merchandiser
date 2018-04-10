@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
-    public static class NumberConverter
+    public static class Number
     {
         public static string ToRupiah(dynamic number)
         {

@@ -17,11 +17,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
         {
             if (isDollar)
             {
-                return NumberConverter.ToDollar(value);
+                return Number.ToDollar(value);
             }
             else
             {
-                return NumberConverter.ToRupiah(value);
+                return Number.ToRupiah(value);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             byte[] imageByte;
             try
             {
-                imageByte = Convert.FromBase64String(Base64Converter.GetBase64File(viewModel.ImageFile));
+                imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImageFile));
             }
             catch (Exception)
             {
@@ -181,26 +181,26 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             {
                 total += item.Total;
             }
-            cell_detail3.Phrase = new Phrase(NumberConverter.ToRupiahWithoutSymbol(total), normal_font);
+            cell_detail3.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(total), normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
             cell_detail3.Phrase = new Phrase("OTL 1", normal_font);
             table_detail3.AddCell(cell_detail3);
             double OTL1CalculatedValue = viewModel.OTL1.CalculatedValue ?? 0;
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(OTL1CalculatedValue)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(OTL1CalculatedValue)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             double afterOTL1 = total + OTL1CalculatedValue;
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(afterOTL1)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(afterOTL1)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("OTL 2", normal_font);
             table_detail3.AddCell(cell_detail3);
             double OTL2CalculatedValue = viewModel.OTL2.CalculatedValue ?? 0;
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(OTL2CalculatedValue)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(OTL2CalculatedValue)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             double afterOTL2 = afterOTL1 + OTL2CalculatedValue;
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(afterOTL2)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(afterOTL2)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("RISK", normal_font);
@@ -208,21 +208,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase(String.Format("{0:0.00}%", viewModel.Risk), normal_font);
             table_detail3.AddCell(cell_detail3);
             double afterRisk = (100 + viewModel.Risk) * afterOTL2 / 100; ;
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(afterRisk)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(afterRisk)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("BEA ANGKUT", normal_font);
             table_detail3.AddCell(cell_detail3);
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(viewModel.FreightCost)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(viewModel.FreightCost)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             double afterFreightCost = afterRisk + viewModel.FreightCost;
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(afterFreightCost)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(afterFreightCost)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("SUB TOTAL", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(afterFreightCost)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(afterFreightCost)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
@@ -230,21 +230,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Phrase = new Phrase(String.Format("{0:0.00}%", viewModel.NETFOBP), normal_font);
             table_detail3.AddCell(cell_detail3);
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(viewModel.NETFOB)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(viewModel.NETFOB)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("KOMISI (%)", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Phrase = new Phrase(String.Format("{0:0.00}%", viewModel.CommissionPortion), normal_font);
             table_detail3.AddCell(cell_detail3);
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(viewModel.CommissionRate)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(viewModel.CommissionRate)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("CONFIRM PRICE", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
             double confirmPrice = viewModel.ConfirmPrice ?? 0 + viewModel.Rate.Value ?? 0;
-            cell_detail3.Phrase = new Phrase($"{NumberConverter.ToRupiahWithoutSymbol(confirmPrice)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(confirmPrice)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             #endregion
 
@@ -445,7 +445,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 cell_ccm.Phrase = new Phrase(String.Format("{0}/{1}", viewModel.CostCalculationGarment_Materials[i].Price, viewModel.CostCalculationGarment_Materials[i].UOMPrice.Name), normal_font);
                 table_ccm.AddCell(cell_ccm);
 
-                cell_ccm.Phrase = new Phrase(NumberConverter.ToRupiah(viewModel.CostCalculationGarment_Materials[i].Total), normal_font);
+                cell_ccm.Phrase = new Phrase(Number.ToRupiah(viewModel.CostCalculationGarment_Materials[i].Total), normal_font);
                 table_ccm.AddCell(cell_ccm);
 
                 Total += viewModel.CostCalculationGarment_Materials[i].Total;
@@ -476,7 +476,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_ccm.AddCell(cell_ccm);
 
             cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
-            cell_ccm.Phrase = new Phrase(NumberConverter.ToRupiah(Total), normal_font);
+            cell_ccm.Phrase = new Phrase(Number.ToRupiah(Total), normal_font);
             table_ccm.AddCell(cell_ccm);
             #endregion
 
@@ -505,7 +505,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 noteY = noteY - 15;
                 table_detail5Y = noteY - 5;
                 cb.SetFontAndSize(bf, 8);
-                cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $"NOTE: 1 US$ = {NumberConverter.ToRupiah(viewModel.Rate.Value)}", 400, noteY, 0);
+                cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", 400, noteY, 0);
             }
             else
             {

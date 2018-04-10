@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
-    public static class Base64Converter
+    public static class Base64
     {
         public static string GetBase64File(string encoded)
         {

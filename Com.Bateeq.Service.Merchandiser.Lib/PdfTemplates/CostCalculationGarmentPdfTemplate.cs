@@ -129,6 +129,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             #endregion
 
+            bool isDollar = viewModel.Rate.Id != 0;
+
             #region Detail 2 (Bottom, Column 1)
             PdfPTable table_detail2 = new PdfPTable(2);
             table_detail2.TotalWidth = 180f;
@@ -244,28 +246,25 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.AddCell(cell_detail3);
             cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
             double confirmPrice = viewModel.ConfirmPrice ?? 0 + viewModel.Rate.Value ?? 0;
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(confirmPrice)}", normal_font);
+            double confirmPriceWithRate = isDollar ? confirmPrice * viewModel.Rate.Value ?? 1 : confirmPrice;
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(confirmPriceWithRate)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             #endregion
 
-            bool isDollar = viewModel.Rate.Id != 0;
+            #region Detail 4.1 (Bottom, Column 3.1)
+            PdfPTable table_detail4_1 = new PdfPTable(2);
+            table_detail4_1.TotalWidth = 180f;
 
-            #region Detail 4 (Bottom, Column 3.1)
-            PdfPTable table_detail4 = new PdfPTable(3);
-            table_detail4.TotalWidth = 180f;
+            float[] detail4_1_widths = new float[] { 1f, 1f };
+            table_detail4_1.SetWidths(detail4_1_widths);
 
-            float[] detail4_widths = new float[] { 1f, 1f, 1f };
-            table_detail4.SetWidths(detail4_widths);
+            PdfPCell cell_detail4_1 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
 
-            PdfPCell cell_detail4 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
-
-            cell_detail4.Phrase = new Phrase("CMT PRICE", bold_font);
-            table_detail4.AddCell(cell_detail4);
-            cell_detail4.Phrase = new Phrase("CNF Price", bold_font);
-            table_detail4.AddCell(cell_detail4);
-            cell_detail4.Phrase = new Phrase("CIF PRICE", bold_font);
-            table_detail4.AddCell(cell_detail4);
-
+            cell_detail4_1.Phrase = new Phrase("FOB PRICE", bold_font);
+            table_detail4_1.AddCell(cell_detail4_1);
+            cell_detail4_1.Phrase = new Phrase("CMT PRICE", bold_font);
+            table_detail4_1.AddCell(cell_detail4_1);
+            
             double CM_Price = 0;
             foreach (CostCalculationGarment_MaterialViewModel item in viewModel.CostCalculationGarment_Materials)
             {
@@ -273,17 +272,37 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             double CMT = CM_Price > 0 ? viewModel.ConfirmPrice ?? 0 : 0;
             string CMT_Price = this.GetCurrencyValue(CMT, isDollar);
-            cell_detail4.Phrase = new Phrase($"{CMT_Price}", normal_font);
-            table_detail4.AddCell(cell_detail4);
-            string CNF_Price = this.GetCurrencyValue(0, isDollar);
-            cell_detail4.Phrase = new Phrase($"{CNF_Price}", normal_font);
-            table_detail4.AddCell(cell_detail4);
-            string CIF_Price = this.GetCurrencyValue(0, isDollar);
-            cell_detail4.Phrase = new Phrase($"{CIF_Price}", normal_font);
-            table_detail4.AddCell(cell_detail4);
+            double FOB = viewModel.ConfirmPrice ?? 0 + CMT;
+            string FOB_Price = this.GetCurrencyValue(FOB, isDollar);
+            cell_detail4_1.Phrase = new Phrase($"{FOB_Price}", normal_font);
+            table_detail4_1.AddCell(cell_detail4_1);
+            cell_detail4_1.Phrase = new Phrase($"{CMT_Price}", normal_font);
+            table_detail4_1.AddCell(cell_detail4_1);
             #endregion
 
-            #region Detail 5 (Bottom, Column 3.2)
+            #region Detail 4.2 (Bottom, Column 3.2)
+            PdfPTable table_detail4_2 = new PdfPTable(2);
+            table_detail4_2.TotalWidth = 180f;
+
+            float[] detail4_2_widths = new float[] { 1f, 1f };
+            table_detail4_2.SetWidths(detail4_2_widths);
+
+            PdfPCell cell_detail4_2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
+
+            cell_detail4_2.Phrase = new Phrase("CNF PRICE", bold_font);
+            table_detail4_2.AddCell(cell_detail4_2);
+            cell_detail4_2.Phrase = new Phrase("CIF PRICE", bold_font);
+            table_detail4_2.AddCell(cell_detail4_2);
+
+            string CNF_Price = this.GetCurrencyValue(0, isDollar);
+            cell_detail4_2.Phrase = new Phrase($"{CNF_Price}", normal_font);
+            table_detail4_2.AddCell(cell_detail4_2);
+            string CIF_Price = this.GetCurrencyValue(0, isDollar);
+            cell_detail4_2.Phrase = new Phrase($"{CIF_Price}", normal_font);
+            table_detail4_2.AddCell(cell_detail4_2);
+            #endregion
+
+            #region Detail 5 (Bottom, Column 3.3)
             PdfPTable table_detail5 = new PdfPTable(4);
             table_detail5.TotalWidth = 180f;
 
@@ -310,7 +329,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail5.AddCell(cell_detail5);
 
             cell_detail5 = new PdfPCell() { Border = Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
-            cell_detail5.Phrase = new Phrase("CONFIRM PRICE FOB", normal_font);
+            cell_detail5.Phrase = new Phrase("CONFIRM PRICE", normal_font);
             table_detail5.AddCell(cell_detail5);
             cell_detail5 = new PdfPCell() { Border = Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
             string confirmPriceFOB = this.GetCurrencyValue(viewModel.ConfirmPrice ?? 0, isDollar);
@@ -415,20 +434,18 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             double Total = 0;
 
             float row2Y = table_detail1.TotalHeight > image.ScaledHeight ? row1Y - table_detail1.TotalHeight - 10 : row1Y - image.ScaledHeight - 10;
-            float[] row3Heights = { table_detail2.TotalHeight, table_detail3.TotalHeight, table_detail4.TotalHeight + table_detail5.TotalHeight };
-            if (isDollar)
-            {
-                row3Heights[2] += 20;
-            }
+            float[] row3Heights = { table_detail2.TotalHeight, table_detail3.TotalHeight, table_detail4_1.TotalHeight + 10 + table_detail4_2.TotalHeight + table_detail5.TotalHeight };
+            row3Heights[2] = isDollar ? row3Heights[2] + 20 : row3Heights[2] + 10;
             float row3TotalHeight = row3Heights.Max() + 10 + table_signature.TotalHeight;
             float row2RemainingHeight = row2Y - 10 - row3TotalHeight;
             float row2AllowedHeight = row2Y - 20 - 10;
+
             for (int i = 0; i < viewModel.CostCalculationGarment_Materials.Count; i++)
             {
                 cell_ccm.Phrase = new Phrase((i + 1).ToString(), normal_font);
                 table_ccm.AddCell(cell_ccm);
 
-                cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Category.SubCategory != null ? String.Format("{0} - {1}", viewModel.CostCalculationGarment_Materials[i].Category.Name, viewModel.CostCalculationGarment_Materials[1].Category.SubCategory) : viewModel.CostCalculationGarment_Materials[i].Category.Name, normal_font);
+                cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Category.SubCategory != null ? String.Format("{0} - {1}", viewModel.CostCalculationGarment_Materials[i].Category.Name, viewModel.CostCalculationGarment_Materials[i].Category.SubCategory) : viewModel.CostCalculationGarment_Materials[i].Category.Name, normal_font);
                 table_ccm.AddCell(cell_ccm);
 
                 cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Material.Name, normal_font);
@@ -496,9 +513,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             table_detail3.WriteSelectedRows(0, -1, 200, row3Y, cb);
 
-            table_detail4.WriteSelectedRows(0, -1, 400, row3Y, cb);
+            table_detail4_1.WriteSelectedRows(0, -1, 400, row3Y, cb);
 
-            float noteY = row3Y - table_detail4.TotalHeight;
+            float detail4_2Y = row3Y - table_detail4_1.TotalHeight - 10;
+            table_detail4_2.WriteSelectedRows(0, -1, 400, detail4_2Y, cb);
+
+            float noteY = detail4_2Y - table_detail4_2.TotalHeight;
             float table_detail5Y;
             if (isDollar)
             {

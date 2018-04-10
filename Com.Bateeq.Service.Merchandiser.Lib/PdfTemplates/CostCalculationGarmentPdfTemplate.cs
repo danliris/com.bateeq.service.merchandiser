@@ -459,7 +459,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 cell_ccm.Phrase = new Phrase(String.Format("{0} {1}", viewModel.CostCalculationGarment_Materials[i].Quantity, viewModel.CostCalculationGarment_Materials[i].UOMQuantity.Name), normal_font);
                 table_ccm.AddCell(cell_ccm);
 
-                cell_ccm.Phrase = new Phrase(String.Format("{0}/{1}", viewModel.CostCalculationGarment_Materials[i].Price, viewModel.CostCalculationGarment_Materials[i].UOMPrice.Name), normal_font);
+                cell_ccm.Phrase = new Phrase(String.Format("{0}/{1}", Number.ToRupiahWithoutSymbol(viewModel.CostCalculationGarment_Materials[i].Price), viewModel.CostCalculationGarment_Materials[i].UOMPrice.Name), normal_font);
                 table_ccm.AddCell(cell_ccm);
 
                 cell_ccm.Phrase = new Phrase(Number.ToRupiah(viewModel.CostCalculationGarment_Materials[i].Total), normal_font);

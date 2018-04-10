@@ -371,8 +371,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.SetWidths(signature_widths);
 
             PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
+
+            cell_signature.Phrase = new Phrase("Mengetahui,", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
+            table_signature.AddCell(cell_signature);
+
             string signatureArea = string.Empty;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4; i++)
             {
                 signatureArea += Environment.NewLine;
             }
@@ -383,11 +391,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("", normal_font);
+            cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("KASIE/KABAG PENJUALAN", normal_font);
+            cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("KADIV PENJUALAN", normal_font);
+            cell_signature.Phrase = new Phrase("Wakil Direktur Utama", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 
@@ -489,7 +497,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
 
             cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5, Colspan = 6 };
-            cell_ccm.Phrase = new Phrase("Total", normal_font);
+            cell_ccm.Phrase = new Phrase("TOTAL", normal_font);
             table_ccm.AddCell(cell_ccm);
 
             cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };

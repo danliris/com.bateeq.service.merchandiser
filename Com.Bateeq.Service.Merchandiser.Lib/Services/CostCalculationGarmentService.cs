@@ -172,7 +172,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             do
             {
-                model.Code = CodeGenerator.GenerateCode();
+                model.Code = Code.Generate();
             }
             while (this.DbSet.Any(sr => sr.Code.Equals(model.Code)));
 
@@ -197,8 +197,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.Line.Id = model.LineId;
             viewModel.Line.Name = model.LineName;
 
-            viewModel.FabricAllowance = PercentageConverter.ToPercent(model.FabricAllowance);
-            viewModel.AccessoriesAllowance = PercentageConverter.ToPercent(model.AccessoriesAllowance);
+            viewModel.FabricAllowance = Percentage.ToPercent(model.FabricAllowance);
+            viewModel.AccessoriesAllowance = Percentage.ToPercent(model.AccessoriesAllowance);
 
             viewModel.SizeRange = new SizeRangeViewModel();
             viewModel.SizeRange.Id = model.SizeRangeId;
@@ -210,7 +210,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             viewModel.Efficiency = new EfficiencyViewModel();
             viewModel.Efficiency.Id = model.EfficiencyId;
-            viewModel.Efficiency.Value = PercentageConverter.ToPercent(model.EfficiencyValue);
+            viewModel.Efficiency.Value = Percentage.ToPercent(model.EfficiencyValue);
 
             viewModel.Wage = new RateViewModel();
             viewModel.Wage.Id = model.WageId;
@@ -269,14 +269,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     };
                     CostCalculationGarment_MaterialVM.UOMPrice = uomPriceVM;
 
-                    CostCalculationGarment_MaterialVM.ShippingFeePortion = PercentageConverter.ToPercent(CostCalculationGarment_Material.ShippingFeePortion);
+                    CostCalculationGarment_MaterialVM.ShippingFeePortion = Percentage.ToPercent(CostCalculationGarment_Material.ShippingFeePortion);
 
                     viewModel.CostCalculationGarment_Materials.Add(CostCalculationGarment_MaterialVM);
                 }
             }
 
-            viewModel.CommissionPortion = PercentageConverter.ToPercent(model.CommissionPortion);
-            viewModel.Risk = PercentageConverter.ToPercent(model.Risk);
+            viewModel.CommissionPortion = Percentage.ToPercent(model.CommissionPortion);
+            viewModel.Risk = Percentage.ToPercent(model.Risk);
 
             viewModel.OTL1 = new RateCalculatedViewModel();
             viewModel.OTL1.Id = model.OTL1Id;
@@ -288,7 +288,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.OTL2.Value = model.OTL2Rate;
             viewModel.OTL2.CalculatedValue = model.OTL2CalculatedRate;
 
-            viewModel.NETFOBP = PercentageConverter.ToPercent((double)model.NETFOBP);
+            viewModel.NETFOBP = Percentage.ToPercent((double)model.NETFOBP);
 
             return viewModel;
         }
@@ -302,8 +302,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.LineCode = viewModel.Line.Code;
             model.LineName = viewModel.Line.Name;
 
-            model.FabricAllowance = PercentageConverter.ToFraction(viewModel.FabricAllowance);
-            model.AccessoriesAllowance = PercentageConverter.ToFraction(viewModel.AccessoriesAllowance);
+            model.FabricAllowance = Percentage.ToFraction(viewModel.FabricAllowance);
+            model.AccessoriesAllowance = Percentage.ToFraction(viewModel.AccessoriesAllowance);
 
             model.SizeRangeId = viewModel.SizeRange.Id;
             model.SizeRangeName = viewModel.SizeRange.Name;
@@ -312,7 +312,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.BuyerName = viewModel.Buyer.Name;
 
             model.EfficiencyId = viewModel.Efficiency.Id;
-            model.EfficiencyValue = PercentageConverter.ToFraction(viewModel.Efficiency.Value);
+            model.EfficiencyValue = Percentage.ToFraction(viewModel.Efficiency.Value);
 
             model.WageId = viewModel.Wage.Id;
             model.WageRate = viewModel.Wage.Value != null ? (double)viewModel.Wage.Value : 0;
@@ -338,13 +338,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 CostCalculationGarment_Material.UOMQuantityName = CostCalculationGarment_MaterialVM.UOMQuantity.Name;
                 CostCalculationGarment_Material.UOMPriceId = CostCalculationGarment_MaterialVM.UOMPrice.Id;
                 CostCalculationGarment_Material.UOMPriceName = CostCalculationGarment_MaterialVM.UOMPrice.Name;
-                CostCalculationGarment_Material.ShippingFeePortion = PercentageConverter.ToFraction(CostCalculationGarment_MaterialVM.ShippingFeePortion);
+                CostCalculationGarment_Material.ShippingFeePortion = Percentage.ToFraction(CostCalculationGarment_MaterialVM.ShippingFeePortion);
 
                 model.CostCalculationGarment_Materials.Add(CostCalculationGarment_Material);
             }
 
-            model.CommissionPortion = PercentageConverter.ToFraction(viewModel.CommissionPortion);
-            model.Risk = PercentageConverter.ToFraction(viewModel.Risk);
+            model.CommissionPortion = Percentage.ToFraction(viewModel.CommissionPortion);
+            model.Risk = Percentage.ToFraction(viewModel.Risk);
 
             model.OTL1Id = viewModel.OTL1.Id;
             model.OTL1Rate = viewModel.OTL1.Value != null ? (double)viewModel.OTL1.Value : 0;
@@ -354,7 +354,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.OTL2Rate = viewModel.OTL2.Value != null ? (double)viewModel.OTL2.Value : 0;
             model.OTL2CalculatedRate = viewModel.OTL2.CalculatedValue != null ? (double)viewModel.OTL2.CalculatedValue : 0;
 
-            model.NETFOBP = PercentageConverter.ToFraction(viewModel.NETFOBP);
+            model.NETFOBP = Percentage.ToFraction(viewModel.NETFOBP);
 
             return model;
         }

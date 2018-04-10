@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
-    public static class TimestampGenerator
+    public static class Timestamp
     {
         private const string TIMESTAMP_FORMAT = "yyyyMMddHHmmssffff";
-        public static string GenerateTimestamp(DateTime value)
+        public static string Generate(DateTime value)
         {
             return value.ToString(TIMESTAMP_FORMAT);
         }

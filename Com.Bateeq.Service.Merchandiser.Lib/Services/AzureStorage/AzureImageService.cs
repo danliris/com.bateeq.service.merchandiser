@@ -39,12 +39,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
 
         public string GenerateFileName(int id, DateTime _createdUtc)
         {
-            return String.Format("IMG_{0}_{1}", id, TimestampGenerator.GenerateTimestamp(_createdUtc));
+            return String.Format("IMG_{0}_{1}", id, Timestamp.Generate(_createdUtc));
         }
 
         public string GenerateFileName(int id, DateTime _createdUtc, int index)
         {
-            return String.Format("IMG_{0}_{1}_{2}", id, index, TimestampGenerator.GenerateTimestamp(_createdUtc));
+            return String.Format("IMG_{0}_{1}_{2}", id, index, Timestamp.Generate(_createdUtc));
         }
 
         public async Task<string> DownloadImage(string moduleName, string imagePath)

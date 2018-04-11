@@ -92,6 +92,31 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Lines",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    _CreatedAgent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    _CreatedBy = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    _CreatedUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    _DeletedAgent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    _DeletedBy = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    _DeletedUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    _IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    _LastModifiedAgent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    _LastModifiedBy = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    _LastModifiedUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lines", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Rates",
                 columns: table => new
                 {
@@ -305,8 +330,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     Commodity = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ConfirmDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ConfirmPrice = table.Column<double>(type: "float", nullable: false),
-                    ConvectionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ConvectionName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(3000)", maxLength: 3000, nullable: true),
                     EfficiencyId = table.Column<int>(type: "int", nullable: false),
@@ -318,6 +341,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                     Index = table.Column<double>(type: "float", nullable: false),
                     Insurance = table.Column<double>(type: "float", nullable: false),
                     LeadTime = table.Column<int>(type: "int", nullable: false),
+                    LineId = table.Column<int>(type: "int", maxLength: 100, nullable: false),
+                    LineName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     NETFOB = table.Column<double>(type: "float", nullable: false),
                     NETFOBP = table.Column<double>(type: "float", nullable: false),
                     OTL1CalculatedRate = table.Column<double>(type: "float", nullable: false),
@@ -765,6 +790,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
             migrationBuilder.DropTable(
                 name: "Efficiencies");
+
+            migrationBuilder.DropTable(
+                name: "Lines");
 
             migrationBuilder.DropTable(
                 name: "Materials");

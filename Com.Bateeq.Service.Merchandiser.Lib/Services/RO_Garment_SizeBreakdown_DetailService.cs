@@ -55,7 +55,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             do
             {
-                model.Code = CodeGenerator.GenerateCode();
+                model.Code = Code.Generate();
             }
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 

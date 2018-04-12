@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
 {
-    public static class EmailValidator
+    public static class Email
     {
         /// &lt;summary>
         /// Regular expression, which is used to validate an E-Mail address.
@@ -25,7 +22,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Helpers
         /// &lt;returns>True, when Parameter-string is not null and 
         /// contains a valid E-Mail address;
         /// otherwise false.&lt;/returns>
-        public static bool IsValidEmail(string email)
+        public static bool IsValid(string email)
         {
             if (email != null)
                 return Regex.IsMatch(email, MatchEmailPattern);

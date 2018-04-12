@@ -28,11 +28,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfContentByte cb = writer.DirectContent;
 
             #region Header
+            cb.BeginText();
             cb.SetFontAndSize(bf, 10);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PT. EFRATA RETAILINDO", 10, 820, 0);
             cb.SetFontAndSize(bf_bold, 12);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "COST CALCULATION", 10, 805, 0);
-            cb.SetFontAndSize(bf, 8);
+            cb.EndText();
             #endregion
 
             #region Top
@@ -465,7 +466,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float row2Y = row1EndY - 10;
             float allowedRow2Height = row2Y - 20 - 10;
             float remainingRow2Height = row1EndY - table_price.TotalHeight - table_signature.TotalHeight - 30;
-            for (int i = 0; i < viewModel.CostCalculationRetail_Materials.Count - 4; i++)
+            for (int i = 0; i < viewModel.CostCalculationRetail_Materials.Count; i++)
             {
                 cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
                 cell_ccm.Phrase = new Phrase((i + 1).ToString(), normal_font);

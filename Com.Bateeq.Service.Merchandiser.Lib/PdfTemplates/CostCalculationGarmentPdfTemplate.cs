@@ -41,10 +41,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfContentByte cb = writer.DirectContent;
 
             #region Header
+            cb.BeginText();
             cb.SetFontAndSize(bf, 10);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PT. EFRATA RETAILINDO", 10, 820, 0);
             cb.SetFontAndSize(bf_bold, 12);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "COST CALCULATION PENJUALAN UMUM", 10, 805, 0);
+            cb.EndText();
             #endregion
 
             #region Detail 1 (Top)
@@ -281,9 +283,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             {
                 CM_Price += item.CM_Price ?? 0;
             }
-            double CMT = CM_Price > 0 ? viewModel.ConfirmPrice ?? 0 : 0;
+            double ConfirmPrice = viewModel.ConfirmPrice ?? 0;
+            double CMT = CM_Price > 0 ? ConfirmPrice : 0;
             string CMT_Price = this.GetCurrencyValue(CMT, isDollar);
-            double FOB = viewModel.ConfirmPrice ?? 0 + CMT;
+            double FOB = ConfirmPrice + CM_Price;
             string FOB_Price = this.GetCurrencyValue(FOB, isDollar);
             cell_detail4_1.Phrase = new Phrase($"{FOB_Price}", normal_font);
             table_detail4_1.AddCell(cell_detail4_1);
@@ -569,8 +572,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
         private void DrawPrintedOn(DateTime now, BaseFont bf, PdfContentByte cb)
         {
+            cb.BeginText();
             cb.SetFontAndSize(bf, 6);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "Printed on: " + now.ToString("dd/MM/yyyy | HH:mm"), 10, 10, 0);
+            cb.EndText();
         }
     }
 }

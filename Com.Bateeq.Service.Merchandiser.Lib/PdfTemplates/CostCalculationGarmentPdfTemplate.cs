@@ -48,64 +48,75 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #endregion
 
             #region Detail 1 (Top)
-            PdfPTable table_detail1 = new PdfPTable(6);
+            PdfPTable table_detail1 = new PdfPTable(9);
             table_detail1.TotalWidth = 500f;
 
-            float[] detail1_widths = new float[] { 1f, 2f, 1f, 2f, 1f, 2f };
+            float[] detail1_widths = new float[] { 1f, 0.1f, 2f, 1f, 0.1f, 2f, 1f, 0.1f, 2f };
             table_detail1.SetWidths(detail1_widths);
 
-            PdfPCell cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 5, PaddingBottom = 3, PaddingTop = 5 };
+            PdfPCell cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 5, PaddingTop = 5 };
+            PdfPCell cell_colon = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE };
+            cell_colon.Phrase = new Phrase(":", normal_font);
 
             cell_detail1.Phrase = new Phrase("RO", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.RO}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.RO}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("SIZE RANGE", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.SizeRange.Name}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.SizeRange.Name}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("LEAD TIME", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.LeadTime}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.LeadTime}", normal_font);
             table_detail1.AddCell(cell_detail1);
 
             cell_detail1.Phrase = new Phrase("ARTIKEL", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.Article}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.Article}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("SEKSI", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.Section}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.Section}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("FABRIC", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.FabricAllowance}%", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.FabricAllowance}%", normal_font);
             table_detail1.AddCell(cell_detail1);
 
             cell_detail1.Phrase = new Phrase("DATE", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel._CreatedUtc.ToString("dd MMMM yyyy")}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel._CreatedUtc.ToString("dd MMMM yyyy")}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("KOMODITI", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.Commodity}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.Commodity}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("ACC", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.AccessoriesAllowance}%", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.AccessoriesAllowance}%", normal_font);
             table_detail1.AddCell(cell_detail1);
 
             cell_detail1.Phrase = new Phrase("LINE", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase($": {viewModel.Line.Name}", normal_font);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.Line.Name}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase("", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase("", normal_font);
             table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase("", normal_font);
+            table_detail1.AddCell(cell_detail1);
+            table_detail1.AddCell(cell_detail1);
             table_detail1.AddCell(cell_detail1);
             #endregion
 

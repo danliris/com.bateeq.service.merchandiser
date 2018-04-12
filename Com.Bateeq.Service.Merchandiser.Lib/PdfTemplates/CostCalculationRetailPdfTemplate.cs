@@ -28,46 +28,109 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfContentByte cb = writer.DirectContent;
 
             #region Header
-            // Top
+            cb.BeginText();
             cb.SetFontAndSize(bf, 10);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PT. EFRATA RETAILINDO", 10, 820, 0);
             cb.SetFontAndSize(bf_bold, 12);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "COST CALCULATION", 10, 805, 0);
-            cb.SetFontAndSize(bf, 8);
-            // Col 1
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "RO", 10, 790, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.RO}", 60, 790, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "ARTIKEL", 10, 775, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.Article}", 60, 775, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "STYLE", 10, 760, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.Style.name}", 60, 760, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "MUSIM", 10, 745, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.Season.name}", 60, 745, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "KONTER", 10, 730, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.Counter.name}", 60, 730, 0);
-            // Col 2
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PEMBELI", 190, 790, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.Buyer.Name}", 240, 790, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "DELIV DATE", 190, 775, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.DeliveryDate.ToString("dd MMMM yyyy")}", 240, 775, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "SIZE RANGE", 190, 760, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.SizeRange.Name}", 240, 760, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "EFISIENSI", 190, 745, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.Efficiency.Value}%", 240, 745, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "RESIKO", 190, 730, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.Risk}%", 240, 730, 0);
-            // Col 3
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "TARIF OL", 370, 790, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.OL.Value}", 420, 790, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "TARIF OTL 1", 370, 775, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.OTL1.Value}", 420, 775, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "TARIF OTL 2", 370, 760, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.OTL2.Value}", 420, 760, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "TARIF OTL 3", 370, 745, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {viewModel.OTL3.Value}", 420, 745, 0);
-            var STD_Hour = viewModel.OL.Value + viewModel.OTL1.Value + viewModel.OTL2.Value + viewModel.OTL3.Value;
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "STD HOUR", 370, 730, 0);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $": {STD_Hour}", 420, 730, 0);
+            cb.EndText();
+            #endregion
+
+            #region Top
+            PdfPTable table_top = new PdfPTable(9);
+            table_top.TotalWidth = 500f;
+
+            float[] top_widths = new float[] { 1f, 0.1f, 2f, 1f, 0.1f, 2f, 1f, 0.1f, 2f };
+            table_top.SetWidths(top_widths);
+
+            PdfPCell cell_top = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 5, PaddingTop = 5 };
+            PdfPCell cell_colon = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE };
+            cell_colon.Phrase = new Phrase(":", normal_font);
+
+            cell_top.Phrase = new Phrase("RO", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.RO}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("PEMBELI", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.Buyer.Name}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("TARIF OL", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            double OLValue = viewModel.OL.Value ?? 0;
+            cell_top.Phrase = new Phrase($"{OLValue}", normal_font);
+            table_top.AddCell(cell_top);
+
+            cell_top.Phrase = new Phrase("ARTIKEL", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.Article}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("DELIV DATE", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.DeliveryDate.ToString("dd MMMM yyyy")}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("TARIF OTL 1", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            double OTL1Value = viewModel.OTL1.Value ?? 0;
+            cell_top.Phrase = new Phrase($"{OTL1Value}%", normal_font);
+            table_top.AddCell(cell_top);
+
+            cell_top.Phrase = new Phrase("STYLE", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.Style.name}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("SIZE RANGE", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.SizeRange.Name}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("TARIF OTL 2", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            double OTL2Value = viewModel.OTL2.Value ?? 0;
+            cell_top.Phrase = new Phrase($"{OTL2Value}", normal_font);
+            table_top.AddCell(cell_top);
+
+            cell_top.Phrase = new Phrase("MUSIM", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.Season.name}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("EFISIENSI", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.Efficiency.Value}%", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("TARIF OTL 3", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            double OTL3Value = viewModel.OTL3.Value ?? 0;
+            cell_top.Phrase = new Phrase($"{OTL3Value}", normal_font);
+            table_top.AddCell(cell_top);
+
+            cell_top.Phrase = new Phrase("KONTER", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.Counter.name}", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("RESIKO", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.Risk}%", normal_font);
+            table_top.AddCell(cell_top);
+            cell_top.Phrase = new Phrase("STD HOUR", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            double STD_Hour = OLValue + OTL1Value + OTL2Value + OTL3Value;
+            cell_top.Phrase = new Phrase($"{STD_Hour}", normal_font);
+            table_top.AddCell(cell_top);
             #endregion
 
             #region Image
@@ -88,9 +151,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 percentage = 60 / image.Width;
                 image.ScalePercent(percentage * 100);
             }
-            int row1Y = 800 - Convert.ToInt32(image.ScaledHeight);
-            image.SetAbsolutePosition(520, row1Y);
-            cb.AddImage(image, inlineImage: true);
+
             #endregion
 
             #region Detail (Bottom, Column 1.1)
@@ -357,11 +418,20 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             #endregion
 
+            #region Draw Top
+            float row1Y = 800;
+            table_top.WriteSelectedRows(0, -1, 10, row1Y, cb);
+
+            float imageY = 800 - image.ScaledHeight;
+            image.SetAbsolutePosition(520, imageY);
+            cb.AddImage(image, inlineImage: true);
+            #endregion
+
             #region Cost Calculation Material
             PdfPTable table_ccm = new PdfPTable(8);
             table_ccm.TotalWidth = 570f;
 
-            float[] ccm_widths = new float[] { 1.25f, 3f, 4f, 6f, 3f, 4f, 3f, 4f };
+            float[] ccm_widths = new float[] { 1.25f, 3.5f, 4f, 6f, 3f, 4f, 3f, 4f };
             table_ccm.SetWidths(ccm_widths);
 
             PdfPCell cell_ccm;
@@ -392,10 +462,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_ccm.AddCell(cell_ccm);
 
             double Total = 0;
-            int row1EndY = image.ScaledHeight > 70 ? (int)(row1Y - image.ScaledHeight) : 730;
-            int row2Y = (int)row1EndY - 10;
-            int allowedRow2Height = row2Y - 20 - 10;
-            int remainingRow2Height = (int)(row1EndY - table_price.TotalHeight - table_signature.TotalHeight - 30);
+            float row1EndY = image.ScaledHeight > table_top.TotalHeight ? row1Y - image.ScaledHeight : row1Y - table_top.TotalHeight;
+            float row2Y = row1EndY - 10;
+            float allowedRow2Height = row2Y - 20 - 10;
+            float remainingRow2Height = row1EndY - table_price.TotalHeight - table_signature.TotalHeight - 30;
             for (int i = 0; i < viewModel.CostCalculationRetail_Materials.Count; i++)
             {
                 cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
@@ -426,10 +496,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 table_ccm.AddCell(cell_ccm);
                 Total += viewModel.CostCalculationRetail_Materials[i].Total;
 
-                int currentHeight = (int)table_ccm.TotalHeight;
-                if (currentHeight / remainingRow2Height > 0)
+                float currentHeight = table_ccm.TotalHeight;
+                if (currentHeight / remainingRow2Height > 1)
                 {
-                    if (currentHeight / allowedRow2Height > 0)
+                    if (currentHeight / allowedRow2Height > 1)
                     {
                         PdfPRow headerRow = table_ccm.GetRow(0);
                         PdfPRow lastRow = table_ccm.GetRow(table_ccm.Rows.Count - 1);
@@ -443,7 +513,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                         table_ccm.CalculateHeights();
                         row2Y = 830;
                         allowedRow2Height = row2Y - 20 - 10;
-                        remainingRow2Height = (int)(840 - 10 - 10 - table_price.TotalHeight - 10 - table_signature.TotalHeight - 20 - 10);
+                        remainingRow2Height = 840 - 10 - 10 - table_price.TotalHeight - 10 - table_signature.TotalHeight - 20 - 10;
                     }
                 }
             }
@@ -454,15 +524,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
             cell_ccm.Phrase = new Phrase(Number.ToRupiah(Total), normal_font);
             table_ccm.AddCell(cell_ccm);
-
-            table_ccm.WriteSelectedRows(0, -1, 10, row2Y, cb);
             #endregion
 
-            #region Drawing
-            int row3Y = (int)(row2Y - table_ccm.TotalHeight - 10);
-            int row3LeftHeight = (int)(20 + table_detail.TotalHeight + 5 + table_keterangan.TotalHeight);
-            int row3Height = row3LeftHeight > table_price.TotalHeight ? (int)(table_price.TotalHeight + 10 + table_signature.TotalHeight) : (int)(row3LeftHeight + 10 + table_signature.TotalHeight);
-            int remainingRow3Height = (int)(row3Y - 20 - 10);
+            #region Draw Middle and Bottom
+            table_ccm.WriteSelectedRows(0, -1, 10, row2Y, cb);
+
+            float row3Y = row2Y - table_ccm.TotalHeight - 10;
+            float row3LeftHeight = 20 + table_detail.TotalHeight + 5 + table_keterangan.TotalHeight;
+            float row3Height = row3LeftHeight > table_price.TotalHeight ? row3LeftHeight + 10 + table_signature.TotalHeight : table_price.TotalHeight + 10 + table_signature.TotalHeight;
+            float remainingRow3Height = row3Y - 20 - 10;
             if (remainingRow3Height < row3Height)
             {
                 this.DrawPrintedOn(now, bf, cb);

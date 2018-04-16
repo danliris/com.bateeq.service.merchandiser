@@ -16,6 +16,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             BaseFont bf_bold = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
             Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 7);
             Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 7);
+            Font bold_font_8 = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
             Font font_9 = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 9);
             DateTime now = DateTime.Now;
 
@@ -48,6 +49,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             PdfPCell cell_top = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2 };
             PdfPCell cell_colon = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE };
+            PdfPCell cell_top_keterangan = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2, Colspan = 7 };
             cell_colon.Phrase = new Phrase(":", normal_font);
 
             cell_top.Phrase = new Phrase("RO", normal_font);
@@ -64,7 +66,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OLValue = viewModel.OL.Value ?? 0;
-            cell_top.Phrase = new Phrase($"{OLValue}", normal_font);
+            string OL = OLValue > 0 ? OLValue.ToString() + " detik" : OLValue.ToString();
+            cell_top.Phrase = new Phrase($"{OL}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("ARTIKEL", normal_font);
@@ -81,7 +84,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OTL1Value = viewModel.OTL1.Value ?? 0;
-            cell_top.Phrase = new Phrase($"{OTL1Value}%", normal_font);
+            string OTL1 = OTL1Value > 0 ? OTL1Value.ToString() + " detik" : OTL1Value.ToString();
+            cell_top.Phrase = new Phrase($"{OTL1}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("STYLE", normal_font);
@@ -98,7 +102,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OTL2Value = viewModel.OTL2.Value ?? 0;
-            cell_top.Phrase = new Phrase($"{OTL2Value}", normal_font);
+            string OTL2 = OTL2Value > 0 ? OTL2Value.ToString() + " detik" : OTL2Value.ToString();
+            cell_top.Phrase = new Phrase($"{OTL2}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("MUSIM", normal_font);
@@ -115,7 +120,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OTL3Value = viewModel.OTL3.Value ?? 0;
-            cell_top.Phrase = new Phrase($"{OTL3Value}", normal_font);
+            string OTL3 = OTL3Value > 0 ? OTL3Value.ToString() + " detik" : OTL3Value.ToString();
+            cell_top.Phrase = new Phrase($"{OTL3}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("KONTER", normal_font);
@@ -131,9 +137,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase("STD HOUR", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            double STD_Hour = OLValue + OTL1Value + OTL2Value + OTL3Value;
+            double STD_HourValue = OLValue + OTL1Value + OTL2Value + OTL3Value;
+            string STD_Hour = STD_HourValue > 0 ? STD_HourValue.ToString() + " detik" : STD_HourValue.ToString();
             cell_top.Phrase = new Phrase($"{STD_Hour}", normal_font);
             table_top.AddCell(cell_top);
+
+            cell_top.Phrase = new Phrase("KETERANGAN", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top_keterangan.Phrase = new Phrase($"{viewModel.Description}", normal_font);
+            table_top.AddCell(cell_top_keterangan);
             #endregion
 
             #region Image
@@ -226,7 +239,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
+            cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
             table_signature.AddCell(cell_signature);
@@ -241,175 +254,152 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] price_widths = new float[] { 1.6f, 3f, 3f, 4f, 1f };
             table_price.SetWidths(price_widths);
 
-            PdfPCell cell_price;
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_price_center = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_price_left = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_price_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
 
-            cell_price.Phrase = new Phrase("KET (X)", bold_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("HARGA", bold_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("PEMBULATAN HARGA", bold_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("KETERANGAN", bold_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", bold_font);
-            table_price.AddCell(cell_price);
+            cell_price_center.Phrase = new Phrase("KET (X)", bold_font);
+            table_price.AddCell(cell_price_center);
+            cell_price_center.Phrase = new Phrase("HARGA (Rp)", bold_font);
+            table_price.AddCell(cell_price_center);
+            cell_price_center.Phrase = new Phrase("PEMBULATAN HARGA (Rp)", bold_font);
+            table_price.AddCell(cell_price_center);
+            cell_price_center.Phrase = new Phrase("KETERANGAN", bold_font);
+            table_price.AddCell(cell_price_center);
+            cell_price_center.Phrase = new Phrase("", bold_font);
+            table_price.AddCell(cell_price_center);
 
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed20), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding20), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding20") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.1", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed21), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding21), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding21") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.2", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed22), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding22), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding22") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.3", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed23), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding23), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding23") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.4", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed24), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding24), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding24") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.5", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed25), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding25), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding25") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.6", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed26), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding26), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding26") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.7", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed27), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding27), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding27") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.8", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed28), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding28), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding28") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("2.9", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed29), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding29), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding29") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("3.0", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Proposed30), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(Number.ToRupiah(viewModel.Rounding30), normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding30") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
-
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase("Others", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase(viewModel.RoundingOthers > 0 ? Number.ToRupiah(viewModel.RoundingOthers) : "", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price.Phrase = new Phrase("", normal_font);
-            table_price.AddCell(cell_price);
-            cell_price = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_price.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("RoundingOthers") ? "*" : "", normal_font);
-            table_price.AddCell(cell_price);
+            cell_price_left.Phrase = new Phrase("2", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed20), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding20), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding20") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.1", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed21), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding21), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding21") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.2", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed22), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding22), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding22") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.3", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed23), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding23), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding23") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.4", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed24), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding24), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding24") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.5", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed25), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding25), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding25") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.6", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed26), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding26), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding26") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.7", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed27), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding27), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding27") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.8", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed28), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding28), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding28") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("2.9", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed29), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding29), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding29") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("3.0", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Proposed30), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.Rounding30), normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("Rounding30") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
+            
+            cell_price_left.Phrase = new Phrase("Others", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_right.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_right.Phrase = new Phrase(viewModel.RoundingOthers > 0 ? Number.ToRupiahWithoutSymbol(viewModel.RoundingOthers) : "", normal_font);
+            table_price.AddCell(cell_price_right);
+            cell_price_left.Phrase = new Phrase("", normal_font);
+            table_price.AddCell(cell_price_left);
+            cell_price_center.Phrase = new Phrase(viewModel.SelectedRounding.ToString().Equals("RoundingOthers") ? "*" : "", normal_font);
+            table_price.AddCell(cell_price_center);
             #endregion
 
             #region Cost Calculation Material
@@ -438,10 +428,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_ccm_center.Phrase = new Phrase("KUANTITAS", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("HARGA PER SATUAN", bold_font);
+            cell_ccm_center.Phrase = new Phrase("HARGA PER SATUAN (Rp)", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("TOTAL", bold_font);
+            cell_ccm_center.Phrase = new Phrase("TOTAL (Rp)", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
             double Total = 0;
@@ -451,7 +441,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float row3LeftHeight = calculatedHppHeight + 5 + table_detail.TotalHeight + 5 + table_signature.TotalHeight;
             float row3RightHeight = table_price.TotalHeight;
             float row3Height = row3LeftHeight > row3RightHeight ? row3LeftHeight : row3RightHeight;
-            float remainingRow2Height = row2Y - row3Height - printedOnHeight - margin;
+            float remainingRow2Height = row2Y - 10 - row3Height - printedOnHeight - margin;
             float allowedRow2Height = row2Y - printedOnHeight - margin;
             for (int i = 0; i < viewModel.CostCalculationRetail_Materials.Count; i++)
             {
@@ -467,13 +457,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 cell_ccm_left.Phrase = new Phrase(viewModel.CostCalculationRetail_Materials[i].Description, normal_font);
                 table_ccm.AddCell(cell_ccm_left);
 
-                cell_ccm_center.Phrase = new Phrase(String.Format("{0} {1}", viewModel.CostCalculationRetail_Materials[i].Quantity, viewModel.CostCalculationRetail_Materials[i].UOMQuantity.Name), normal_font);
-                table_ccm.AddCell(cell_ccm_center);
+                cell_ccm_right.Phrase = new Phrase(String.Format("{0} {1}", viewModel.CostCalculationRetail_Materials[i].Quantity, viewModel.CostCalculationRetail_Materials[i].UOMQuantity.Name), normal_font);
+                table_ccm.AddCell(cell_ccm_right);
 
-                cell_ccm_center.Phrase = new Phrase(String.Format("{0}/{1}", Number.ToRupiahWithoutSymbol(viewModel.CostCalculationRetail_Materials[i].Price), viewModel.CostCalculationRetail_Materials[i].UOMPrice.Name), normal_font);
-                table_ccm.AddCell(cell_ccm_center);
+                cell_ccm_right.Phrase = new Phrase(String.Format("{0}/{1}", Number.ToRupiahWithoutSymbol(viewModel.CostCalculationRetail_Materials[i].Price), viewModel.CostCalculationRetail_Materials[i].UOMPrice.Name), normal_font);
+                table_ccm.AddCell(cell_ccm_right);
 
-                cell_ccm_right.Phrase = new Phrase(Number.ToRupiah(viewModel.CostCalculationRetail_Materials[i].Total), normal_font);
+                cell_ccm_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.CostCalculationRetail_Materials[i].Total), normal_font);
                 table_ccm.AddCell(cell_ccm_right);
                 Total += viewModel.CostCalculationRetail_Materials[i].Total;
 
@@ -493,17 +483,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                         table_ccm.Rows.Add(lastRow);
                         table_ccm.CalculateHeights();
                         row2Y = startY;
-                        allowedRow2Height = row2Y - printedOnHeight - margin;
                         remainingRow2Height = row2Y - 10 - row3Height - printedOnHeight - margin;
+                        allowedRow2Height = row2Y - printedOnHeight - margin;
                     }
                 }
             }
 
             cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2, Colspan = 6 };
-            cell_ccm_right.Phrase = new Phrase("TOTAL", normal_font);
+            cell_ccm_right.Phrase = new Phrase("TOTAL", bold_font_8);
             table_ccm.AddCell(cell_ccm_right);
             cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_ccm_right.Phrase = new Phrase(Number.ToRupiah(Total), normal_font);
+            cell_ccm_right.Phrase = new Phrase(Number.ToRupiah(Total), bold_font_8);
             table_ccm.AddCell(cell_ccm_right);
             #endregion
 

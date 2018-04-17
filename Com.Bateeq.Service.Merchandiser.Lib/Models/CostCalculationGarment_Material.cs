@@ -1,8 +1,6 @@
 ﻿using Com.Moonlay.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Models
 {
@@ -11,6 +9,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public int CostCalculationGarmentId { get; set; }
         public virtual CostCalculationGarment CostCalculationGarment { get; set; }
         public string Code { get; set; }
+        public int? PO_SerialNumber { get; set; }
+        public string PO { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int MaterialId { get; set; }

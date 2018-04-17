@@ -54,12 +54,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
         {
             string category = model.CategoryName.Substring(0, 3).ToUpper();
             int latestSN_Garment = this.DbSet
-                .Where(d => d.CategoryName.Substring(0, 3).ToUpper() == category)
+                .Where(d => d.CategoryName.Substring(0, 3).ToUpper() == category && d._CreatedUtc.Year == model._CreatedUtc.Year)
                 .DefaultIfEmpty()
                 .Max(d => d.PO_SerialNumber)
                 .GetValueOrDefault();
             int latestSN_Retail = this.DbContext.CostCalculationGarment_Materials
-                .Where(d => d.CategoryName.Substring(0, 3).ToUpper() == category)
+                .Where(d => d.CategoryName.Substring(0, 3).ToUpper() == category && d._CreatedUtc.Year == model._CreatedUtc.Year)
                 .DefaultIfEmpty()
                 .Max(d => d.PO_SerialNumber)
                 .GetValueOrDefault();

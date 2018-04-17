@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Com.Bateeq.Service.Merchandiser.Lib.Helpers;
 using System.Linq.Dynamic.Core;
 using Com.Moonlay.NetCore.Lib;
+using System.Threading.Tasks;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -47,6 +48,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+        
+        public async Task GeneratePO(CostCalculationRetail_Material model)
+        {
+            string category = model.CategoryName.Substring(0, 3).ToUpper();
+            int latestSN_Retail = this.DbSet
+                .Where(d => d.CategoryName.Substring(0, 3).ToUpper() == category && d._CreatedUtc.Year == model._CreatedUtc.Year)
+                .DefaultIfEmpty()
+                .Max(d => d.PO_SerialNumber)
+                .GetValueOrDefault();
+            int latestSN_Garment = this.DbContext.CostCalculationGarment_Materials
+                .Where(d => d.CategoryName.Substring(0, 3).ToUpper() == category && d._CreatedUtc.Year == model._CreatedUtc.Year)
+                .DefaultIfEmpty()
+                .Max(d => d.PO_SerialNumber)
+                .GetValueOrDefault();
+            int latestSN = Math.Max(latestSN_Retail, latestSN_Garment);
+            model.PO_SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
+            if (category == "FAB")
+                model.PO = String.Format("{0}{1}{2:D5}", "PM", model._CreatedUtc.ToString("yy"), model.PO_SerialNumber);
+            else
+                model.PO = String.Format("{0}{1}{2:D5}", "PA", model._CreatedUtc.ToString("yy"), model.PO_SerialNumber);
+            await this.UpdateModel(model.Id, model);
         }
 
         public override void OnCreating(CostCalculationRetail_Material model)

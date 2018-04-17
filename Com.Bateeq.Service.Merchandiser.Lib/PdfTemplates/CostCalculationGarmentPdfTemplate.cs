@@ -29,8 +29,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
         {
             BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
             BaseFont bf_bold = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
-            Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
-            Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
+            Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 7);
+            Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 7);
+            Font bold_font_8 = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
             DateTime now = DateTime.Now;
 
             Document document = new Document(PageSize.A4, 10, 10, 10, 10);
@@ -39,6 +40,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             writer.CloseStream = false;
             document.Open();
             PdfContentByte cb = writer.DirectContent;
+
+            float margin = 10;
+            float printedOnHeight = 10;
+            float startY = 840 - margin;
 
             #region Header
             cb.BeginText();
@@ -56,7 +61,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] detail1_widths = new float[] { 1f, 0.1f, 2f, 1f, 0.1f, 2f, 1f, 0.1f, 2f };
             table_detail1.SetWidths(detail1_widths);
 
-            PdfPCell cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 5, PaddingTop = 5 };
+            PdfPCell cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2 };
             PdfPCell cell_colon = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE };
             cell_colon.Phrase = new Phrase(":", normal_font);
 
@@ -142,6 +147,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             #endregion
 
+            #region Draw Top
+            float row1Y = 800;
+            table_detail1.WriteSelectedRows(0, -1, 10, row1Y, cb);
+
+            float imageY = row1Y - image.ScaledHeight;
+            image.SetAbsolutePosition(520, imageY);
+            cb.AddImage(image, inlineImage: true);
+            #endregion
+
             bool isDollar = viewModel.Rate.Id != 0;
 
             #region Detail 2 (Bottom, Column 1)
@@ -151,7 +165,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] detail2_widths = new float[] { 1f, 2f };
             table_detail2.SetWidths(detail2_widths);
 
-            PdfPCell cell_detail2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 3, PaddingBottom = 10, PaddingLeft = 3, PaddingTop = 10 };
+            PdfPCell cell_detail2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
 
             cell_detail2.Phrase = new Phrase("KUANTITAS", normal_font);
             table_detail2.AddCell(cell_detail2);
@@ -186,20 +200,20 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] detail3_widths = new float[] { 1.5f, 1f, 1.5f };
             table_detail3.SetWidths(detail3_widths);
 
-            PdfPCell cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
+            PdfPCell cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3 };
+
+            PdfPCell cell_detail3_colspan2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3, Colspan = 2 };
 
             cell_detail3.Phrase = new Phrase("TOTAL", normal_font);
             table_detail3.AddCell(cell_detail3);
-            cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
             double total = 0;
             foreach (CostCalculationGarment_MaterialViewModel item in viewModel.CostCalculationGarment_Materials)
             {
                 total += item.Total;
             }
-            cell_detail3.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(total), normal_font);
-            table_detail3.AddCell(cell_detail3);
+            cell_detail3_colspan2.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(total), normal_font);
+            table_detail3.AddCell(cell_detail3_colspan2);
 
-            cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
             cell_detail3.Phrase = new Phrase("OTL 1", normal_font);
             table_detail3.AddCell(cell_detail3);
             double OTL1CalculatedValue = viewModel.OTL1.CalculatedValue ?? 0;
@@ -236,11 +250,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cell_detail3.Phrase = new Phrase("SUB TOTAL", normal_font);
             table_detail3.AddCell(cell_detail3);
-            cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(afterFreightCost)}", normal_font);
-            table_detail3.AddCell(cell_detail3);
+            cell_detail3_colspan2.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(afterFreightCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan2);
 
-            cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
             cell_detail3.Phrase = new Phrase("NET/FOB (%)", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Phrase = new Phrase(String.Format("{0:0.00}%", viewModel.NETFOBP), normal_font);
@@ -256,12 +268,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("CONFIRM PRICE", normal_font);
-            table_detail3.AddCell(cell_detail3);
-            cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
+            table_detail3.AddCell(cell_detail3); ;
             double confirmPrice = viewModel.ConfirmPrice ?? 0 + viewModel.Rate.Value ?? 0;
             double confirmPriceWithRate = isDollar ? confirmPrice * viewModel.Rate.Value ?? 1 : confirmPrice;
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(confirmPriceWithRate)}", normal_font);
-            table_detail3.AddCell(cell_detail3);
+            cell_detail3_colspan2.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(confirmPriceWithRate)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan2);
             #endregion
 
             #region Detail 4.1 (Bottom, Column 3.1)
@@ -271,13 +282,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] detail4_1_widths = new float[] { 1f, 1f };
             table_detail4_1.SetWidths(detail4_1_widths);
 
-            PdfPCell cell_detail4_1 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
+            PdfPCell cell_detail4_1 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3 };
 
             cell_detail4_1.Phrase = new Phrase("FOB PRICE", bold_font);
             table_detail4_1.AddCell(cell_detail4_1);
             cell_detail4_1.Phrase = new Phrase("CMT PRICE", bold_font);
             table_detail4_1.AddCell(cell_detail4_1);
-            
+
             double CM_Price = 0;
             foreach (CostCalculationGarment_MaterialViewModel item in viewModel.CostCalculationGarment_Materials)
             {
@@ -301,7 +312,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] detail4_2_widths = new float[] { 1f, 1f };
             table_detail4_2.SetWidths(detail4_2_widths);
 
-            PdfPCell cell_detail4_2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3 };
+            PdfPCell cell_detail4_2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3 };
 
             cell_detail4_2.Phrase = new Phrase("CNF PRICE", bold_font);
             table_detail4_2.AddCell(cell_detail4_2);
@@ -320,11 +331,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfPTable table_detail5 = new PdfPTable(4);
             table_detail5.TotalWidth = 180f;
 
-            float[] detail5_widths = new float[] { 1f, 1f, 1f, 1f };
+            float[] detail5_widths = new float[] { 1f, 1.25f, 1f, 1.25f };
             table_detail5.SetWidths(detail5_widths);
-            PdfPCell cell_detail5;
-
-            cell_detail5 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
+            PdfPCell cell_detail5 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
 
             cell_detail5 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 5, PaddingRight = 3, PaddingBottom = 5, PaddingLeft = 3, Colspan = 2 };
             cell_detail5.Phrase = new Phrase("FREIGHT", normal_font);
@@ -384,7 +393,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] signature_widths = new float[] { 1f, 1f, 1f };
             table_signature.SetWidths(signature_widths);
 
-            PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
+            PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
 
             cell_signature.Phrase = new Phrase("Mengetahui,", normal_font);
             table_signature.AddCell(cell_signature);
@@ -394,7 +403,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 signatureArea += Environment.NewLine;
             }
@@ -405,7 +414,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
+            cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
             table_signature.AddCell(cell_signature);
@@ -413,79 +422,73 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             #endregion
 
-            #region Draw Top
-            float row1Y = 800;
-            table_detail1.WriteSelectedRows(0, -1, 10, row1Y, cb);
-
-            float imageY = row1Y - image.ScaledHeight;
-            image.SetAbsolutePosition(520, imageY);
-            cb.AddImage(image, inlineImage: true);
-            #endregion
-
             #region Cost Calculation Material
             PdfPTable table_ccm = new PdfPTable(7);
             table_ccm.TotalWidth = 570f;
 
-            float[] ccm_widths = new float[] { 1f, 3f, 4f, 6f, 3f, 4f, 4f };
+            float[] ccm_widths = new float[] { 1.25f, 3.5f, 4f, 9f, 3f, 4f, 4f };
             table_ccm.SetWidths(ccm_widths);
 
-            PdfPCell cell_ccm;
-            cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
+            PdfPCell cell_ccm_center = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_ccm_left = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
 
-            cell_ccm.Phrase = new Phrase("NO", bold_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_center.Phrase = new Phrase("NO", bold_font);
+            table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm.Phrase = new Phrase("KATEGORI", bold_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_center.Phrase = new Phrase("KATEGORI", bold_font);
+            table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm.Phrase = new Phrase("MATERIAL", bold_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_center.Phrase = new Phrase("MATERIAL", bold_font);
+            table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm.Phrase = new Phrase("DESKRIPSI", bold_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_center.Phrase = new Phrase("DESKRIPSI", bold_font);
+            table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm.Phrase = new Phrase("KUANTITAS", bold_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_center.Phrase = new Phrase("KUANTITAS", bold_font);
+            table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm.Phrase = new Phrase("HARGA PER SATUAN", bold_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_center.Phrase = new Phrase("HARGA PER SATUAN (Rp)", bold_font);
+            table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm.Phrase = new Phrase("TOTAL", bold_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_center.Phrase = new Phrase("TOTAL (Rp)", bold_font);
+            table_ccm.AddCell(cell_ccm_center);
 
             double Total = 0;
-
-            float row2Y = table_detail1.TotalHeight > image.ScaledHeight ? row1Y - table_detail1.TotalHeight - 10 : row1Y - image.ScaledHeight - 10;
-            float[] row3Heights = { table_detail2.TotalHeight, table_detail3.TotalHeight, table_detail4_1.TotalHeight + 10 + table_detail4_2.TotalHeight + table_detail5.TotalHeight };
-            row3Heights[2] = isDollar ? row3Heights[2] + 20 : row3Heights[2] + 10;
-            float row3TotalHeight = row3Heights.Max() + 10 + table_signature.TotalHeight;
-            float row2RemainingHeight = row2Y - 10 - row3TotalHeight;
-            float row2AllowedHeight = row2Y - 20 - 10;
+            float row1Height = image.ScaledHeight > table_detail1.TotalHeight ? image.ScaledHeight : table_detail1.TotalHeight;
+            float row2Y = row1Y - row1Height - 10;
+            float[] row3Heights = { table_detail2.TotalHeight, table_detail3.TotalHeight, table_detail4_1.TotalHeight + 10 + table_detail4_2.TotalHeight + 10 + table_detail5.TotalHeight };
+            float dollarDetailHeight = 10;
+            if (isDollar)
+                row3Heights[2] += dollarDetailHeight;
+            float row3Height = row3Heights.Max();
+            float secondHighestRow3Height = row3Heights[1] > row3Heights[2] ? row3Heights[1] : row3Heights[2];
+            bool signatureInsideRow3 = row3Heights.Max() == row3Heights[0] && row3Heights[0] - 10 - secondHighestRow3Height > table_signature.TotalHeight;
+            float row2RemainingHeight = row2Y - 10 - row3Height - printedOnHeight - margin;
+            float row2AllowedHeight = row2Y - printedOnHeight - margin;
 
             for (int i = 0; i < viewModel.CostCalculationGarment_Materials.Count; i++)
             {
-                cell_ccm.Phrase = new Phrase((i + 1).ToString(), normal_font);
-                table_ccm.AddCell(cell_ccm);
+                cell_ccm_center.Phrase = new Phrase((i + 1).ToString(), normal_font);
+                table_ccm.AddCell(cell_ccm_center);
 
-                cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Category.SubCategory != null ? String.Format("{0} - {1}", viewModel.CostCalculationGarment_Materials[i].Category.Name, viewModel.CostCalculationGarment_Materials[i].Category.SubCategory) : viewModel.CostCalculationGarment_Materials[i].Category.Name, normal_font);
-                table_ccm.AddCell(cell_ccm);
+                cell_ccm_left.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Category.SubCategory != null ? String.Format("{0} - {1}", viewModel.CostCalculationGarment_Materials[i].Category.Name, viewModel.CostCalculationGarment_Materials[i].Category.SubCategory) : viewModel.CostCalculationGarment_Materials[i].Category.Name, normal_font);
+                table_ccm.AddCell(cell_ccm_left);
 
-                cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Material.Name, normal_font);
-                table_ccm.AddCell(cell_ccm);
+                cell_ccm_left.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Material.Name, normal_font);
+                table_ccm.AddCell(cell_ccm_left);
 
-                cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
-                cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Description, normal_font);
-                table_ccm.AddCell(cell_ccm);
+                cell_ccm_left.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].Description, normal_font);
+                table_ccm.AddCell(cell_ccm_left);
 
-                cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
-                cell_ccm.Phrase = new Phrase(String.Format("{0} {1}", viewModel.CostCalculationGarment_Materials[i].Quantity, viewModel.CostCalculationGarment_Materials[i].UOMQuantity.Name), normal_font);
-                table_ccm.AddCell(cell_ccm);
+                cell_ccm_right.Phrase = new Phrase(String.Format("{0} {1}", viewModel.CostCalculationGarment_Materials[i].Quantity, viewModel.CostCalculationGarment_Materials[i].UOMQuantity.Name), normal_font);
+                table_ccm.AddCell(cell_ccm_right);
 
-                cell_ccm.Phrase = new Phrase(String.Format("{0}/{1}", Number.ToRupiahWithoutSymbol(viewModel.CostCalculationGarment_Materials[i].Price), viewModel.CostCalculationGarment_Materials[i].UOMPrice.Name), normal_font);
-                table_ccm.AddCell(cell_ccm);
+                cell_ccm_right.Phrase = new Phrase(String.Format("{0}/{1}", Number.ToRupiahWithoutSymbol(viewModel.CostCalculationGarment_Materials[i].Price), viewModel.CostCalculationGarment_Materials[i].UOMPrice.Name), normal_font);
+                table_ccm.AddCell(cell_ccm_right);
 
-                cell_ccm.Phrase = new Phrase(Number.ToRupiah(viewModel.CostCalculationGarment_Materials[i].Total), normal_font);
-                table_ccm.AddCell(cell_ccm);
+                cell_ccm_right.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(viewModel.CostCalculationGarment_Materials[i].Total), normal_font);
+                table_ccm.AddCell(cell_ccm_right);
 
                 Total += viewModel.CostCalculationGarment_Materials[i].Total;
                 float currentHeight = table_ccm.TotalHeight;
@@ -503,31 +506,31 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                         table_ccm.Rows.Add(headerRow);
                         table_ccm.Rows.Add(lastRow);
                         table_ccm.CalculateHeights();
-                        row2Y = 830;
-                        row2AllowedHeight = row2Y - 20 - 10;
-                        row2RemainingHeight = 830 - row3TotalHeight - 20 - 10;
+                        row2Y = startY;
+                        row2RemainingHeight = row2Y - 10 - row3Height - printedOnHeight - margin;
+                        row2AllowedHeight = row2Y - printedOnHeight - margin;
                     }
                 }
             }
 
-            cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5, Colspan = 6 };
-            cell_ccm.Phrase = new Phrase("TOTAL", normal_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2, Colspan = 6 };
+            cell_ccm_right.Phrase = new Phrase("TOTAL", bold_font_8);
+            table_ccm.AddCell(cell_ccm_right);
 
-            cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5 };
-            cell_ccm.Phrase = new Phrase(Number.ToRupiah(Total), normal_font);
-            table_ccm.AddCell(cell_ccm);
+            cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            cell_ccm_right.Phrase = new Phrase(Number.ToRupiah(Total), bold_font_8);
+            table_ccm.AddCell(cell_ccm_right);
             #endregion
 
             #region Draw Middle and Bottom
             table_ccm.WriteSelectedRows(0, -1, 10, row2Y, cb);
 
             float row3Y = row2Y - table_ccm.TotalHeight - 10;
-            float row3RemainingHeight = row3Y - 20 - 10;
-            if (row3RemainingHeight < row3TotalHeight)
+            float row3RemainingHeight = row3Y - printedOnHeight - margin;
+            if (row3RemainingHeight < row3Height)
             {
                 this.DrawPrintedOn(now, bf, cb);
-                row3Y = 830;
+                row3Y = startY;
                 document.NewPage();
             }
 
@@ -546,8 +549,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             {
                 noteY = noteY - 15;
                 table_detail5Y = noteY - 5;
-                cb.SetFontAndSize(bf, 8);
+                cb.BeginText();
+                cb.SetFontAndSize(bf, 7);
                 cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", 400, noteY, 0);
+                cb.EndText();
             }
             else
             {
@@ -555,8 +560,27 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             table_detail5.WriteSelectedRows(0, -1, 400, table_detail5Y, cb);
 
-            float table_signatureY = 30 + table_signature.TotalHeight;
-            table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
+            float table_signatureX;
+            float table_signatureY;
+            if (signatureInsideRow3)
+            {
+                table_signatureX = margin + table_detail2.TotalWidth + 10;
+                table_signatureY = row3Y - row3Height + table_signature.TotalHeight;
+                table_signature.TotalWidth = 390f;
+            }
+            else
+            {
+                table_signatureX = margin;
+                table_signatureY = row3Y - row3Height - 10;
+                float signatureRemainingHeight = table_signatureY - printedOnHeight - margin;
+                if (signatureRemainingHeight < table_signature.TotalHeight)
+                {
+                    this.DrawPrintedOn(now, bf, cb);
+                    table_signatureY = startY;
+                    document.NewPage();
+                }
+            }
+            table_signature.WriteSelectedRows(0, -1, table_signatureX, table_signatureY, cb);
 
             this.DrawPrintedOn(now, bf, cb);
             #endregion

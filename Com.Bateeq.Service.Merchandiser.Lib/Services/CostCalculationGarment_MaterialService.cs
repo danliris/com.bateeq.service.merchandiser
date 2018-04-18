@@ -58,7 +58,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .DefaultIfEmpty()
                 .Max(d => d.PO_SerialNumber)
                 .GetValueOrDefault();
-            int latestSN_Retail = this.DbContext.CostCalculationGarment_Materials
+            int latestSN_Retail = this.DbContext.CostCalculationRetail_Materials
                 .Where(d => d.CategoryName.Substring(0, 3).ToUpper() == category && d._CreatedUtc.Year == model._CreatedUtc.Year)
                 .DefaultIfEmpty()
                 .Max(d => d.PO_SerialNumber)

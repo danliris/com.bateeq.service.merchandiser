@@ -1,20 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+using System.Collections.Generic;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
-    public partial class Dev_1_1_1 : Migration
+    public partial class _1_AddPoNumberForBudget : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "SerialNumber",
-                table: "CostCalculationRetails",
-                newName: "RO_SerialNumber");
+                table: "CostCalculationRetails");
 
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "SerialNumber",
-                table: "CostCalculationGarments",
-                newName: "RO_SerialNumber");
+                table: "CostCalculationGarments");
+
+            migrationBuilder.AddColumn<int>(
+                name: "RO_SerialNumber",
+                table: "CostCalculationRetails",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<string>(
                 name: "PO",
@@ -28,6 +35,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
                 table: "CostCalculationRetail_Materials",
                 type: "int",
                 nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "RO_SerialNumber",
+                table: "CostCalculationGarments",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<string>(
                 name: "PO",
@@ -45,31 +59,41 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "RO_SerialNumber",
+                table: "CostCalculationRetails");
+
+            migrationBuilder.DropColumn(
+                name: "PO",
+                table: "CostCalculationRetail_Materials");
+
+            migrationBuilder.DropColumn(
+                name: "PO_SerialNumber",
+                table: "CostCalculationRetail_Materials");
+
+            migrationBuilder.DropColumn(
+                name: "RO_SerialNumber",
+                table: "CostCalculationGarments");
+
+            migrationBuilder.DropColumn(
+                name: "PO",
+                table: "CostCalculationGarment_Materials");
+
+            migrationBuilder.DropColumn(
+                name: "PO_SerialNumber",
+                table: "CostCalculationGarment_Materials");
+
+            migrationBuilder.AddColumn<int>(
+                name: "SerialNumber",
                 table: "CostCalculationRetails",
-                newName: "SerialNumber");
+                nullable: false,
+                defaultValue: 0);
 
-            migrationBuilder.RenameColumn(
-                name: "RO_SerialNumber",
+            migrationBuilder.AddColumn<int>(
+                name: "SerialNumber",
                 table: "CostCalculationGarments",
-                newName: "SerialNumber");
-
-            migrationBuilder.DropColumn(
-                name: "PO",
-                table: "CostCalculationRetail_Materials");
-
-            migrationBuilder.DropColumn(
-                name: "PO_SerialNumber",
-                table: "CostCalculationRetail_Materials");
-            
-            migrationBuilder.DropColumn(
-                name: "PO",
-                table: "CostCalculationGarment_Materials");
-
-            migrationBuilder.DropColumn(
-                name: "PO_SerialNumber",
-                table: "CostCalculationGarment_Materials");
+                nullable: false,
+                defaultValue: 0);
         }
     }
 }

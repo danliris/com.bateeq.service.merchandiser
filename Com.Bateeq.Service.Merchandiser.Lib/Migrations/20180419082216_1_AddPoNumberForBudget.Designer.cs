@@ -11,8 +11,8 @@ using System;
 namespace Com.Bateeq.Service.Merchandiser.Lib.Migrations
 {
     [DbContext(typeof(MerchandiserDbContext))]
-    [Migration("20180417131529_Dev_1_1_1")]
-    partial class Dev_1_1_1
+    [Migration("20180419082216_1_AddPoNumberForBudget")]
+    partial class _1_AddPoNumberForBudget
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

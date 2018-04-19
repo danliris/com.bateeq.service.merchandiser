@@ -34,23 +34,25 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cb.SetFontAndSize(bf, 10);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PT. EFRATA RETAILINDO", 10, 820, 0);
             cb.SetFontAndSize(bf_bold, 12);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "BUDGET RETAIL", 10, 805, 0);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "BUDGET PRODUCTION", 10, 805, 0);
             cb.EndText();
             #endregion
 
             #region Detail 1 (Top)
-            PdfPTable table_detail1 = new PdfPTable(10);
+            PdfPTable table_detail1 = new PdfPTable(8);
             table_detail1.TotalWidth = 570f;
 
-            float[] detail1_widths = new float[] { 1f, 0.1f, 2f, 1f, 0.1f, 2f, 2f, 0.1f, 2f, 2f };
+            float[] detail1_widths = new float[] { 1f, 0.1f, 2f, 3f, 1f, 0.1f, 2f, 3f };
             table_detail1.SetWidths(detail1_widths);
 
             PdfPCell cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2 };
 
-            cell_detail1.Phrase = new Phrase("NO RO", normal_font);
+            cell_detail1.Phrase = new Phrase("RO", normal_font);
             table_detail1.AddCell(cell_detail1);
             table_detail1.AddCell(cell_colon);
             cell_detail1.Phrase = new Phrase($"{viewModel.RO}", normal_font);
+            table_detail1.AddCell(cell_detail1);
+            cell_detail1.Phrase = new Phrase("", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("SEASON", normal_font);
             table_detail1.AddCell(cell_detail1);
@@ -58,11 +60,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail1.Phrase = new Phrase($"{viewModel.Season.name}", normal_font);
             table_detail1.AddCell(cell_detail1);
             cell_detail1.Phrase = new Phrase("", normal_font);
-            table_detail1.AddCell(cell_detail1);
-            table_detail1.AddCell(cell_detail1);
-            table_detail1.AddCell(cell_detail1);
-            cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2 };
-            cell_detail1.Phrase = new Phrase("FM-00-PJ-02-003/R1", normal_font);
             table_detail1.AddCell(cell_detail1);
             #endregion
 
@@ -85,17 +82,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail2.Phrase = new Phrase($"{viewModel.Buyer.Name}", normal_font);
             table_detail2.AddCell(cell_detail2);
 
-            cell_detail2.Phrase = new Phrase("ART NO", normal_font);
+            cell_detail2.Phrase = new Phrase("ARTICLE", normal_font);
             table_detail2.AddCell(cell_detail2);
             cell_detail2.Phrase = new Phrase($"{viewModel.Article}", normal_font);
             table_detail2.AddCell(cell_detail2);
 
-            cell_detail2.Phrase = new Phrase("DESKRIPSI", normal_font);
+            cell_detail2.Phrase = new Phrase("DESCRIPTION", normal_font);
             table_detail2.AddCell(cell_detail2);
             cell_detail2.Phrase = new Phrase($"{viewModel.Description}", normal_font);
             table_detail2.AddCell(cell_detail2);
 
-            cell_detail2.Phrase = new Phrase("KUANTITAS", normal_font);
+            cell_detail2.Phrase = new Phrase("QTY", normal_font);
             table_detail2.AddCell(cell_detail2);
             cell_detail2.Phrase = new Phrase($"{viewModel.Quantity} PCS", normal_font);
             table_detail2.AddCell(cell_detail2);
@@ -187,15 +184,39 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
 
-            cell_signature.Phrase = new Phrase("PENJUALAN", normal_font);
+            cell_signature.Phrase = new Phrase("Membuat,", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("KASIE / KABAG PENJUALAN", normal_font);
+            cell_signature.Phrase = new Phrase("", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("KABAG PEMBELIAN", normal_font);
+            cell_signature.Phrase = new Phrase("Mengetahui,", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("KADIV PROD.GMT", normal_font);
+            cell_signature.Phrase = new Phrase("", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("KADIV PENJUALAN", normal_font);
+            cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
+            table_signature.AddCell(cell_signature);
+
+            string signatureArea = string.Empty;
+            for (int i = 0; i < 5; i++)
+            {
+                signatureArea += Environment.NewLine;
+            }
+
+            cell_signature.Phrase = new Phrase(signatureArea, normal_font);
+            table_signature.AddCell(cell_signature);
+            table_signature.AddCell(cell_signature);
+            table_signature.AddCell(cell_signature);
+            table_signature.AddCell(cell_signature);
+            table_signature.AddCell(cell_signature);
+
+            cell_signature.Phrase = new Phrase("Merchandiser", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Bag Produksi", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 
@@ -210,17 +231,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cell_ccm.Phrase = new Phrase("NO", bold_font);
             table_ccm.AddCell(cell_ccm);
-            cell_ccm.Phrase = new Phrase("KATEGORI", bold_font);
+            cell_ccm.Phrase = new Phrase("CATEGORIES", bold_font);
             table_ccm.AddCell(cell_ccm);
-            cell_ccm.Phrase = new Phrase("MATERIAL", bold_font);
+            cell_ccm.Phrase = new Phrase("MATERIALS", bold_font);
             table_ccm.AddCell(cell_ccm);
-            cell_ccm.Phrase = new Phrase("DESKRIPSI", bold_font);
+            cell_ccm.Phrase = new Phrase("DESCRIPTION", bold_font);
             table_ccm.AddCell(cell_ccm);
             cell_ccm.Phrase = new Phrase("USAGE", bold_font);
             table_ccm.AddCell(cell_ccm);
             cell_ccm.Phrase = new Phrase("PRICE", bold_font);
             table_ccm.AddCell(cell_ccm);
-            cell_ccm.Phrase = new Phrase("KUANTITAS", bold_font);
+            cell_ccm.Phrase = new Phrase("QUANTITY", bold_font);
             table_ccm.AddCell(cell_ccm);
             cell_ccm.Phrase = new Phrase("UNIT", bold_font);
             table_ccm.AddCell(cell_ccm);

@@ -36,7 +36,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cb.SetFontAndSize(bf, 10);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PT. EFRATA RETAILINDO", 10, 820, 0);
             cb.SetFontAndSize(bf_bold, 12);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "COST CALCULATION", 10, 805, 0);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "COST CALCULATION RETAIL", 10, 805, 0);
             cb.EndText();
             #endregion
 
@@ -57,12 +57,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.RO}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("PEMBELI", normal_font);
+            cell_top.Phrase = new Phrase("BUYER", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Buyer.Name}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("TARIF OL", normal_font);
+            cell_top.Phrase = new Phrase("OL", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OLValue = viewModel.OL.Value ?? 0;
@@ -70,17 +70,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase($"{OL}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("ARTIKEL", normal_font);
+            cell_top.Phrase = new Phrase("ARTICLE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Article}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("DELIV DATE", normal_font);
+            cell_top.Phrase = new Phrase("DELIVERY", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.DeliveryDate.ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("TARIF OTL 1", normal_font);
+            cell_top.Phrase = new Phrase("OTL 1", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OTL1Value = viewModel.OTL1.Value ?? 0;
@@ -98,7 +98,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.SizeRange.Name}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("TARIF OTL 2", normal_font);
+            cell_top.Phrase = new Phrase("OTL 2", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OTL2Value = viewModel.OTL2.Value ?? 0;
@@ -106,17 +106,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase($"{OTL2}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("MUSIM", normal_font);
+            cell_top.Phrase = new Phrase("SEASON", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Season.name}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("EFISIENSI", normal_font);
+            cell_top.Phrase = new Phrase("EFFICIENCY", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Efficiency.Value}%", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("TARIF OTL 3", normal_font);
+            cell_top.Phrase = new Phrase("OTL 3", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OTL3Value = viewModel.OTL3.Value ?? 0;
@@ -124,12 +124,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase($"{OTL3}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("KONTER", normal_font);
+            cell_top.Phrase = new Phrase("COUNTER", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Counter.name}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("RESIKO", normal_font);
+            cell_top.Phrase = new Phrase("RISK", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Risk}%", normal_font);
@@ -416,29 +416,29 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_ccm_center.Phrase = new Phrase("NO", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("KATEGORI", bold_font);
+            cell_ccm_center.Phrase = new Phrase("CATEGORIES", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("MATERIAL", bold_font);
+            cell_ccm_center.Phrase = new Phrase("MATERIALS", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("DESKRIPSI", bold_font);
+            cell_ccm_center.Phrase = new Phrase("DESCRIPTION", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("KUANTITAS", bold_font);
+            cell_ccm_center.Phrase = new Phrase("QUANTITY", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("HARGA PER SATUAN (Rp)", bold_font);
+            cell_ccm_center.Phrase = new Phrase("RP. PTC/PC", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
-            cell_ccm_center.Phrase = new Phrase("TOTAL (Rp)", bold_font);
+            cell_ccm_center.Phrase = new Phrase("RP. TOTAL", bold_font);
             table_ccm.AddCell(cell_ccm_center);
 
             double Total = 0;
             float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
             float row2Y = row1Y - row1Height - 10;
             float calculatedHppHeight = 7;
-            float row3LeftHeight = calculatedHppHeight + 5 + table_detail.TotalHeight + 5 + table_signature.TotalHeight;
+            float row3LeftHeight = table_detail.TotalHeight + 5 + table_signature.TotalHeight;
             float row3RightHeight = table_price.TotalHeight;
             float row3Height = row3LeftHeight > row3RightHeight ? row3LeftHeight : row3RightHeight;
             float remainingRow2Height = row2Y - 10 - row3Height - printedOnHeight - margin;
@@ -513,17 +513,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float calculatedHppY = row3Y - calculatedHppHeight;
             cb.BeginText();
             cb.SetFontAndSize(bf, 8);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "KALKULASI HPP: Total Cost + (Total Cost * Risk)", 10, calculatedHppY, 0);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "KALKULASI HPP: (OL + OTL1 + OTL2 + FABRIC + ACC) + ((OL + OTL1 + OTL2 + FABRIC + ACC) * (Risk/100))", 10, calculatedHppY, 0);
             cb.EndText();
             #endregion
 
             float table_detailY = calculatedHppY - 5;
             table_detail.WriteSelectedRows(0, -1, 10, table_detailY, cb);
 
-            float table_signatureY = table_detailY - table_detail.TotalHeight - 5;
+            float table_signatureY = table_detailY - row3Height + table_signature.TotalHeight;
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
 
-            table_price.WriteSelectedRows(0, -1, 300, row3Y, cb);
+            table_price.WriteSelectedRows(0, -1, 300, table_detailY, cb);
 
             this.DrawPrintedOn(now, bf, cb);
             #endregion

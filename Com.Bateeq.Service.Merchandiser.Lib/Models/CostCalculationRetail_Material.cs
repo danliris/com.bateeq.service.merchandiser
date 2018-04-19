@@ -12,6 +12,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
         public int CostCalculationRetailId { get; set; }
         public virtual CostCalculationRetail CostCalculationRetail { get; set; }
         public string Code { get; set; }
+        public int? PO_SerialNumber { get; set; }
+        public string PO { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int MaterialId { get; set; }

@@ -82,9 +82,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             int latestSN = this.DbSet
                 .Where(d => d.LineId.Equals(Model.LineId))
                 .DefaultIfEmpty()
-                .Max(d => d.SerialNumber);
-            Model.SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
-            Model.RO = String.Format("{0}{1:D4}", Model.LineCode, Model.SerialNumber);
+                .Max(d => d.RO_SerialNumber);
+            Model.RO_SerialNumber = latestSN != 0 ? latestSN + 1 : 1;
+            Model.RO = String.Format("{0}{1:D4}", Model.LineCode, Model.RO_SerialNumber);
             int created = await this.CreateAsync(Model);
             
             Model.ImagePath = await this.AzureImageService.UploadImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImageFile);
@@ -166,6 +166,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
             
             return await this.DeleteAsync(Id);
+        }
+
+        public async Task GeneratePO(int Id)
+        {
+            HashSet<int> CostCalculationGarment_Materials = new HashSet<int>(this.CostCalculationGarment_MaterialService.DbSet
+                    .Where(p => p.CostCalculationGarmentId.Equals(Id))
+                    .Select(p => p.Id));
+            foreach(int id in CostCalculationGarment_Materials)
+            {
+                CostCalculationGarment_Material model = await CostCalculationGarment_MaterialService.ReadModelById(id);
+                if (model.PO_SerialNumber == null)
+                {
+                    await CostCalculationGarment_MaterialService.GeneratePO(model);
+                }
+            }
         }
 
         public override void OnCreating(CostCalculationGarment model)

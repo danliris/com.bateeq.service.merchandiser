@@ -12,7 +12,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
     public class CostCalculationRetail : StandardEntity, IValidatableObject
     {
         public string Code { get; set; }
-        public int SerialNumber { get; set; }
+        public int RO_SerialNumber { get; set; }
         public string RO { get; set; }
         public string Article { get; set; }
         public string StyleId { get; set; }

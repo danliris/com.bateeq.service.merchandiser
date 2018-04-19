@@ -1,11 +1,9 @@
 ﻿using Com.Bateeq.Service.Merchandiser.Lib.Services;
-using Com.Bateeq.Service.Merchandiser.Lib.ViewModels;
 using Com.Moonlay.Models;
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Models
@@ -13,7 +11,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Models
     public class CostCalculationGarment : StandardEntity, IValidatableObject
     {
         public string Code { get; set; }
-        public int SerialNumber { get; set; }
+        public int RO_SerialNumber { get; set; }
         public string RO { get; set; }
         public string Article { get; set; }
         public int LineId { get; set; }

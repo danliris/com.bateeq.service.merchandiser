@@ -39,10 +39,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #endregion
 
             #region Detail 1 (Top)
-            PdfPTable table_detail1 = new PdfPTable(10);
+            PdfPTable table_detail1 = new PdfPTable(9);
             table_detail1.TotalWidth = 570f;
 
-            float[] detail1_widths = new float[] { 1f, 0.1f, 2f, 1f, 0.1f, 2f, 2f, 0.1f, 2f, 2f };
+            float[] detail1_widths = new float[] { 1f, 0.1f, 2f, 1f, 0.1f, 2f, 1.5f, 0.1f, 2f };
             table_detail1.SetWidths(detail1_widths);
 
             PdfPCell cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2 };
@@ -61,9 +61,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail1.AddCell(cell_detail1);
             table_detail1.AddCell(cell_colon);
             cell_detail1.Phrase = new Phrase($"{viewModel.ConfirmDate.ToString("dd/MM/yyyy")}", normal_font);
-            table_detail1.AddCell(cell_detail1);
-            cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2 };
-            cell_detail1.Phrase = new Phrase("FM-00-PJ-02-003/R1", normal_font);
             table_detail1.AddCell(cell_detail1);
             #endregion
 

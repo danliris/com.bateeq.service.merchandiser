@@ -357,7 +357,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 PaddingTop = 2
             };
 
-            cell_top_ong.Phrase = new Phrase("Budget", bold_font);
+            cell_top_ong.Phrase = new Phrase("Ongkos", bold_font);
             table_ong_top.AddCell(cell_top_ong);
 
             float rowYTittleOng = rowYAcc - table_accessories.TotalHeight - 10;
@@ -365,7 +365,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_ong_top.WriteSelectedRows(0, -1, 10, rowYTittleOng, cb);
             #endregion
 
-            #region Budget Table
+            #region Ongkos Table
 
             PdfPTable table_budget = new PdfPTable(5);
             table_budget.TotalWidth = 570f;
@@ -556,6 +556,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_left.Phrase = new Phrase(viewModel.Total.ToString() != null ? viewModel.Total.ToString() : "0", normal_font);
             table_breakDown.AddCell(cell_breakDown_left);
 
+
+            if (writer.GetVerticalPosition(true) - table_breakDown.GetRowHeight(0) - table_breakDown.GetRowHeight(1) < document.Bottom)
+            {
+                document.NewPage();
+            }
+
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion
 
@@ -605,6 +611,122 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float allowedRow2HeightInstruction = rowYInstruction - printedOnHeight - margin;
 
             table_instruction.WriteSelectedRows(0, -1, 10, rowYInstruction, cb);
+            #endregion
+
+            #region RO Image
+            var countImageRo = 0;
+            byte[] roImage;
+
+            foreach (var index in viewModel.ImagesFile)
+            {
+                countImageRo++;
+            }
+
+            PdfPTable table_ro_image = new PdfPTable(countImageRo);
+            table_ro_image.TotalWidth = 570f;
+            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 10;
+
+            foreach (var imageFromRo in viewModel.ImagesFile)
+            {
+                try
+                {
+                    roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
+                }
+                catch (Exception)
+                {
+                    var webClient = new WebClient();
+                    roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+                }
+
+                Image images = Image.GetInstance(imgb: roImage);
+
+                if (images.Width > 60)
+                {
+                    float percentage = 0.0f;
+                    percentage = 60 / images.Width;
+                    images.ScalePercent(percentage * 100);
+                }
+
+                PdfPCell imageCell = new PdfPCell(images);
+                imageCell.Border = 0;
+                imageCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                table_ro_image.AddCell(imageCell);
+                table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
+            }
+
+            #endregion
+
+            #region Signature (Bottom, Column 1.2)
+
+            PdfPTable table_signature = new PdfPTable(6);
+            table_signature.TotalWidth = 570f;
+
+            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };
+            table_signature.SetWidths(signature_widths);
+
+            PdfPCell cell_signature = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2
+            };
+
+            cell_signature.Phrase = new Phrase("Dibuat", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Kasie Pembelian", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("R & D", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka Produksi", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Mengetahui", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
+            table_signature.AddCell(cell_signature);
+
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
+            table_signature.AddCell(cell_signature);
+
+
+            cell_signature.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature);
+
+            float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 10;
+            table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 
             document.Close();

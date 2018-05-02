@@ -92,10 +92,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.ConfirmDate.ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("Style", normal_font);
+            cell_top.Phrase = new Phrase("Line", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Article}", normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Line.Name}", normal_font);
             table_top.AddCell(cell_top);
             cell_top.Phrase = new Phrase("Buyer", normal_font);
             table_top.AddCell(cell_top);
@@ -116,12 +116,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase("Quantity", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Quantity.ToString()}", normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.Total.ToString()}", normal_font);
             table_top.AddCell(cell_top);
             cell_top.Phrase = new Phrase("Size Range", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.SizeRange}", normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.SizeRange.Name}", normal_font);
             table_top.AddCell(cell_top);
 
             byte[] imageByte;
@@ -211,18 +211,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_fabric.AddCell(cell_fabric_center);
 
             cell_fabric_center.Phrase = new Phrase("Quantity", bold_font);
+            table_fabric.AddCell(cell_fabric_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
             {
                 if (materialModel.Category.Name == "FAB")
                 {
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Material.Name != null ? materialModel.Material.Name : "", normal_font);
+                    cell_fabric_left.Phrase = new Phrase(materialModel.Category.SubCategory != null ? materialModel.Category.SubCategory : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
                     cell_fabric_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Quantity != null ? String.Format("{0} Meter", materialModel.Quantity) : "0", normal_font);
+                    cell_fabric_left.Phrase = new Phrase(materialModel.Quantity.ToString() != null ? String.Format("{0} Meter", materialModel.Quantity.ToString()) : "0", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
                 }
             }
@@ -417,6 +418,302 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
 
             table_budget.WriteSelectedRows(0, -1, 10, rowYBudget, cb);
+            #endregion
+
+            #region Table Size Breakdown
+            //Title
+            PdfPTable table_breakdown_top = new PdfPTable(1);
+            table_breakdown_top.TotalWidth = 570f;
+
+            float[] breakdown_width_top = new float[] { 5f };
+            table_breakdown_top.SetWidths(breakdown_width_top);
+
+            PdfPCell cell_top_breakdown = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                PaddingRight = 1,
+                PaddingBottom = 2,
+                PaddingTop = 2
+            };
+
+            cell_top_breakdown.Phrase = new Phrase("Size Breakdown", bold_font);
+            table_breakdown_top.AddCell(cell_top_breakdown);
+
+            float rowYTittleBreakDown = rowYBudget - table_budget.TotalHeight - 10;
+            float allowedRow2HeightBreakdown = rowYTittleBreakDown - printedOnHeight - margin;
+            table_breakdown_top.WriteSelectedRows(0, -1, 10, rowYTittleBreakDown, cb);
+
+            //Main Table Size Breakdown
+            PdfPTable table_breakDown = new PdfPTable(2);
+            table_breakDown.TotalWidth = 570f;
+
+            float[] breakDown_widths = new float[] { 5f, 10f };
+            table_breakDown.SetWidths(breakDown_widths);
+
+            PdfPCell cell_breakDown_center = new PdfPCell()
+            {
+                Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2
+            };
+
+            PdfPCell cell_breakDown_left = new PdfPCell()
+            {
+                Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2
+            };
+
+            PdfPCell cell_breakDown_total = new PdfPCell()
+            {
+                Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2
+            };
+
+            PdfPCell cell_breakDown_total_2 = new PdfPCell()
+            {
+                Border = Rectangle.TOP_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2
+            };
+
+            float rowYbreakDown = rowYTittleBreakDown - table_breakdown_top.TotalHeight - 5;
+            float allowedRow2HeightBreakDown = rowYbreakDown - printedOnHeight - margin;
+
+            cell_breakDown_center.Phrase = new Phrase("Warna", bold_font);
+            table_breakDown.AddCell(cell_breakDown_center);
+
+            cell_breakDown_center.Phrase = new Phrase("Size Range", bold_font);
+            table_breakDown.AddCell(cell_breakDown_center);
+
+            foreach (var productRetail in viewModel.RO_Garment_SizeBreakdowns)
+            {
+                if (productRetail.Total != 0)
+                {
+                    cell_breakDown_left.Phrase = new Phrase(productRetail.Color.name != null ? productRetail.Color.name : "", normal_font);
+                    table_breakDown.AddCell(cell_breakDown_left);
+
+                    PdfPTable table_breakDown_child = new PdfPTable(3);
+                    table_breakDown_child.TotalWidth = 300f;
+
+                    float[] breakDown_child_widths = new float[] { 5f, 5f, 5f };
+                    table_breakDown_child.SetWidths(breakDown_child_widths);
+
+                    PdfPCell cell_breakDown_child_center = new PdfPCell()
+                    {
+                        Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
+                        HorizontalAlignment = Element.ALIGN_CENTER,
+                        VerticalAlignment = Element.ALIGN_MIDDLE,
+                        Padding = 2
+                    };
+
+                    PdfPCell cell_breakDown_child_left = new PdfPCell()
+                    {
+                        Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
+                        HorizontalAlignment = Element.ALIGN_LEFT,
+                        VerticalAlignment = Element.ALIGN_MIDDLE,
+                        Padding = 2
+                    };
+
+                    cell_breakDown_child_center.Phrase = new Phrase("Keterangan", bold_font);
+                    table_breakDown_child.AddCell(cell_breakDown_child_center);
+
+                    cell_breakDown_child_center.Phrase = new Phrase("Size", bold_font);
+                    table_breakDown_child.AddCell(cell_breakDown_child_center);
+
+                    cell_breakDown_child_center.Phrase = new Phrase("Kuantitas", bold_font);
+                    table_breakDown_child.AddCell(cell_breakDown_child_center);
+
+                    foreach (var size in productRetail.RO_Garment_SizeBreakdown_Details)
+                    {
+
+                        cell_breakDown_child_left.Phrase = new Phrase(size.Information != null ? size.Information : "", normal_font);
+                        table_breakDown_child.AddCell(cell_breakDown_child_left);
+
+                        cell_breakDown_child_left.Phrase = new Phrase(size.Size.Name != null ? size.Size.Name : "", normal_font);
+                        table_breakDown_child.AddCell(cell_breakDown_child_left);
+
+                        cell_breakDown_child_left.Phrase = new Phrase(size.Quantity.ToString() != null ? size.Quantity.ToString() : "0", normal_font);
+                        table_breakDown_child.AddCell(cell_breakDown_child_left);
+                    }
+
+                    cell_breakDown_child_left.Phrase = new Phrase(" ", bold_font);
+                    table_breakDown_child.AddCell(cell_breakDown_child_left);
+
+                    cell_breakDown_child_left.Phrase = new Phrase("Total", bold_font);
+                    table_breakDown_child.AddCell(cell_breakDown_child_left);
+
+                    cell_breakDown_child_left.Phrase = new Phrase(productRetail.Total.ToString() != null ? productRetail.Total.ToString() : "0", normal_font);
+                    table_breakDown_child.AddCell(cell_breakDown_child_left);
+
+                    table_breakDown_child.WriteSelectedRows(0, -1, 10, 0, cb);
+
+                    table_breakDown.AddCell(table_breakDown_child);
+                }
+            }
+
+            cell_breakDown_total_2.Phrase = new Phrase("Total", bold_font);
+            table_breakDown.AddCell(cell_breakDown_total_2);
+
+            cell_breakDown_total_2.Phrase = new Phrase(viewModel.Total.ToString(), bold_font);
+            table_breakDown.AddCell(cell_breakDown_total_2);
+
+            if (writer.GetVerticalPosition(true) - table_breakDown.GetRowHeight(0) - table_breakDown.GetRowHeight(1) < document.Bottom)
+            {
+                document.NewPage();
+            }
+
+            table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
+            #endregion
+
+            #region Table Instruksi
+            //Title
+            PdfPTable table_instruction = new PdfPTable(1);
+            float[] instruction_widths = new float[] { 5f };
+
+            table_instruction.TotalWidth = 500f;
+            table_instruction.SetWidths(instruction_widths);
+
+            PdfPCell cell_top_instruction = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                PaddingRight = 1,
+                PaddingBottom = 2,
+                PaddingTop = 2
+            };
+
+            PdfPCell cell_colon_instruction = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE
+            };
+
+            PdfPCell cell_top_keterangan_instruction = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                PaddingRight = 1,
+                PaddingBottom = 2,
+                PaddingTop = 2,
+                Colspan = 7
+            };
+
+            cell_top_instruction.Phrase = new Phrase("Instruction", normal_font);
+            table_instruction.AddCell(cell_top_instruction);
+            table_instruction.AddCell(cell_colon_instruction);
+            cell_top_keterangan_instruction.Phrase = new Phrase($"{viewModel.Instruction}", normal_font);
+            table_instruction.AddCell(cell_top_keterangan_instruction);
+
+            float rowYInstruction = rowYbreakDown - table_breakDown.TotalHeight - 10;
+            float allowedRow2HeightInstruction = rowYInstruction - printedOnHeight - margin;
+
+            table_instruction.WriteSelectedRows(0, -1, 10, rowYInstruction, cb);
+            #endregion
+
+            #region RO Image
+            var countImageRo = 0;
+            byte[] roImage;
+
+            foreach (var index in viewModel.ImagesFile)
+            {
+                countImageRo++;
+            }
+
+            PdfPTable table_ro_image = new PdfPTable(countImageRo);
+            table_ro_image.TotalWidth = 570f;
+            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 10;
+
+            foreach (var imageFromRo in viewModel.ImagesFile)
+            {
+                try
+                {
+                    roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
+                }
+                catch (Exception)
+                {
+                    var webClient = new WebClient();
+                    roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+                }
+
+                Image images = Image.GetInstance(imgb: roImage);
+
+                if (images.Width > 60)
+                {
+                    float percentage = 0.0f;
+                    percentage = 60 / images.Width;
+                    images.ScalePercent(percentage * 100);
+                }
+
+                PdfPCell imageCell = new PdfPCell(images);
+                imageCell.Border = 0;
+                table_ro_image.AddCell(imageCell);
+            }
+            table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
+            #endregion
+
+            #region Signature
+            PdfPTable table_signature = new PdfPTable(6);
+            table_signature.TotalWidth = 570f;
+
+            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };
+            table_signature.SetWidths(signature_widths);
+
+            PdfPCell cell_signature = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2,
+            };
+
+            PdfPCell cell_signature_noted = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2,
+                PaddingTop = 50
+            };
+
+            cell_signature.Phrase = new Phrase("Dibuat", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Kasie Pembelian", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("R & D", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka Produksi", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Mengetahui", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
+            table_signature.AddCell(cell_signature);
+
+            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature_noted);
+            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature_noted);
+            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature_noted);
+            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature_noted);
+            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature_noted);
+            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            table_signature.AddCell(cell_signature_noted);
+
+            float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 10;
+            table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 
             document.Close();

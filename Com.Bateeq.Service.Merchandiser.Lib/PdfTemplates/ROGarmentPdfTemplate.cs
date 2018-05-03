@@ -179,10 +179,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_fabric_top.WriteSelectedRows(0, -1, 10, rowYTittleFab, cb);
 
             //Main fabric table
-            PdfPTable table_fabric = new PdfPTable(3);
+            PdfPTable table_fabric = new PdfPTable(5);
             table_fabric.TotalWidth = 570f;
 
-            float[] fabric_widths = new float[] { 5f, 5f, 5f };
+            float[] fabric_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_fabric.SetWidths(fabric_widths);
 
             PdfPCell cell_fabric_center = new PdfPCell()
@@ -207,10 +207,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_fabric_center.Phrase = new Phrase("Fabric", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
+            cell_fabric_center.Phrase = new Phrase("Name", bold_font);
+            table_fabric.AddCell(cell_fabric_center);
+
             cell_fabric_center.Phrase = new Phrase("Description", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
             cell_fabric_center.Phrase = new Phrase("Quantity", bold_font);
+            table_fabric.AddCell(cell_fabric_center);
+
+            cell_fabric_center.Phrase = new Phrase("Information", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
@@ -220,10 +226,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_fabric_left.Phrase = new Phrase(materialModel.Category.SubCategory != null ? materialModel.Category.SubCategory : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
+                    cell_fabric_left.Phrase = new Phrase(materialModel.Material.Name != null ? materialModel.Material.Name : "", normal_font);
+                    table_fabric.AddCell(cell_fabric_left);
+
                     cell_fabric_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
                     cell_fabric_left.Phrase = new Phrase(materialModel.Quantity.ToString() != null ? String.Format("{0} Meter", materialModel.Quantity.ToString()) : "0", normal_font);
+                    table_fabric.AddCell(cell_fabric_left);
+
+                    cell_fabric_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
                 }
             }
@@ -262,10 +274,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_acc_top.WriteSelectedRows(0, -1, 10, rowYTittleAcc, cb);
 
             //Main Accessories Table
-            PdfPTable table_accessories = new PdfPTable(4);
+            PdfPTable table_accessories = new PdfPTable(5);
             table_accessories.TotalWidth = 570f;
 
-            float[] accessories_widths = new float[] { 5f, 5f, 5f, 5f };
+            float[] accessories_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_accessories.SetWidths(accessories_widths);
 
             PdfPCell cell_acc_center = new PdfPCell()
@@ -299,6 +311,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_acc_center.Phrase = new Phrase("Quantity", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
+            cell_acc_center.Phrase = new Phrase("Information", bold_font);
+            table_accessories.AddCell(cell_acc_center);
+
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
             {
                 if (materialModel.Category.Name == "ACC")
@@ -313,6 +328,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     table_accessories.AddCell(cell_acc_left);
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Quantity != null ? String.Format("{0} Meter", materialModel.Quantity) : "0", normal_font);
+                    table_accessories.AddCell(cell_acc_left);
+
+                    cell_acc_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_accessories.AddCell(cell_acc_left);
                 }
             }
@@ -348,7 +366,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYTittleOng = rowYAcc - table_accessories.TotalHeight - 10;
             float allowedRow2HeightTopOng = rowYTittleOng - printedOnHeight - margin;
-            table_ong_top.WriteSelectedRows(0, -1, 10, rowYTittleOng, cb);
+            
 
             //Main Table Ongkos
             PdfPTable table_budget = new PdfPTable(5);
@@ -356,6 +374,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float[] budget_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_budget.SetWidths(budget_widths);
+            var ongIndex = 0;
 
             PdfPCell cell_budget_center = new PdfPCell()
             {
@@ -409,6 +428,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     cell_budget_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_budget.AddCell(cell_budget_left);
+
+                    ongIndex++;
                 }
             }
 
@@ -417,7 +438,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 document.NewPage();
             }
 
-            table_budget.WriteSelectedRows(0, -1, 10, rowYBudget, cb);
+            if (ongIndex != 0)
+            {
+                table_budget.WriteSelectedRows(0, -1, 10, rowYBudget, cb);
+                table_ong_top.WriteSelectedRows(0, -1, 10, rowYTittleOng, cb);
+            }
             #endregion
 
             #region Table Size Breakdown

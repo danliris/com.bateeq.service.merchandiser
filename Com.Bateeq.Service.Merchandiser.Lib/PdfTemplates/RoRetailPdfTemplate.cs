@@ -362,7 +362,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYTittleOng = rowYAcc - table_accessories.TotalHeight - 10;
             float allowedRow2HeightTopOng = rowYTittleOng - printedOnHeight - margin;
-            table_ong_top.WriteSelectedRows(0, -1, 10, rowYTittleOng, cb);
+            
             #endregion
 
             #region Ongkos Table
@@ -372,6 +372,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float[] budget_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_budget.SetWidths(budget_widths);
+
+            var ongIndex = 0;
 
             PdfPCell cell_budget_center = new PdfPCell()
             {
@@ -425,10 +427,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     cell_budget_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_budget.AddCell(cell_budget_left);
+
+                    ongIndex++;
                 }
             }
 
-            table_budget.WriteSelectedRows(0, -1, 10, rowYBudget, cb);
+            if (ongIndex != 0)
+            {
+                table_budget.WriteSelectedRows(0, -1, 10, rowYBudget, cb);
+                table_ong_top.WriteSelectedRows(0, -1, 10, rowYTittleOng, cb);
+            }
             #endregion
 
             #region Size Breakdown Title

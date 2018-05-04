@@ -108,7 +108,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.CostCalculationRetail_Materials)
                 .FirstOrDefaultAsync();
-            
+
+            read.CostCalculationRetail_Materials = read.CostCalculationRetail_Materials.OrderByDescending(material => material.Total).ToList();
+
             read.ImageFile = await this.AzureImageService.DownloadImage(read.GetType().Name, read.ImagePath);
 
             return read;

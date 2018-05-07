@@ -38,7 +38,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
 
                 return new FileStreamResult(stream, "application/pdf")
                 {
-                    FileDownloadName = "CostCalculationRetail_" + viewModel.RO + ".pdf"
+                    FileDownloadName = "Cost Calculation Retail " + viewModel.RO + ".pdf"
                 };
             }
             catch (Exception e)

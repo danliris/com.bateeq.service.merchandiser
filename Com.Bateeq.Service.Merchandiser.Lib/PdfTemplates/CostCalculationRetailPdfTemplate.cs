@@ -137,7 +137,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase("STD HOUR", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            double STD_HourValue = OLValue + OTL1Value + OTL2Value + OTL3Value;
+            double STD_HourValue = viewModel.SH_Cutting.Value + viewModel.SH_Finishing.Value + viewModel.SH_Sewing.Value;
             string STD_Hour = STD_HourValue > 0 ? STD_HourValue.ToString() + " detik" : STD_HourValue.ToString();
             cell_top.Phrase = new Phrase($"{STD_Hour}", normal_font);
             table_top.AddCell(cell_top);
@@ -226,6 +226,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
             table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Wakil Direktur Utama", normal_font);
+            table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
             for (int i = 0; i < 5; i++)
@@ -239,11 +245,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
+            cell_signature.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
+            cell_signature.Phrase = new Phrase("Haenis Gunarto ", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Wakil Direktur Utama", normal_font);
+            cell_signature.Phrase = new Phrase("Ninuk Setyawati", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 

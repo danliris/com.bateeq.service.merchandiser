@@ -715,6 +715,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 imageCell.Border = 0;
                 table_ro_image.AddCell(imageCell);
             }
+
+            PdfPCell cell_image = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_MIDDLE,
+                Padding = 2,
+            };
+
+            foreach (var name in viewModel.ImagesName)
+            {
+                cell_image.Phrase = new Phrase(name, normal_font);
+                table_ro_image.AddCell(cell_image);
+            }
+
             table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
             #endregion
 

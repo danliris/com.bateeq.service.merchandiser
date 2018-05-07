@@ -76,49 +76,49 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             };
 
             cell_colon.Phrase = new Phrase(":", normal_font);
-            cell_top.Phrase = new Phrase("No RO", normal_font);
+            cell_top.Phrase = new Phrase("NO RO", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.RO}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("Section", normal_font);
+            cell_top.Phrase = new Phrase("SECTION", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Section}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("Date", normal_font);
+            cell_top.Phrase = new Phrase("DATE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.ConfirmDate.ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("Line", normal_font);
+            cell_top.Phrase = new Phrase("LINE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Line.Name}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("Buyer", normal_font);
+            cell_top.Phrase = new Phrase("BUYER", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Buyer.Name}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("Delivery Date", normal_font);
+            cell_top.Phrase = new Phrase("DELIVERY DATE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.DeliveryDate.ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("Desc", normal_font);
+            cell_top.Phrase = new Phrase("DESC", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Description}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("Quantity", normal_font);
+            cell_top.Phrase = new Phrase("QUANTITY", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Total.ToString()}", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("Size Range", normal_font);
+            cell_top.Phrase = new Phrase("SIZE RANGE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.SizeRange.Name}", normal_font);
@@ -170,7 +170,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 PaddingTop = 2
             };
 
-            cell_top_fabric.Phrase = new Phrase("FAB", bold_font);
+            cell_top_fabric.Phrase = new Phrase("FABRIC", bold_font);
             table_fabric_top.AddCell(cell_top_fabric);
 
             float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
@@ -204,19 +204,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float rowYFab = rowYTittleFab - table_fabric_top.TotalHeight - 5;
             float allowedRow2HeightFab = rowYFab - printedOnHeight - margin;
 
-            cell_fabric_center.Phrase = new Phrase("Fabric", bold_font);
+            cell_fabric_center.Phrase = new Phrase("FABRIC", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("Name", bold_font);
+            cell_fabric_center.Phrase = new Phrase("NAME", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("Description", bold_font);
+            cell_fabric_center.Phrase = new Phrase("DESCRIPTION", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("Quantity", bold_font);
+            cell_fabric_center.Phrase = new Phrase("QUANTITY", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("Remark", bold_font);
+            cell_fabric_center.Phrase = new Phrase("REMARK", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
@@ -260,7 +260,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 PaddingTop = 2
             };
 
-            cell_top_acc.Phrase = new Phrase("Accessories", bold_font);
+            cell_top_acc.Phrase = new Phrase("ACCESSORIES", bold_font);
             table_acc_top.AddCell(cell_top_acc);
 
             float rowYTittleAcc = rowYFab - table_fabric.TotalHeight - 10;
@@ -293,19 +293,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float rowYAcc = rowYTittleAcc - table_fabric_top.TotalHeight - 5;
             float allowedRow2HeightAcc = rowYAcc - printedOnHeight - margin;
 
-            cell_acc_center.Phrase = new Phrase("Accessories", bold_font);
+            cell_acc_center.Phrase = new Phrase("ACCESSORIES", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
-            cell_acc_center.Phrase = new Phrase("Name", bold_font);
+            cell_acc_center.Phrase = new Phrase("NAME", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
-            cell_acc_center.Phrase = new Phrase("Description", bold_font);
+            cell_acc_center.Phrase = new Phrase("DESCRIPTION", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
-            cell_acc_center.Phrase = new Phrase("Quantity", bold_font);
+            cell_acc_center.Phrase = new Phrase("QUANTITY", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
-            cell_acc_center.Phrase = new Phrase("Remark", bold_font);
+            cell_acc_center.Phrase = new Phrase("REMARK", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
@@ -349,7 +349,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 PaddingTop = 2
             };
 
-            cell_top_ong.Phrase = new Phrase("Ongkos", bold_font);
+            cell_top_ong.Phrase = new Phrase("ONGKOS", bold_font);
             table_ong_top.AddCell(cell_top_ong);
 
             float rowYTittleOng = rowYAcc - table_accessories.TotalHeight - 10;
@@ -383,19 +383,19 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float rowYBudget = rowYTittleOng - table_ong_top.TotalHeight - 5;
             float allowedRow2HeightBudget = rowYBudget - printedOnHeight - margin;
 
-            cell_budget_center.Phrase = new Phrase("Ongkos", bold_font);
+            cell_budget_center.Phrase = new Phrase("ONGKOS", bold_font);
             table_budget.AddCell(cell_budget_center);
 
-            cell_budget_center.Phrase = new Phrase("Name", bold_font);
+            cell_budget_center.Phrase = new Phrase("NAME", bold_font);
             table_budget.AddCell(cell_budget_center);
 
-            cell_budget_center.Phrase = new Phrase("Description", bold_font);
+            cell_budget_center.Phrase = new Phrase("DESCRIPTION", bold_font);
             table_budget.AddCell(cell_budget_center);
 
-            cell_budget_center.Phrase = new Phrase("Quantity", bold_font);
+            cell_budget_center.Phrase = new Phrase("QUANTITY", bold_font);
             table_budget.AddCell(cell_budget_center);
 
-            cell_budget_center.Phrase = new Phrase("Remark", bold_font);
+            cell_budget_center.Phrase = new Phrase("REMARK", bold_font);
             table_budget.AddCell(cell_budget_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
@@ -446,7 +446,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 PaddingTop = 2
             };
 
-            cell_top_breakdown.Phrase = new Phrase("Size Breakdown", bold_font);
+            cell_top_breakdown.Phrase = new Phrase("SIZE BREAKDOWN", bold_font);
             table_breakdown_top.AddCell(cell_top_breakdown);
 
             float rowYTittleBreakDown = rowYBudget - table_budget.TotalHeight - 10;
@@ -494,11 +494,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYbreakDown = rowYTittleBreakDown - table_breakdown_top.TotalHeight - 5;
             float allowedRow2HeightBreakDown = rowYbreakDown - printedOnHeight - margin;
+            var remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
 
-            cell_breakDown_center.Phrase = new Phrase("Warna", bold_font);
+            cell_breakDown_center.Phrase = new Phrase("WARNA", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
-            cell_breakDown_center.Phrase = new Phrase("Size Range", bold_font);
+            cell_breakDown_center.Phrase = new Phrase("SIZE RANGE", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
             foreach (var productRetail in viewModel.RO_Garment_SizeBreakdowns)
@@ -530,13 +531,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                         Padding = 2
                     };
 
-                    cell_breakDown_child_center.Phrase = new Phrase("Remark", bold_font);
+                    cell_breakDown_child_center.Phrase = new Phrase("KETERANGAN", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_center);
 
-                    cell_breakDown_child_center.Phrase = new Phrase("Size", bold_font);
+                    cell_breakDown_child_center.Phrase = new Phrase("SIZE", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_center);
 
-                    cell_breakDown_child_center.Phrase = new Phrase("Quantity", bold_font);
+                    cell_breakDown_child_center.Phrase = new Phrase("QUANTITY", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_center);
 
                     foreach (var size in productRetail.RO_Garment_SizeBreakdown_Details)
@@ -555,7 +556,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_breakDown_child_left.Phrase = new Phrase(" ", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_left);
 
-                    cell_breakDown_child_left.Phrase = new Phrase("Total", bold_font);
+                    cell_breakDown_child_left.Phrase = new Phrase("TOTAL", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_left);
 
                     cell_breakDown_child_left.Phrase = new Phrase(productRetail.Total.ToString() != null ? productRetail.Total.ToString() : "0", normal_font);
@@ -565,9 +566,31 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     table_breakDown.AddCell(table_breakDown_child);
                 }
+
+                var tableBreakdownCurrentHeight = table_breakDown.TotalHeight;
+
+                if (tableBreakdownCurrentHeight / remainingRowToHeightBrekdown > 1)
+                {
+                    if (tableBreakdownCurrentHeight / allowedRow2HeightBreakDown > 1)
+                    {
+                        PdfPRow headerRow = table_breakDown.GetRow(0);
+                        PdfPRow lastRow = table_breakDown.GetRow(table_breakDown.Rows.Count - 1);
+                        table_breakDown.DeleteLastRow();
+                        table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
+                        table_breakDown.DeleteBodyRows();
+                        this.DrawPrintedOn(now, bf, cb);
+                        document.NewPage();
+                        table_breakDown.Rows.Add(headerRow);
+                        table_breakDown.Rows.Add(lastRow);
+                        table_breakDown.CalculateHeights();
+                        rowYbreakDown = startY;
+                        remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
+                        allowedRow2HeightBreakDown = remainingRowToHeightBrekdown - printedOnHeight - margin;
+                    }
+                }
             }
 
-            cell_breakDown_total_2.Phrase = new Phrase("Total", bold_font);
+            cell_breakDown_total_2.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_total_2);
 
             cell_breakDown_total_2.Phrase = new Phrase(viewModel.Total.ToString(), bold_font);
@@ -617,7 +640,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 Colspan = 7
             };
 
-            cell_top_instruction.Phrase = new Phrase("Instruction", normal_font);
+            cell_top_instruction.Phrase = new Phrase("INSTRUCTION", normal_font);
             table_instruction.AddCell(cell_top_instruction);
             table_instruction.AddCell(cell_colon_instruction);
             cell_top_keterangan_instruction.Phrase = new Phrase($"{viewModel.Instruction}", normal_font);
@@ -638,7 +661,24 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 countImageRo++;
             }
 
+            if (countImageRo > 5)
+            {
+                countImageRo = 5;
+            }
+
             PdfPTable table_ro_image = new PdfPTable(countImageRo);
+            float[] ro_widths = new float[countImageRo];
+
+            for (var i = 0; i < countImageRo; i++)
+            {
+                ro_widths.SetValue(5f, i);
+            }
+
+            if (countImageRo != 0)
+            {
+                table_ro_image.SetWidths(ro_widths);
+            }
+
             table_ro_image.TotalWidth = 570f;
             float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 10;
 

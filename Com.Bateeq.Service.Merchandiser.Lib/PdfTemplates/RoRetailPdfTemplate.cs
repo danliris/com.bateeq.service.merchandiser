@@ -561,6 +561,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                         table_breakDown.DeleteLastRow();
                         table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
                         table_breakDown.DeleteBodyRows();
+                        this.DrawPrintedOn(now, bf, cb);
                         document.NewPage();
                         table_breakDown.Rows.Add(headerRow);
                         table_breakDown.Rows.Add(lastRow);
@@ -632,7 +633,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top_keterangan_instruction.Phrase = new Phrase($"{viewModel.Instruction}", normal_font);
             table_instruction.AddCell(cell_top_keterangan_instruction);
 
-            float rowYInstruction = rowYbreakDown - table_breakDown.TotalHeight - 10;
+            float rowYInstruction = rowYbreakDown - table_breakDown.TotalHeight - 5;
             float allowedRow2HeightInstruction = rowYInstruction - printedOnHeight - margin;
             var tableInstructionCurrentHeight = table_instruction.TotalHeight;
             var remainingRowToHeightInstruction = rowYInstruction - 5 - printedOnHeight - margin;
@@ -646,8 +647,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     table_instruction.DeleteLastRow();
                     table_instruction.WriteSelectedRows(0, -1, 10, rowYInstruction, cb);
                     table_instruction.DeleteBodyRows();
+                    this.DrawPrintedOn(now, bf, cb);
                     document.NewPage();
-                    table_instruction.Rows.Add(headerRow);
                     table_instruction.Rows.Add(lastRow);
                     table_instruction.CalculateHeights();
                     rowYInstruction = startY;
@@ -668,9 +669,27 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 countImageRo++;
             }
 
+            if (countImageRo > 5)
+            {
+                countImageRo = 5;
+            }
+
             PdfPTable table_ro_image = new PdfPTable(countImageRo);
+            float[] ro_widths = new float[countImageRo];
+
+            for (var i  = 0; i < countImageRo; i++ )
+            {
+                ro_widths.SetValue(5f, i);
+            }
+
+            if (countImageRo != 0)
+            {
+                table_ro_image.SetWidths(ro_widths);
+            }
+            
+
             table_ro_image.TotalWidth = 570f;
-            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 10;
+            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 5;
 
             foreach (var imageFromRo in viewModel.ImagesFile)
             {
@@ -751,7 +770,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature_noted.Phrase = new Phrase("(Michelle Tjokrosaputro)", normal_font);
             table_signature.AddCell(cell_signature_noted);
 
-            float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 10;
+            float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 5;
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 

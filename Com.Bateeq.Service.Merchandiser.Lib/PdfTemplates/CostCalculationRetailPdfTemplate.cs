@@ -137,7 +137,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase("STD HOUR", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            double STD_HourValue = OLValue + OTL1Value + OTL2Value + OTL3Value;
+            double STD_HourValue = viewModel.SH_Cutting.Value + viewModel.SH_Finishing.Value + viewModel.SH_Sewing.Value;
             string STD_Hour = STD_HourValue > 0 ? STD_HourValue.ToString() + " detik" : STD_HourValue.ToString();
             cell_top.Phrase = new Phrase($"{STD_Hour}", normal_font);
             table_top.AddCell(cell_top);

@@ -219,7 +219,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_fabric_center.Phrase = new Phrase("Quantity", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("Information", bold_font);
+            cell_fabric_center.Phrase = new Phrase("Remark", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
             foreach (var materialModel in viewModel.CostCalculationRetail.CostCalculationRetail_Materials)
@@ -312,7 +312,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_acc_center.Phrase = new Phrase("Quantity", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
-            cell_acc_center.Phrase = new Phrase("Information", bold_font);
+            cell_acc_center.Phrase = new Phrase("Remark", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
             foreach (var materialModel in viewModel.CostCalculationRetail.CostCalculationRetail_Materials)
@@ -362,7 +362,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYTittleOng = rowYAcc - table_accessories.TotalHeight - 10;
             float allowedRow2HeightTopOng = rowYTittleOng - printedOnHeight - margin;
-            
+
             #endregion
 
             #region Ongkos Table
@@ -406,7 +406,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_budget_center.Phrase = new Phrase("Quantity", bold_font);
             table_budget.AddCell(cell_budget_center);
 
-            cell_budget_center.Phrase = new Phrase("Information", bold_font);
+            cell_budget_center.Phrase = new Phrase("Remark", bold_font);
             table_budget.AddCell(cell_budget_center);
 
             foreach (var materialModel in viewModel.CostCalculationRetail.CostCalculationRetail_Materials)
@@ -507,11 +507,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYbreakDown = rowYTittleBreakDown - table_breakdown_top.TotalHeight - 5;
             float allowedRow2HeightBreakDown = rowYbreakDown - printedOnHeight - margin;
+            var remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
 
-            cell_breakDown_center.Phrase = new Phrase("Kode Toko", bold_font);
+            cell_breakDown_center.Phrase = new Phrase("Store Code", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
-            cell_breakDown_center.Phrase = new Phrase("Toko", bold_font);
+            cell_breakDown_center.Phrase = new Phrase("Store", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
             cell_breakDown_center.Phrase = new Phrase("10", bold_font);
@@ -548,6 +549,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_breakDown_left.Phrase = new Phrase(productRetail.Total.ToString() != null ? productRetail.Total.ToString() : "0", normal_font);
                     table_breakDown.AddCell(cell_breakDown_left);
                 }
+
+                var tableBreakdownCurrentHeight = table_breakDown.TotalHeight;
+
+                if (tableBreakdownCurrentHeight / remainingRowToHeightBrekdown > 1)
+                {
+                    if (tableBreakdownCurrentHeight / allowedRow2HeightBreakDown > 1)
+                    {
+                        PdfPRow headerRow = table_breakDown.GetRow(0);
+                        PdfPRow lastRow = table_breakDown.GetRow(table_breakDown.Rows.Count - 1);
+                        table_breakDown.DeleteLastRow();
+                        table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
+                        table_breakDown.DeleteBodyRows();
+                        document.NewPage();
+                        table_breakDown.Rows.Add(headerRow);
+                        table_breakDown.Rows.Add(lastRow);
+                        table_breakDown.CalculateHeights();
+                        rowYbreakDown = startY;
+                        remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
+                        allowedRow2HeightBreakDown = remainingRowToHeightBrekdown - printedOnHeight - margin;
+                    }
+                }
+
             }
 
             cell_breakDown_total.Phrase = new Phrase(" ", bold_font);
@@ -563,12 +586,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             cell_breakDown_left.Phrase = new Phrase(viewModel.Total.ToString() != null ? viewModel.Total.ToString() : "0", normal_font);
             table_breakDown.AddCell(cell_breakDown_left);
-
-
-            if (writer.GetVerticalPosition(true) - table_breakDown.GetRowHeight(0) - table_breakDown.GetRowHeight(1) < document.Bottom)
-            {
-                document.NewPage();
-            }
 
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion
@@ -617,6 +634,27 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYInstruction = rowYbreakDown - table_breakDown.TotalHeight - 10;
             float allowedRow2HeightInstruction = rowYInstruction - printedOnHeight - margin;
+            var tableInstructionCurrentHeight = table_instruction.TotalHeight;
+            var remainingRowToHeightInstruction = rowYInstruction - 5 - printedOnHeight - margin;
+
+            if (tableInstructionCurrentHeight / remainingRowToHeightInstruction > 1)
+            {
+                if (tableInstructionCurrentHeight / allowedRow2HeightInstruction > 1)
+                {
+                    PdfPRow headerRow = table_instruction.GetRow(0);
+                    PdfPRow lastRow = table_instruction.GetRow(table_instruction.Rows.Count - 1);
+                    table_instruction.DeleteLastRow();
+                    table_instruction.WriteSelectedRows(0, -1, 10, rowYInstruction, cb);
+                    table_instruction.DeleteBodyRows();
+                    document.NewPage();
+                    table_instruction.Rows.Add(headerRow);
+                    table_instruction.Rows.Add(lastRow);
+                    table_instruction.CalculateHeights();
+                    rowYInstruction = startY;
+                    remainingRowToHeightInstruction = rowYInstruction - 5 - printedOnHeight - margin;
+                    allowedRow2HeightInstruction = remainingRowToHeightInstruction - printedOnHeight - margin;
+                }
+            }
 
             table_instruction.WriteSelectedRows(0, -1, 10, rowYInstruction, cb);
             #endregion
@@ -700,17 +738,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(Michelle Tjokrosaputro)", normal_font);
             table_signature.AddCell(cell_signature_noted);
 
             float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 10;

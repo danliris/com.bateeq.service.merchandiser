@@ -21,6 +21,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double? SH_Cutting { get; set; }
         public double? SH_Sewing { get; set; }
         public double? SH_Finishing { get; set; }
+        public double? FabricAllowance { get; set; }
+        public double? AccessoriesAllowance { get; set; }
 
         public DateTime DeliveryDate { get; set; }
         public int? Quantity { get; set; }

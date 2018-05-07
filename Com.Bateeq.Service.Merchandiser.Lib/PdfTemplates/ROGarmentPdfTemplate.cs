@@ -170,7 +170,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 PaddingTop = 2
             };
 
-            cell_top_fabric.Phrase = new Phrase("Fabric", bold_font);
+            cell_top_fabric.Phrase = new Phrase("FAB", bold_font);
             table_fabric_top.AddCell(cell_top_fabric);
 
             float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
@@ -707,13 +707,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
             cell_signature_noted.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
             table_signature.AddCell(cell_signature_noted);

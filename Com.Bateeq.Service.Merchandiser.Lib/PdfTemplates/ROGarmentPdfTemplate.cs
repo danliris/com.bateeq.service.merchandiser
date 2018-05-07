@@ -216,7 +216,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_fabric_center.Phrase = new Phrase("Quantity", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("Information", bold_font);
+            cell_fabric_center.Phrase = new Phrase("Remark", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
@@ -239,12 +239,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     table_fabric.AddCell(cell_fabric_left);
                 }
             }
-
-            if (writer.GetVerticalPosition(true) - table_fabric.GetRowHeight(0) - table_fabric.GetRowHeight(1) < document.Bottom)
-            {
-                document.NewPage();
-            }
-
             table_fabric.WriteSelectedRows(0, -1, 10, rowYFab, cb);
             #endregion
 
@@ -311,7 +305,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_acc_center.Phrase = new Phrase("Quantity", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
-            cell_acc_center.Phrase = new Phrase("Information", bold_font);
+            cell_acc_center.Phrase = new Phrase("Remark", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
@@ -334,12 +328,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     table_accessories.AddCell(cell_acc_left);
                 }
             }
-
-            if (writer.GetVerticalPosition(true) - table_accessories.GetRowHeight(0) - table_accessories.GetRowHeight(1) < document.Bottom)
-            {
-                document.NewPage();
-            }
-
             table_accessories.WriteSelectedRows(0, -1, 10, rowYAcc, cb);
             #endregion
 
@@ -407,7 +395,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_budget_center.Phrase = new Phrase("Quantity", bold_font);
             table_budget.AddCell(cell_budget_center);
 
-            cell_budget_center.Phrase = new Phrase("Information", bold_font);
+            cell_budget_center.Phrase = new Phrase("Remark", bold_font);
             table_budget.AddCell(cell_budget_center);
 
             foreach (var materialModel in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
@@ -431,11 +419,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     ongIndex++;
                 }
-            }
-
-            if (writer.GetVerticalPosition(true) - table_budget.GetRowHeight(0) - table_budget.GetRowHeight(1) < document.Bottom)
-            {
-                document.NewPage();
             }
 
             if (ongIndex != 0)
@@ -547,13 +530,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                         Padding = 2
                     };
 
-                    cell_breakDown_child_center.Phrase = new Phrase("Keterangan", bold_font);
+                    cell_breakDown_child_center.Phrase = new Phrase("Remark", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_center);
 
                     cell_breakDown_child_center.Phrase = new Phrase("Size", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_center);
 
-                    cell_breakDown_child_center.Phrase = new Phrase("Kuantitas", bold_font);
+                    cell_breakDown_child_center.Phrase = new Phrase("Quantity", bold_font);
                     table_breakDown_child.AddCell(cell_breakDown_child_center);
 
                     foreach (var size in productRetail.RO_Garment_SizeBreakdown_Details)
@@ -724,17 +707,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                    )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(Michelle Tjokrosaputro)", normal_font);
             table_signature.AddCell(cell_signature_noted);
 
             float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 10;

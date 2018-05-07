@@ -98,7 +98,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationRetail.Style.name}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("Content", normal_font);
+            cell_top.Phrase = new Phrase("Counter", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationRetail.Counter.name}", normal_font);
@@ -172,7 +172,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 PaddingTop = 2
             };
 
-            cell_top_fabric.Phrase = new Phrase("Fabric", bold_font);
+            cell_top_fabric.Phrase = new Phrase("FAB", bold_font);
             table_fabric_top.AddCell(cell_top_fabric);
 
             float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
@@ -738,13 +738,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(                      )", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
             cell_signature_noted.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
             table_signature.AddCell(cell_signature_noted);

@@ -635,8 +635,18 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYInstruction = rowYbreakDown - table_breakDown.TotalHeight - 5;
             float allowedRow2HeightInstruction = rowYInstruction - printedOnHeight - margin;
-            var tableInstructionCurrentHeight = table_instruction.TotalHeight;
             var remainingRowToHeightInstruction = rowYInstruction - 5 - printedOnHeight - margin;
+            var tableInstructionCurrentHeight = table_instruction.TotalHeight;
+
+            if (remainingRowToHeightInstruction < 0)
+            {
+                remainingRowToHeightInstruction = remainingRowToHeightInstruction * -1;
+            }
+
+            if (allowedRow2HeightInstruction < 0)
+            {
+                allowedRow2HeightInstruction = allowedRow2HeightInstruction * -1;
+            }
 
             if (tableInstructionCurrentHeight / remainingRowToHeightInstruction > 1)
             {
@@ -647,8 +657,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     table_instruction.DeleteLastRow();
                     table_instruction.WriteSelectedRows(0, -1, 10, rowYInstruction, cb);
                     table_instruction.DeleteBodyRows();
-                    this.DrawPrintedOn(now, bf, cb);
                     document.NewPage();
+                    table_instruction.Rows.Add(headerRow);
                     table_instruction.Rows.Add(lastRow);
                     table_instruction.CalculateHeights();
                     rowYInstruction = startY;

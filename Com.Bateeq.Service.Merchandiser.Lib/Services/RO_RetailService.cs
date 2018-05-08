@@ -241,6 +241,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.ImagesPath = model.ImagesPath != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesPath) : null;
             
             viewModel.CostCalculationRetail = this.CostCalculationRetailService.MapToViewModel(model.CostCalculationRetail);
+            viewModel.ImagesName = model.ImagesName != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesName) : new List<string>();
 
             viewModel.Color = new ArticleColorViewModel()
             {
@@ -274,6 +275,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             
             model.CostCalculationRetailId = viewModel.CostCalculationRetail.Id;
             model.CostCalculationRetail = this.CostCalculationRetailService.MapToModel(viewModel.CostCalculationRetail);
+            model.ImagesName = JsonConvert.SerializeObject(viewModel.ImagesName);
 
             model.ColorId = viewModel.Color._id;
             model.ColorName = viewModel.Color.name;

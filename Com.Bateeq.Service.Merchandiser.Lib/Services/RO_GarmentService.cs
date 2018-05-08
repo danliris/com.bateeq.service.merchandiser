@@ -240,6 +240,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.ImagesPath = model.ImagesPath != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesPath) : null;
             
             viewModel.CostCalculationGarment = this.CostCalculationGarmentService.MapToViewModel(model.CostCalculationGarment);
+            viewModel.ImagesName = model.ImagesName != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesName) : new List<string>();
 
             viewModel.RO_Garment_SizeBreakdowns = new List<RO_Garment_SizeBreakdownViewModel>();
             if (model.RO_Garment_SizeBreakdowns != null)
@@ -262,6 +263,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             
             model.CostCalculationGarmentId = viewModel.CostCalculationGarment.Id;
             model.CostCalculationGarment = this.CostCalculationGarmentService.MapToModel(viewModel.CostCalculationGarment);
+            model.ImagesName = JsonConvert.SerializeObject(viewModel.ImagesName);
 
             model.RO_Garment_SizeBreakdowns = new List<RO_Garment_SizeBreakdown>();
             foreach (RO_Garment_SizeBreakdownViewModel sizeBreakdownVM in viewModel.RO_Garment_SizeBreakdowns)

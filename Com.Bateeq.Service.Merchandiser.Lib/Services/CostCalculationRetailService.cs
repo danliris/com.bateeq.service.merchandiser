@@ -108,7 +108,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.CostCalculationRetail_Materials)
                 .FirstOrDefaultAsync();
-            
+
+            read.CostCalculationRetail_Materials = read.CostCalculationRetail_Materials.OrderByDescending(material => material.Total).ToList();
+
             read.ImageFile = await this.AzureImageService.DownloadImage(read.GetType().Name, read.ImagePath);
 
             return read;
@@ -232,6 +234,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             viewModel.SizeRange.Id = model.SizeRangeId;
             viewModel.SizeRange.Name = model.SizeRangeName;
 
+            viewModel.FabricAllowance = Percentage.ToPercent(model.FabricAllowance);
+            viewModel.AccessoriesAllowance = Percentage.ToPercent(model.AccessoriesAllowance);
+
             try
             {
                 // Get Related Size of particular Size Range if possible
@@ -353,6 +358,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             model.BuyerName = viewModel.Buyer.Name;
             model.SizeRangeId = viewModel.SizeRange.Id;
             model.SizeRangeName = viewModel.SizeRange.Name;
+            model.FabricAllowance = Percentage.ToFraction(viewModel.FabricAllowance);
+            model.AccessoriesAllowance = Percentage.ToFraction(viewModel.AccessoriesAllowance);
             model.EfficiencyId = viewModel.Efficiency.Id;
             model.EfficiencyValue = viewModel.Efficiency.Value != null ? (double)viewModel.Efficiency.Value : 0;
             model.Risk = Percentage.ToFraction(viewModel.Risk);

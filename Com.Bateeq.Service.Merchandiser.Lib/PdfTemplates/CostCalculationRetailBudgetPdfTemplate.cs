@@ -280,9 +280,22 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 double price = viewModel.CostCalculationRetail_Materials[i].Price ?? 0;
                 cell_ccm.Phrase = new Phrase(String.Format("{0}/{1}", Number.ToRupiahWithoutSymbol(price), viewModel.CostCalculationRetail_Materials[i].UOMPrice.Name), normal_font);
                 table_ccm.AddCell(cell_ccm);
-                
+
+                double factor;
+                if (viewModel.CostCalculationRetail_Materials[i].Category.Name == "FAB")
+                {
+                    factor = viewModel.FabricAllowance ?? 0;
+                }
+                else if (viewModel.CostCalculationRetail_Materials[i].Category.Name == "ACC")
+                {
+                    factor = viewModel.AccessoriesAllowance ?? 0;
+                }
+                else
+                {
+                    factor = 0;
+                }
                 double totalQuantity = viewModel.Quantity ?? 0;
-                double quantity =  usage * totalQuantity;
+                double quantity = (100 + factor) / 100 * usage * totalQuantity;
                 cell_ccm.Phrase = new Phrase(quantity.ToString(), normal_font);
                 table_ccm.AddCell(cell_ccm);
 

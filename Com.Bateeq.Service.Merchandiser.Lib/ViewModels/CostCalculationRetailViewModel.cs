@@ -8,7 +8,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
     public class CostCalculationRetailViewModel : BasicViewModel, IValidatableObject
     {
         public string Code { get; set; }
-        public int SerialNumber { get; set; }
+        public int RO_SerialNumber { get; set; }
         public string RO { get; set; }
 
         public string Article { get; set; }
@@ -21,6 +21,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public double? SH_Cutting { get; set; }
         public double? SH_Sewing { get; set; }
         public double? SH_Finishing { get; set; }
+        public double? FabricAllowance { get; set; }
+        public double? AccessoriesAllowance { get; set; }
 
         public DateTime DeliveryDate { get; set; }
         public int? Quantity { get; set; }

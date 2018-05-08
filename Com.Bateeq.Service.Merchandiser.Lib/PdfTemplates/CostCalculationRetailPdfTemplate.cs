@@ -137,7 +137,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase("STD HOUR", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            double STD_HourValue = OLValue + OTL1Value + OTL2Value + OTL3Value;
+            double STD_HourValue = viewModel.SH_Cutting.Value + viewModel.SH_Finishing.Value + viewModel.SH_Sewing.Value;
             string STD_Hour = STD_HourValue > 0 ? STD_HourValue.ToString() + " detik" : STD_HourValue.ToString();
             cell_top.Phrase = new Phrase($"{STD_Hour}", normal_font);
             table_top.AddCell(cell_top);
@@ -149,33 +149,32 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top_keterangan);
             #endregion
 
-            #region Image
-            byte[] imageByte;
+            #region Draw Image
+            float imageHeight;
             try
             {
-                imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImageFile));
+                byte[] imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImageFile));
+                Image image = Image.GetInstance(imgb: imageByte);
+                if (image.Width > 60)
+                {
+                    float percentage = 0.0f;
+                    percentage = 60 / image.Width;
+                    image.ScalePercent(percentage * 100);
+                }
+                imageHeight = image.ScaledHeight;
+                float imageY = 800 - imageHeight;
+                image.SetAbsolutePosition(520, imageY);
+                cb.AddImage(image, inlineImage: true);
             }
             catch (Exception)
             {
-                var webClient = new WebClient();
-                imageByte = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
-            }
-            Image image = Image.GetInstance(imgb: imageByte);
-            if (image.Width > 60)
-            {
-                float percentage = 0.0f;
-                percentage = 60 / image.Width;
-                image.ScalePercent(percentage * 100);
+                imageHeight = 0;
             }
             #endregion
 
             #region Draw Top
             float row1Y = 800;
             table_top.WriteSelectedRows(0, -1, 10, row1Y, cb);
-
-            float imageY = 800 - image.ScaledHeight;
-            image.SetAbsolutePosition(520, imageY);
-            cb.AddImage(image, inlineImage: true);
             #endregion
 
             #region Detail (Bottom, Column 1.2)
@@ -187,7 +186,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             PdfPCell cell_detail = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5, Rowspan = 4 };
 
-            double total = Convert.ToDouble(viewModel.OTL1.CalculatedValue + viewModel.OTL2.CalculatedValue + viewModel.OTL3.CalculatedValue);
+            double total = Convert.ToDouble(viewModel.OL.CalculatedValue + viewModel.OTL1.CalculatedValue + viewModel.OTL2.CalculatedValue + viewModel.OTL3.CalculatedValue);
             cell_detail.Phrase = new Phrase(
                 "OL".PadRight(22) + ": " + viewModel.OL.CalculatedValue + Environment.NewLine + Environment.NewLine +
                 "OTL 1".PadRight(20) + ": " + viewModel.OTL1.CalculatedValue + Environment.NewLine + Environment.NewLine +
@@ -226,6 +225,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
             table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Wakil Direktur Utama", normal_font);
+            table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
             for (int i = 0; i < 5; i++)
@@ -239,11 +244,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
+            cell_signature.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
+            cell_signature.Phrase = new Phrase("Haenis Gunarto ", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Wakil Direktur Utama", normal_font);
+            cell_signature.Phrase = new Phrase("Ninuk Setyawati", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 
@@ -435,7 +440,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_ccm.AddCell(cell_ccm_center);
 
             double Total = 0;
-            float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
+            float row1Height = imageHeight > table_top.TotalHeight ? imageHeight : table_top.TotalHeight;
             float row2Y = row1Y - row1Height - 10;
             float calculatedHppHeight = 7;
             float row3LeftHeight = table_detail.TotalHeight + 5 + table_signature.TotalHeight;
@@ -513,7 +518,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float calculatedHppY = row3Y - calculatedHppHeight;
             cb.BeginText();
             cb.SetFontAndSize(bf, 8);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "KALKULASI HPP: (OL + OTL1 + OTL2 + FABRIC + ACC) + ((OL + OTL1 + OTL2 + FABRIC + ACC) * (Risk/100))", 10, calculatedHppY, 0);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "KALKULASI HPP: (OL + OTL1 + OTL2 + FABRIC + ACC) + ((OL + OTL1 + OTL2 + FABRIC + ACC) * Risk)", 10, calculatedHppY, 0);
             cb.EndText();
             #endregion
 

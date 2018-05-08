@@ -751,7 +751,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cell_signature.Phrase = new Phrase("Dibuat", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Kasie Pembelian", normal_font);
+            cell_signature.Phrase = new Phrase("Kasie Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("R & D", normal_font);
             table_signature.AddCell(cell_signature);

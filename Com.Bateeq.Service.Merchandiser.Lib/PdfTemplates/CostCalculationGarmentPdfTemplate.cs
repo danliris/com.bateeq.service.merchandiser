@@ -128,32 +128,31 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #endregion
 
             #region Image
-            byte[] imageByte;
+            float imageHeight;
             try
             {
-                imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImageFile));
+                byte[] imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImageFile));
+                Image image = Image.GetInstance(imgb: imageByte);
+                if (image.Width > 60)
+                {
+                    float percentage = 0.0f;
+                    percentage = 60 / image.Width;
+                    image.ScalePercent(percentage * 100);
+                }
+                imageHeight = image.ScaledHeight;
+                float imageY = 800 - imageHeight;
+                image.SetAbsolutePosition(520, imageY);
+                cb.AddImage(image, inlineImage: true);
             }
             catch (Exception)
             {
-                var webClient = new WebClient();
-                imageByte = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
-            }
-            Image image = Image.GetInstance(imgb: imageByte);
-            if (image.Width > 60)
-            {
-                float percentage = 0.0f;
-                percentage = 60 / image.Width;
-                image.ScalePercent(percentage * 100);
+                imageHeight = 0;
             }
             #endregion
 
             #region Draw Top
             float row1Y = 800;
             table_detail1.WriteSelectedRows(0, -1, 10, row1Y, cb);
-
-            float imageY = row1Y - image.ScaledHeight;
-            image.SetAbsolutePosition(520, imageY);
-            cb.AddImage(image, inlineImage: true);
             #endregion
 
             bool isDollar = viewModel.Rate.Id != 0;
@@ -449,7 +448,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_ccm.AddCell(cell_ccm_center);
 
             double Total = 0;
-            float row1Height = image.ScaledHeight > table_detail1.TotalHeight ? image.ScaledHeight : table_detail1.TotalHeight;
+            float row1Height = imageHeight > table_detail1.TotalHeight ? imageHeight : table_detail1.TotalHeight;
             float row2Y = row1Y - row1Height - 10;
             float[] row3Heights = { table_detail2.TotalHeight, table_detail3.TotalHeight, table_detail4_1.TotalHeight + 10 + table_detail4_2.TotalHeight + 10 + table_detail5.TotalHeight };
             float dollarDetailHeight = 10;

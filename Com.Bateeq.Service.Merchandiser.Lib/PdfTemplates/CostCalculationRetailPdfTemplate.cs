@@ -149,33 +149,32 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top_keterangan);
             #endregion
 
-            #region Image
-            byte[] imageByte;
+            #region Draw Image
+            float imageHeight;
             try
             {
-                imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImageFile));
+                byte[] imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImageFile));
+                Image image = Image.GetInstance(imgb: imageByte);
+                if (image.Width > 60)
+                {
+                    float percentage = 0.0f;
+                    percentage = 60 / image.Width;
+                    image.ScalePercent(percentage * 100);
+                }
+                imageHeight = image.ScaledHeight;
+                float imageY = 800 - imageHeight;
+                image.SetAbsolutePosition(520, imageY);
+                cb.AddImage(image, inlineImage: true);
             }
             catch (Exception)
             {
-                var webClient = new WebClient();
-                imageByte = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
-            }
-            Image image = Image.GetInstance(imgb: imageByte);
-            if (image.Width > 60)
-            {
-                float percentage = 0.0f;
-                percentage = 60 / image.Width;
-                image.ScalePercent(percentage * 100);
+                imageHeight = 0;
             }
             #endregion
 
             #region Draw Top
             float row1Y = 800;
             table_top.WriteSelectedRows(0, -1, 10, row1Y, cb);
-
-            float imageY = 800 - image.ScaledHeight;
-            image.SetAbsolutePosition(520, imageY);
-            cb.AddImage(image, inlineImage: true);
             #endregion
 
             #region Detail (Bottom, Column 1.2)
@@ -441,7 +440,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_ccm.AddCell(cell_ccm_center);
 
             double Total = 0;
-            float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
+            float row1Height = imageHeight > table_top.TotalHeight ? imageHeight : table_top.TotalHeight;
             float row2Y = row1Y - row1Height - 10;
             float calculatedHppHeight = 7;
             float row3LeftHeight = table_detail.TotalHeight + 5 + table_signature.TotalHeight;

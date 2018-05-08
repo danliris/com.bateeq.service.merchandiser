@@ -186,7 +186,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             PdfPCell cell_detail = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 5, Rowspan = 4 };
 
-            double total = Convert.ToDouble(viewModel.OTL1.CalculatedValue + viewModel.OTL2.CalculatedValue + viewModel.OTL3.CalculatedValue);
+            double total = Convert.ToDouble(viewModel.OL.CalculatedValue + viewModel.OTL1.CalculatedValue + viewModel.OTL2.CalculatedValue + viewModel.OTL3.CalculatedValue);
             cell_detail.Phrase = new Phrase(
                 "OL".PadRight(22) + ": " + viewModel.OL.CalculatedValue + Environment.NewLine + Environment.NewLine +
                 "OTL 1".PadRight(20) + ": " + viewModel.OTL1.CalculatedValue + Environment.NewLine + Environment.NewLine +
@@ -518,7 +518,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float calculatedHppY = row3Y - calculatedHppHeight;
             cb.BeginText();
             cb.SetFontAndSize(bf, 8);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "KALKULASI HPP: (OL + OTL1 + OTL2 + FABRIC + ACC) + ((OL + OTL1 + OTL2 + FABRIC + ACC) * (Risk/100))", 10, calculatedHppY, 0);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "KALKULASI HPP: (OL + OTL1 + OTL2 + FABRIC + ACC) + ((OL + OTL1 + OTL2 + FABRIC + ACC) * Risk)", 10, calculatedHppY, 0);
             cb.EndText();
             #endregion
 

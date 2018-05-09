@@ -186,7 +186,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             foreach (int id in CostCalculationRetail_Materials)
             {
                 CostCalculationRetail_Material model = await CostCalculationRetail_MaterialService.ReadModelById(id);
-                if (model.PO_SerialNumber == null)
+                if (model.PO_SerialNumber == null || model.PO_SerialNumber == 0)
                 {
                     await CostCalculationRetail_MaterialService.GeneratePO(model);
                 }

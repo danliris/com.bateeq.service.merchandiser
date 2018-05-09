@@ -9,7 +9,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
     public class CostCalculationGarment_MaterialViewModel : BasicViewModel
     {
         public string Code { get; set; }
-        public int PO_SerialNumber { get; set; }
+        public int? PO_SerialNumber { get; set; }
         public string PO { get; set; }
         public CategoryViewModel Category { get; set; }
         public MaterialViewModel Material { get; set; }

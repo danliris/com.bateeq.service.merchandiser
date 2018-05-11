@@ -470,8 +470,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfPTable table_breakDown = new PdfPTable(7);
             table_breakDown.TotalWidth = 570f;
 
-            float[] breakDown_widths = new float[] { 5f, 5f, 5f, 5f, 5f, 5f, 5f };
-            table_breakDown.SetWidths(breakDown_widths);
+            //float[] breakDown_widths = new float[] { 5f, 5f, 5f, 5f, 5f, 5f, 5f };
+            //table_breakDown.SetWidths(breakDown_widths);
 
             PdfPCell cell_breakDown_center = new PdfPCell()
             {
@@ -515,17 +515,26 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_center.Phrase = new Phrase("STORE", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
-            cell_breakDown_center.Phrase = new Phrase("10", bold_font);
-            table_breakDown.AddCell(cell_breakDown_center);
+            List<String> breakdownSizes = new List<string>();
 
-            cell_breakDown_center.Phrase = new Phrase("12", bold_font);
-            table_breakDown.AddCell(cell_breakDown_center);
+            foreach (var size in viewModel.RO_Retail_SizeBreakdowns)
+            {
+                var sizes = size.SizeQuantity.Keys;
 
-            cell_breakDown_center.Phrase = new Phrase("14", bold_font);
-            table_breakDown.AddCell(cell_breakDown_center);
+                foreach (var values in sizes)
+                {
+                    if (!breakdownSizes.Contains(values))
+                    {
+                        breakdownSizes.Add(values);
+                    }
+                }
+            }
 
-            cell_breakDown_center.Phrase = new Phrase("16", bold_font);
-            table_breakDown.AddCell(cell_breakDown_center);
+            foreach (var size in breakdownSizes)
+            {
+                cell_breakDown_center.Phrase = new Phrase(size, bold_font);
+                table_breakDown.AddCell(cell_breakDown_center);
+            }
 
             cell_breakDown_center.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
@@ -542,8 +551,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     foreach (var size in productRetail.SizeQuantity)
                     {
-                        cell_breakDown_left.Phrase = new Phrase(size.Value.ToString() != null ? size.Value.ToString() : "0", normal_font);
-                        table_breakDown.AddCell(cell_breakDown_left);
+                        foreach(var sizeHeader in breakdownSizes)
+                        {
+                            if (size.Key == sizeHeader)
+                            {
+                                cell_breakDown_left.Phrase = new Phrase(size.Value.ToString() != null ? size.Value.ToString() : "0", normal_font);
+                                table_breakDown.AddCell(cell_breakDown_left);
+                            }
+                        }
                     }
 
                     cell_breakDown_left.Phrase = new Phrase(productRetail.Total.ToString() != null ? productRetail.Total.ToString() : "0", normal_font);
@@ -687,7 +702,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfPTable table_ro_image = new PdfPTable(countImageRo);
             float[] ro_widths = new float[countImageRo];
 
-            for (var i  = 0; i < countImageRo; i++ )
+            for (var i = 0; i < countImageRo; i++)
             {
                 ro_widths.SetValue(5f, i);
             }

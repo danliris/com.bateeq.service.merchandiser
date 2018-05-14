@@ -669,6 +669,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     table_instruction.DeleteLastRow();
                     table_instruction.WriteSelectedRows(0, -1, 10, rowYInstruction, cb);
                     table_instruction.DeleteBodyRows();
+                    this.DrawPrintedOn(now, bf, cb);
                     document.NewPage();
                     table_instruction.Rows.Add(headerRow);
                     table_instruction.Rows.Add(lastRow);
@@ -810,6 +811,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 
+            this.DrawPrintedOn(now, bf, cb);
             document.Close();
 
             byte[] byteInfo = stream.ToArray();

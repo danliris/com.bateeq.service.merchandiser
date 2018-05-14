@@ -210,6 +210,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             {
                 total += item.Total;
             }
+            total += viewModel.ProductionCost;
             cell_detail3_colspan2.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(total), normal_font);
             table_detail3.AddCell(cell_detail3_colspan2);
 

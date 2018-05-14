@@ -132,7 +132,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Border = Rectangle.RIGHT_BORDER;
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.LEFT_BORDER;
-            cell_detail3.Phrase = new Phrase("SH. CUT", normal_font);
+            cell_detail3.Phrase = new Phrase("SMV. CUT", normal_font);
             table_detail3.AddCell(cell_detail3);
             table_detail3.AddCell(cell_colon);
             cell_detail3.Border = Rectangle.NO_BORDER;
@@ -140,7 +140,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{SH_Cutting}", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.NO_BORDER;
-            cell_detail3.Phrase = new Phrase("SH. SEW", normal_font);
+            cell_detail3.Phrase = new Phrase("SMV. SEW", normal_font);
             table_detail3.AddCell(cell_detail3);
             table_detail3.AddCell(cell_colon);
             cell_detail3.Border = Rectangle.RIGHT_BORDER;
@@ -155,7 +155,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase("", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER;
-            cell_detail3.Phrase = new Phrase("SH. FIN", normal_font);
+            cell_detail3.Phrase = new Phrase("SMV. FIN", normal_font);
             table_detail3.AddCell(cell_detail3);
             table_detail3.AddCell(cell_colon);
             cell_detail3.Border = Rectangle.BOTTOM_BORDER;
@@ -163,7 +163,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{SH_Finishing}", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.BOTTOM_BORDER;
-            cell_detail3.Phrase = new Phrase("SH. TOT", normal_font);
+            cell_detail3.Phrase = new Phrase("SMV. TOT", normal_font);
             table_detail3.AddCell(cell_detail3);
             table_detail3.AddCell(cell_colon);
             cell_detail3.Border = Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER;

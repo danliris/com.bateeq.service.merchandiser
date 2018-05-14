@@ -596,11 +596,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_total_2.Phrase = new Phrase(viewModel.Total.ToString(), bold_font);
             table_breakDown.AddCell(cell_breakDown_total_2);
 
-            if (writer.GetVerticalPosition(true) - table_breakDown.GetRowHeight(0) - table_breakDown.GetRowHeight(1) < document.Bottom)
-            {
-                document.NewPage();
-            }
-
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion
 
@@ -779,6 +774,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 
+            this.DrawPrintedOn(now, bf, cb);
             document.Close();
 
             byte[] byteInfo = stream.ToArray();

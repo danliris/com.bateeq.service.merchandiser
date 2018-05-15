@@ -232,7 +232,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_fabric_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Quantity.ToString() != null ? String.Format("{0} Meter", materialModel.Quantity.ToString()) : "0", normal_font);
+                    cell_fabric_left.Phrase = new Phrase(materialModel.Quantity.ToString() != null ? String.Format("{0} " + materialModel.UOMQuantity.Name, materialModel.Quantity.ToString()) : "0", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
                     cell_fabric_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
@@ -321,7 +321,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_acc_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
                     table_accessories.AddCell(cell_acc_left);
 
-                    cell_acc_left.Phrase = new Phrase(materialModel.Quantity != null ? String.Format("{0} Meter", materialModel.Quantity) : "0", normal_font);
+                    cell_acc_left.Phrase = new Phrase(materialModel.Quantity != null ? String.Format("{0} " + materialModel.UOMQuantity.Name, materialModel.Quantity.ToString()) : "0", normal_font);
                     table_accessories.AddCell(cell_acc_left);
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
@@ -411,7 +411,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_budget_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
                     table_budget.AddCell(cell_budget_left);
 
-                    cell_budget_left.Phrase = new Phrase(materialModel.Quantity != null ? String.Format("{0} Meter", materialModel.Quantity) : "0", normal_font);
+                    cell_budget_left.Phrase = new Phrase(materialModel.Quantity != null ? String.Format("{0} " + materialModel.UOMQuantity.Name, materialModel.Quantity.ToString()) : "0", normal_font);
                     table_budget.AddCell(cell_budget_left);
 
                     cell_budget_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
@@ -596,11 +596,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_total_2.Phrase = new Phrase(viewModel.Total.ToString(), bold_font);
             table_breakDown.AddCell(cell_breakDown_total_2);
 
-            if (writer.GetVerticalPosition(true) - table_breakDown.GetRowHeight(0) - table_breakDown.GetRowHeight(1) < document.Bottom)
-            {
-                document.NewPage();
-            }
-
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion
 
@@ -779,6 +774,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 
+            this.DrawPrintedOn(now, bf, cb);
             document.Close();
 
             byte[] byteInfo = stream.ToArray();

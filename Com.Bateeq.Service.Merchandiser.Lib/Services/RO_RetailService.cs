@@ -147,6 +147,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     .ThenInclude(ccr => ccr.CostCalculationRetail_Materials)
                 .FirstOrDefaultAsync();
 
+            read.RO_Retail_SizeBreakdowns = read.RO_Retail_SizeBreakdowns.OrderBy(item => item.StoreCode).ToList();
             read.CostCalculationRetail.ImageFile = await this.AzureImageService.DownloadImage(read.CostCalculationRetail.GetType().Name, read.CostCalculationRetail.ImagePath);
             read.ImagesFile = await this.AzureImageService.DownloadMultipleImages(read.GetType().Name, read.ImagesPath);
 

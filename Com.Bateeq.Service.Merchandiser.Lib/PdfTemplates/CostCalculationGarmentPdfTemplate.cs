@@ -210,6 +210,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             {
                 total += item.Total;
             }
+            total += viewModel.ProductionCost;
             cell_detail3_colspan2.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(total), normal_font);
             table_detail3.AddCell(cell_detail3_colspan2);
 
@@ -411,7 +412,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cell_signature.Phrase = new Phrase("Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Wakil Direktur Utama", normal_font);
+            cell_signature.Phrase = new Phrase("Direktur Operasional", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 

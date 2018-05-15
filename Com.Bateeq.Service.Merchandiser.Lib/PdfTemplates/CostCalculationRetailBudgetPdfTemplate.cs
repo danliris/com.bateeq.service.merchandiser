@@ -282,17 +282,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 table_ccm.AddCell(cell_ccm);
 
                 double factor;
-                if (viewModel.CostCalculationRetail_Materials[i].Category.Name == "FAB")
-                {
-                    factor = viewModel.FabricAllowance ?? 0;
-                }
-                else if (viewModel.CostCalculationRetail_Materials[i].Category.Name == "ACC")
+                if (viewModel.CostCalculationRetail_Materials[i].Category.Name == "ACC")
                 {
                     factor = viewModel.AccessoriesAllowance ?? 0;
                 }
                 else
                 {
-                    factor = 0;
+                    factor = viewModel.FabricAllowance ?? 0;
                 }
                 double totalQuantity = viewModel.Quantity ?? 0;
                 double quantity = (100 + factor) / 100 * usage * totalQuantity;

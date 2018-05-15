@@ -466,9 +466,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #endregion
 
             #region == Table Size Breakdown ==
-
-            PdfPTable table_breakDown = new PdfPTable(7);
-            table_breakDown.TotalWidth = 570f;
+            var tableBreakdownColumn = 3;
             
             PdfPCell cell_breakDown_center = new PdfPCell()
             {
@@ -505,13 +503,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float rowYbreakDown = rowYTittleBreakDown - table_breakdown_top.TotalHeight - 5;
             float allowedRow2HeightBreakDown = rowYbreakDown - printedOnHeight - margin;
             var remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
-
-            cell_breakDown_center.Phrase = new Phrase("STORE CODE", bold_font);
-            table_breakDown.AddCell(cell_breakDown_center);
-
-            cell_breakDown_center.Phrase = new Phrase("STORE", bold_font);
-            table_breakDown.AddCell(cell_breakDown_center);
-
+            
             List<String> breakdownSizes = new List<string>();
 
             foreach (var size in viewModel.RO_Retail_SizeBreakdowns)
@@ -523,9 +515,20 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     if (!breakdownSizes.Contains(values))
                     {
                         breakdownSizes.Add(values);
+                        tableBreakdownColumn++;
                     }
                 }
             }
+
+            PdfPTable table_breakDown = new PdfPTable(tableBreakdownColumn);
+            table_breakDown.TotalWidth = 570f;
+
+
+            cell_breakDown_center.Phrase = new Phrase("STORE CODE", bold_font);
+            table_breakDown.AddCell(cell_breakDown_center);
+
+            cell_breakDown_center.Phrase = new Phrase("STORE", bold_font);
+            table_breakDown.AddCell(cell_breakDown_center);
 
             foreach (var size in breakdownSizes)
             {

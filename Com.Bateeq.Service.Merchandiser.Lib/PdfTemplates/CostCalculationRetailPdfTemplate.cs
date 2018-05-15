@@ -66,7 +66,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double OLValue = viewModel.OL.Value ?? 0;
-            string OL = OLValue > 0 ? OLValue.ToString() + " detik" : OLValue.ToString();
+            string OL = OLValue > 0 ? OLValue.ToString() + " menit" : OLValue.ToString();
             cell_top.Phrase = new Phrase($"{OL}", normal_font);
             table_top.AddCell(cell_top);
 
@@ -134,11 +134,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.Risk}%", normal_font);
             table_top.AddCell(cell_top);
-            cell_top.Phrase = new Phrase("STD HOUR", normal_font);
+            cell_top.Phrase = new Phrase("TOTAL SMV", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             double STD_HourValue = viewModel.SH_Cutting.Value + viewModel.SH_Finishing.Value + viewModel.SH_Sewing.Value;
-            string STD_Hour = STD_HourValue > 0 ? STD_HourValue.ToString() + " detik" : STD_HourValue.ToString();
+            string STD_Hour = STD_HourValue > 0 ? STD_HourValue.ToString() : STD_HourValue.ToString();
             cell_top.Phrase = new Phrase($"{STD_Hour}", normal_font);
             table_top.AddCell(cell_top);
 

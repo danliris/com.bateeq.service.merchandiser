@@ -467,7 +467,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             #region == Table Size Breakdown ==
             var tableBreakdownColumn = 3;
-            
+
             PdfPCell cell_breakDown_center = new PdfPCell()
             {
                 Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
@@ -503,7 +503,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float rowYbreakDown = rowYTittleBreakDown - table_breakdown_top.TotalHeight - 5;
             float allowedRow2HeightBreakDown = rowYbreakDown - printedOnHeight - margin;
             var remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
-            
+
             List<String> breakdownSizes = new List<string>();
 
             foreach (var size in viewModel.RO_Retail_SizeBreakdowns)
@@ -551,7 +551,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     foreach (var size in productRetail.SizeQuantity)
                     {
-                        foreach(var sizeHeader in breakdownSizes)
+                        foreach (var sizeHeader in breakdownSizes)
                         {
                             if (size.Key == sizeHeader)
                             {
@@ -563,27 +563,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     cell_breakDown_left.Phrase = new Phrase(productRetail.Total.ToString() != null ? productRetail.Total.ToString() : "0", normal_font);
                     table_breakDown.AddCell(cell_breakDown_left);
-                }
 
-                var tableBreakdownCurrentHeight = table_breakDown.TotalHeight;
 
-                if (tableBreakdownCurrentHeight / remainingRowToHeightBrekdown > 1)
-                {
-                    if (tableBreakdownCurrentHeight / allowedRow2HeightBreakDown > 1)
+                    var tableBreakdownCurrentHeight = table_breakDown.TotalHeight;
+
+                    if (tableBreakdownCurrentHeight / remainingRowToHeightBrekdown > 1)
                     {
-                        PdfPRow headerRow = table_breakDown.GetRow(0);
-                        PdfPRow lastRow = table_breakDown.GetRow(table_breakDown.Rows.Count - 1);
-                        table_breakDown.DeleteLastRow();
-                        table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
-                        table_breakDown.DeleteBodyRows();
-                        this.DrawPrintedOn(now, bf, cb);
-                        document.NewPage();
-                        table_breakDown.Rows.Add(headerRow);
-                        table_breakDown.Rows.Add(lastRow);
-                        table_breakDown.CalculateHeights();
-                        rowYbreakDown = startY;
-                        remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
-                        allowedRow2HeightBreakDown = remainingRowToHeightBrekdown - printedOnHeight - margin;
+                        if (tableBreakdownCurrentHeight / allowedRow2HeightBreakDown > 1)
+                        {
+                            PdfPRow headerRow = table_breakDown.GetRow(0);
+                            PdfPRow lastRow = table_breakDown.GetRow(table_breakDown.Rows.Count - 1);
+                            table_breakDown.DeleteLastRow();
+                            table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
+                            table_breakDown.DeleteBodyRows();
+                            this.DrawPrintedOn(now, bf, cb);
+                            document.NewPage();
+                            table_breakDown.Rows.Add(headerRow);
+                            table_breakDown.Rows.Add(lastRow);
+                            table_breakDown.CalculateHeights();
+                            rowYbreakDown = startY;
+                            remainingRowToHeightBrekdown = rowYbreakDown - 5 - printedOnHeight - margin;
+                            allowedRow2HeightBreakDown = remainingRowToHeightBrekdown - printedOnHeight - margin;
+                        }
                     }
                 }
 

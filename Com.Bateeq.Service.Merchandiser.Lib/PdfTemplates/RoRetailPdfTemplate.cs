@@ -610,7 +610,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #region Table Instruksi
 
             PdfPTable table_instruction = new PdfPTable(1);
-            float[] instruction_widths = new float[] { 5f };
+            float[] instruction_widths = new float[] { 400f };
 
             table_instruction.TotalWidth = 500f;
             table_instruction.SetWidths(instruction_widths);
@@ -696,68 +696,76 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 countImageRo++;
             }
 
-            if (countImageRo > 5)
-            {
-                countImageRo = 5;
-            }
-
-            PdfPTable table_ro_image = new PdfPTable(countImageRo);
-            float[] ro_widths = new float[countImageRo];
-
-            for (var i = 0; i < countImageRo; i++)
-            {
-                ro_widths.SetValue(5f, i);
-            }
+            PdfPTable table_ro_image = null;
+            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 5;
 
             if (countImageRo != 0)
             {
-                table_ro_image.SetWidths(ro_widths);
-            }
+                table_ro_image = new PdfPTable(countImageRo);
 
-            table_ro_image.TotalWidth = 570f;
-            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 5;
-
-            foreach (var imageFromRo in viewModel.ImagesFile)
-            {
-                try
+                if (countImageRo > 5)
                 {
-                    roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
-                }
-                catch (Exception)
-                {
-                    var webClient = new WebClient();
-                    roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+                    countImageRo = 5;
                 }
 
-                Image images = Image.GetInstance(imgb: roImage);
+                float[] ro_widths = new float[countImageRo];
 
-                if (images.Width > 60)
+                for (var i = 0; i < countImageRo; i++)
                 {
-                    float percentage = 0.0f;
-                    percentage = 60 / images.Width;
-                    images.ScalePercent(percentage * 100);
+                    ro_widths.SetValue(5f, i);
                 }
 
-                PdfPCell imageCell = new PdfPCell(images);
-                imageCell.Border = 0;
-                table_ro_image.AddCell(imageCell);
+                if (countImageRo != 0)
+                {
+                    table_ro_image.SetWidths(ro_widths);
+                }
+
+                table_ro_image.TotalWidth = 570f;
+                
+
+                foreach (var imageFromRo in viewModel.ImagesFile)
+                {
+                    try
+                    {
+                        roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
+                    }
+                    catch (Exception)
+                    {
+                        var webClient = new WebClient();
+                        roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+                    }
+
+                    Image images = Image.GetInstance(imgb: roImage);
+
+                    if (images.Width > 60)
+                    {
+                        float percentage = 0.0f;
+                        percentage = 60 / images.Width;
+                        images.ScalePercent(percentage * 100);
+                    }
+
+                    PdfPCell imageCell = new PdfPCell(images);
+                    imageCell.Border = 0;
+                    table_ro_image.AddCell(imageCell);
+                }
+
+                PdfPCell cell_image = new PdfPCell()
+                {
+                    Border = Rectangle.NO_BORDER,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    VerticalAlignment = Element.ALIGN_MIDDLE,
+                    Padding = 2,
+                };
+
+                foreach (var name in viewModel.ImagesName)
+                {
+                    cell_image.Phrase = new Phrase(name, normal_font);
+                    table_ro_image.AddCell(cell_image);
+                }
+
+                table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
             }
-
-            PdfPCell cell_image = new PdfPCell()
-            {
-                Border = Rectangle.NO_BORDER,
-                HorizontalAlignment = Element.ALIGN_LEFT,
-                VerticalAlignment = Element.ALIGN_MIDDLE,
-                Padding = 2,
-            };
-
-            foreach (var name in viewModel.ImagesName)
-            {
-                cell_image.Phrase = new Phrase(name, normal_font);
-                table_ro_image.AddCell(cell_image);
-            }
-
-            table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
+            
             #endregion
 
             #region Signature (Bottom, Column 1.2)
@@ -782,7 +790,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 HorizontalAlignment = Element.ALIGN_CENTER,
                 VerticalAlignment = Element.ALIGN_MIDDLE,
                 Padding = 2,
-                PaddingTop = 50
+                PaddingTop = 30
             };
 
             cell_signature.Phrase = new Phrase("Dibuat", normal_font);
@@ -811,7 +819,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature_noted.Phrase = new Phrase("(Michelle Tjokrosaputro)", normal_font);
             table_signature.AddCell(cell_signature_noted);
 
-            float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 5;
+            float table_signatureY = 0;
+
+            if (table_ro_image != null)
+            {
+                table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 5;
+            } else
+            {
+                table_signatureY = rowYRoImage - 0 - 5;
+            }
+            
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 

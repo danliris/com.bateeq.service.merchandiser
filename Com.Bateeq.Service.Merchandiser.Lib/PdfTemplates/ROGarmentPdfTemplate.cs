@@ -125,30 +125,32 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_top);
 
             byte[] imageByte;
+            float imageHeight;
             try
             {
                 imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.CostCalculationGarment.ImageFile));
+                Image image = Image.GetInstance(imgb: imageByte);
+
+                if (image.Width > 60)
+                {
+                    float percentage = 0.0f;
+                    percentage = 60 / image.Width;
+                    image.ScalePercent(percentage * 100);
+                }
+
+                float imageY = 800 - image.ScaledHeight;
+                imageHeight = image.ScaledHeight;
+                image.SetAbsolutePosition(520, imageY);
+                cb.AddImage(image, inlineImage: true);
             }
             catch (Exception)
             {
-                var webClient = new WebClient();
-                imageByte = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+                imageHeight = 0;
             }
 
-            Image image = Image.GetInstance(imgb: imageByte);
-
-            if (image.Width > 60)
-            {
-                float percentage = 0.0f;
-                percentage = 60 / image.Width;
-                image.ScalePercent(percentage * 100);
-            }
 
             float row1Y = 800;
-            float imageY = 800 - image.ScaledHeight;
 
-            image.SetAbsolutePosition(520, imageY);
-            cb.AddImage(image, inlineImage: true);
             table_top.WriteSelectedRows(0, -1, 10, row1Y, cb);
             #endregion
 
@@ -173,7 +175,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top_fabric.Phrase = new Phrase("FABRIC", bold_font);
             table_fabric_top.AddCell(cell_top_fabric);
 
-            float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
+            float row1Height = imageHeight > table_top.TotalHeight ? imageHeight : table_top.TotalHeight;
             float rowYTittleFab = row1Y - row1Height - 10;
             float allowedRow2Height = rowYTittleFab - printedOnHeight - margin;
             table_fabric_top.WriteSelectedRows(0, -1, 10, rowYTittleFab, cb);
@@ -656,68 +658,78 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 countImageRo++;
             }
 
-            if (countImageRo > 5)
-            {
-                countImageRo = 5;
-            }
-
-            PdfPTable table_ro_image = new PdfPTable(countImageRo);
-            float[] ro_widths = new float[countImageRo];
-
-            for (var i = 0; i < countImageRo; i++)
-            {
-                ro_widths.SetValue(5f, i);
-            }
+            
+            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 10;
+            float imageRoHeight;
 
             if (countImageRo != 0)
             {
-                table_ro_image.SetWidths(ro_widths);
-            }
-
-            table_ro_image.TotalWidth = 570f;
-            float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 10;
-
-            foreach (var imageFromRo in viewModel.ImagesFile)
-            {
-                try
+                if (countImageRo > 5)
                 {
-                    roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
-                }
-                catch (Exception)
-                {
-                    var webClient = new WebClient();
-                    roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+                    countImageRo = 5;
                 }
 
-                Image images = Image.GetInstance(imgb: roImage);
+                PdfPTable table_ro_image = new PdfPTable(countImageRo);
+                float[] ro_widths = new float[countImageRo];
 
-                if (images.Width > 60)
+                for (var i = 0; i < countImageRo; i++)
                 {
-                    float percentage = 0.0f;
-                    percentage = 60 / images.Width;
-                    images.ScalePercent(percentage * 100);
+                    ro_widths.SetValue(5f, i);
                 }
 
-                PdfPCell imageCell = new PdfPCell(images);
-                imageCell.Border = 0;
-                table_ro_image.AddCell(imageCell);
-            }
+                if (countImageRo != 0)
+                {
+                    table_ro_image.SetWidths(ro_widths);
+                }
 
-            PdfPCell cell_image = new PdfPCell()
+                table_ro_image.TotalWidth = 570f;
+
+                foreach (var imageFromRo in viewModel.ImagesFile)
+                {
+                    try
+                    {
+                        roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
+                    }
+                    catch (Exception)
+                    {
+                        var webClient = new WebClient();
+                        roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+                    }
+
+                    Image images = Image.GetInstance(imgb: roImage);
+
+                    if (images.Width > 60)
+                    {
+                        float percentage = 0.0f;
+                        percentage = 60 / images.Width;
+                        images.ScalePercent(percentage * 100);
+                    }
+
+                    PdfPCell imageCell = new PdfPCell(images);
+                    imageCell.Border = 0;
+                    table_ro_image.AddCell(imageCell);
+                }
+
+                PdfPCell cell_image = new PdfPCell()
+                {
+                    Border = Rectangle.NO_BORDER,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    VerticalAlignment = Element.ALIGN_MIDDLE,
+                    Padding = 2,
+                };
+
+                foreach (var name in viewModel.ImagesName)
+                {
+                    cell_image.Phrase = new Phrase(name, normal_font);
+                    table_ro_image.AddCell(cell_image);
+                }
+
+                imageRoHeight = table_ro_image.TotalHeight;
+                table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
+            } else
             {
-                Border = Rectangle.NO_BORDER,
-                HorizontalAlignment = Element.ALIGN_LEFT,
-                VerticalAlignment = Element.ALIGN_MIDDLE,
-                Padding = 2,
-            };
-
-            foreach (var name in viewModel.ImagesName)
-            {
-                cell_image.Phrase = new Phrase(name, normal_font);
-                table_ro_image.AddCell(cell_image);
+                imageRoHeight = 0;
             }
-
-            table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
             #endregion
 
             #region Signature
@@ -770,7 +782,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature_noted.Phrase = new Phrase("(Michelle Tjokrosaputro)", normal_font);
             table_signature.AddCell(cell_signature_noted);
 
-            float table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 10;
+            float table_signatureY = rowYRoImage - imageRoHeight - 10;
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 

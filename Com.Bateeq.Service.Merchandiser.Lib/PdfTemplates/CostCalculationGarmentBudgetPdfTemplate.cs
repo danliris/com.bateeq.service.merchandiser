@@ -125,7 +125,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase("TOTAL BUDGET", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.TOP_BORDER | Rectangle.RIGHT_BORDER;
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiah(Math.Round(totalBudget, 0))}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiah(totalBudget)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3_colspan6.Phrase = new Phrase("STANDARD HOURS", normal_font);
             table_detail3.AddCell(cell_detail3_colspan6);
@@ -140,7 +140,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase("BEA ANGKUT", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.RIGHT_BORDER;
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiah(Math.Round(freightCost, 0))}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiah(freightCost)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.LEFT_BORDER;
             cell_detail3.Phrase = new Phrase("SMV. CUT", normal_font);
@@ -178,13 +178,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{viewModel.SMV_Total}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
-            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(Math.Round(budgetCost, 0))}", normal_font);
+            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
 
             double rateValue = (double) viewModel.Rate.Value;
             double confirmPrice = (double)viewModel.ConfirmPrice;
 
-            cell_detail3_colspan8.Phrase = isDollar ? new Phrase($"US$ 1 = {Number.ToRupiah(Math.Round(rateValue, 0))}" + "".PadRight(10) + $"CONFIRM PRICE : {Number.ToDollar(Math.Round(confirmPrice, 0))} / PCS", normal_font) : new Phrase($"CONFIRM PRICE : {Number.ToRupiah(Math.Round(confirmPrice,0))} / PCS", normal_font);
+            cell_detail3_colspan8.Phrase = isDollar ? new Phrase($"US$ 1 = {Number.ToRupiah(rateValue)}" + "".PadRight(10) + $"CONFIRM PRICE : {Number.ToDollar(confirmPrice)} / PCS", normal_font) : new Phrase($"CONFIRM PRICE : {Number.ToRupiah(confirmPrice)} / PCS", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
             cell_detail3_colspan8.Border = Rectangle.NO_BORDER;
             cell_detail3_colspan8.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -309,6 +309,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 }
                 double totalQuantity = viewModel.Quantity ?? 0;
                 double quantity = (100 + factor) / 100 * usage * totalQuantity;
+
+                quantity = Math.Round(quantity, 0);
+
                 cell_ccm.Phrase = new Phrase(quantity.ToString(), normal_font);
                 table_ccm.AddCell(cell_ccm);
 

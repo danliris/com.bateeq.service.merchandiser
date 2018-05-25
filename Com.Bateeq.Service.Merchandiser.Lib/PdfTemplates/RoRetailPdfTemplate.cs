@@ -124,34 +124,33 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #region Image
 
             byte[] imageByte;
+            float imageHeight;
             try
             {
                 imageByte = Convert.FromBase64String(Base64.GetBase64File(viewModel.CostCalculationRetail.ImageFile));
+                Image image = Image.GetInstance(imgb: imageByte);
+
+                if (image.Width > 60)
+                {
+                    float percentage = 0.0f;
+                    percentage = 60 / image.Width;
+                    image.ScalePercent(percentage * 100);
+                }
+
+                float imageY = 800 - image.ScaledHeight;
+                imageHeight = image.ScaledHeight;
+                image.SetAbsolutePosition(520, imageY);
+                cb.AddImage(image, inlineImage: true);
             }
             catch (Exception)
             {
-                var webClient = new WebClient();
-                imageByte = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
-            }
-
-            Image image = Image.GetInstance(imgb: imageByte);
-
-            if (image.Width > 60)
-            {
-                float percentage = 0.0f;
-                percentage = 60 / image.Width;
-                image.ScalePercent(percentage * 100);
+                imageHeight = 0;
             }
             #endregion
 
             #region Draw Top
-
             float row1Y = 800;
-            float imageY = 800 - image.ScaledHeight;
-
             table_top.WriteSelectedRows(0, -1, 10, row1Y, cb);
-            image.SetAbsolutePosition(520, imageY);
-            cb.AddImage(image, inlineImage: true);
             #endregion
 
             #region Fabric Table Title
@@ -175,7 +174,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top_fabric.Phrase = new Phrase("FABRIC", bold_font);
             table_fabric_top.AddCell(cell_top_fabric);
 
-            float row1Height = image.ScaledHeight > table_top.TotalHeight ? image.ScaledHeight : table_top.TotalHeight;
+            float row1Height = imageHeight > table_top.TotalHeight ? imageHeight : table_top.TotalHeight;
             float rowYTittleFab = row1Y - row1Height - 10;
             float allowedRow2Height = rowYTittleFab - printedOnHeight - margin;
             table_fabric_top.WriteSelectedRows(0, -1, 10, rowYTittleFab, cb);
@@ -695,9 +694,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             {
                 countImageRo++;
             }
-
-            PdfPTable table_ro_image = null;
+            
             float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 5;
+            float imageRoHeight;
+            PdfPTable table_ro_image = null;
 
             if (countImageRo != 0)
             {
@@ -721,7 +721,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 }
 
                 table_ro_image.TotalWidth = 570f;
-                
+
 
                 foreach (var imageFromRo in viewModel.ImagesFile)
                 {
@@ -762,10 +762,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_image.Phrase = new Phrase(name, normal_font);
                     table_ro_image.AddCell(cell_image);
                 }
-
+                imageRoHeight = table_ro_image.TotalHeight;
                 table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
+            } else
+            {
+                imageRoHeight = 0;
             }
-            
+
             #endregion
 
             #region Signature (Bottom, Column 1.2)
@@ -823,12 +826,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             if (table_ro_image != null)
             {
-                table_signatureY = rowYRoImage - table_ro_image.TotalHeight - 5;
-            } else
+                table_signatureY = rowYRoImage - imageRoHeight - 5;
+            }
+            else
             {
                 table_signatureY = rowYRoImage - 0 - 5;
             }
-            
+
             table_signature.WriteSelectedRows(0, -1, 10, table_signatureY, cb);
             #endregion
 

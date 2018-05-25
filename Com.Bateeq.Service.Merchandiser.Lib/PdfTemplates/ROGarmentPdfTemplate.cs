@@ -157,7 +157,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #region Table Fabric
             //Fabric title
             PdfPTable table_fabric_top = new PdfPTable(1);
-            table_fabric_top.TotalWidth = 570f;
+            table_fabric_top.TotalWidth = 500f;
 
             float[] fabric_widths_top = new float[] { 5f };
             table_fabric_top.SetWidths(fabric_widths_top);
@@ -182,7 +182,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             //Main fabric table
             PdfPTable table_fabric = new PdfPTable(5);
-            table_fabric.TotalWidth = 570f;
+            table_fabric.TotalWidth = 500f;
 
             float[] fabric_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_fabric.SetWidths(fabric_widths);
@@ -247,7 +247,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #region Table Accessories
             //Accessories Title
             PdfPTable table_acc_top = new PdfPTable(1);
-            table_acc_top.TotalWidth = 570f;
+            table_acc_top.TotalWidth = 500f;
 
             float[] acc_width_top = new float[] { 5f };
             table_acc_top.SetWidths(acc_width_top);
@@ -271,7 +271,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             //Main Accessories Table
             PdfPTable table_accessories = new PdfPTable(5);
-            table_accessories.TotalWidth = 570f;
+            table_accessories.TotalWidth = 500f;
 
             float[] accessories_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_accessories.SetWidths(accessories_widths);
@@ -336,7 +336,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #region Table Ongkos
             //Ongkos Title
             PdfPTable table_ong_top = new PdfPTable(1);
-            table_ong_top.TotalWidth = 570f;
+            table_ong_top.TotalWidth = 500f;
 
             float[] ong_width_top = new float[] { 5f };
             table_ong_top.SetWidths(ong_width_top);
@@ -360,7 +360,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             //Main Table Ongkos
             PdfPTable table_budget = new PdfPTable(5);
-            table_budget.TotalWidth = 570f;
+            table_budget.TotalWidth = 500f;
 
             float[] budget_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_budget.SetWidths(budget_widths);

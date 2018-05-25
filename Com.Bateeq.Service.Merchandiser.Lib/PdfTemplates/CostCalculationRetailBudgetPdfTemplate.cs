@@ -121,7 +121,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase("TOTAL BUDGET", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.TOP_BORDER | Rectangle.RIGHT_BORDER;
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiah(totalBudget)}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Number.ToRupiah(Math.Round(totalBudget, 0))}", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3_colspan6.Phrase = new Phrase("STANDARD HOURS", normal_font);
             table_detail3.AddCell(cell_detail3_colspan6);
@@ -168,10 +168,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.AddCell(cell_colon);
             cell_detail3.Border = Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER;
             double SH_Total = SH_Cutting + SH_Sewing + SH_Finishing;
-            cell_detail3.Phrase = new Phrase($"{SH_Total}", normal_font);
+            cell_detail3.Phrase = new Phrase($"{Math.Round(SH_Total, 0)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
-            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(Math.Round(budgetCost, 0))}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
             #endregion
 

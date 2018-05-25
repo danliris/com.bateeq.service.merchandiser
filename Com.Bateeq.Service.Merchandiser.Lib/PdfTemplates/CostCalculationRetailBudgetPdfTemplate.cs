@@ -292,6 +292,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 }
                 double totalQuantity = viewModel.Quantity ?? 0;
                 double quantity = (100 + factor) / 100 * usage * totalQuantity;
+
+                quantity = Math.Round(quantity, 0);
+
                 cell_ccm.Phrase = new Phrase(quantity.ToString(), normal_font);
                 table_ccm.AddCell(cell_ccm);
 

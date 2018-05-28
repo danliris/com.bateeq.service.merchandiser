@@ -119,6 +119,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_colon);
             cell_top_keterangan.Phrase = new Phrase($"{viewModel.Total}", normal_font);
             table_top.AddCell(cell_top_keterangan);
+            cell_top.Phrase = new Phrase("RO DESCRIPTION", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top_keterangan.Phrase = new Phrase(viewModel.CostCalculationRetail.Description ?? "" , normal_font);
+            table_top.AddCell(cell_top_keterangan);
             #endregion
 
             #region Image
@@ -521,8 +526,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             PdfPTable table_breakDown = new PdfPTable(tableBreakdownColumn);
             table_breakDown.TotalWidth = 570f;
-
-
+            List<float> breakdownWidth = new List<float>();
+            breakdownWidth.Add(1f);
+            breakdownWidth.Add(3f);
+            
             cell_breakDown_center.Phrase = new Phrase("STORE CODE", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
@@ -531,10 +538,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             foreach (var size in breakdownSizes)
             {
+                breakdownWidth.Add(1f);
                 cell_breakDown_center.Phrase = new Phrase(size, bold_font);
                 table_breakDown.AddCell(cell_breakDown_center);
             }
 
+            breakdownWidth.Add(1f);
             cell_breakDown_center.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
@@ -602,6 +611,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             cell_breakDown_left.Phrase = new Phrase(viewModel.Total.ToString() != null ? viewModel.Total.ToString() : "0", normal_font);
             table_breakDown.AddCell(cell_breakDown_left);
+
+            float[] breakdown_width = breakdownWidth.ToArray();
+            table_breakDown.SetWidths(breakdown_width);
 
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion

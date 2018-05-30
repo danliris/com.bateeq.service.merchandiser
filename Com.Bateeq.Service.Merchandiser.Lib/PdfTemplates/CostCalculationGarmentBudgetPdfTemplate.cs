@@ -115,6 +115,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             double budgetCost = isDollar ? viewModel.ConfirmPrice * viewModel.Rate.Value ?? 0 : viewModel.ConfirmPrice ?? 0;
             double totalBudget = budgetCost * viewModel.Quantity ?? 0;
+
             PdfPCell cell_detail3 = new PdfPCell() { HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
             PdfPCell cell_detail3_right = new PdfPCell() { HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
             PdfPCell cell_detail3_colspan6 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7, Colspan = 6 };
@@ -179,7 +180,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
-            cell_detail3_colspan8.Phrase = isDollar ? new Phrase($"US$ 1 = {Number.ToRupiah(viewModel.Rate.Value)}" + "".PadRight(10) + $"CONFIRM PRICE : {Number.ToDollar(viewModel.ConfirmPrice)} / PCS", normal_font) : new Phrase($"CONFIRM PRICE : {Number.ToRupiah(viewModel.ConfirmPrice)} / PCS", normal_font);
+
+            double rateValue = (double) viewModel.Rate.Value;
+            double confirmPrice = (double)viewModel.ConfirmPrice;
+
+            cell_detail3_colspan8.Phrase = isDollar ? new Phrase($"US$ 1 = {Number.ToRupiah(rateValue)}" + "".PadRight(10) + $"CONFIRM PRICE : {Number.ToDollar(confirmPrice)} / PCS", normal_font) : new Phrase($"CONFIRM PRICE : {Number.ToRupiah(confirmPrice)} / PCS", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
             cell_detail3_colspan8.Border = Rectangle.NO_BORDER;
             cell_detail3_colspan8.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -304,6 +309,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 }
                 double totalQuantity = viewModel.Quantity ?? 0;
                 double quantity = (100 + factor) / 100 * usage * totalQuantity;
+
+                quantity = Math.Round(quantity, 0);
+
                 cell_ccm.Phrase = new Phrase(quantity.ToString(), normal_font);
                 table_ccm.AddCell(cell_ccm);
 

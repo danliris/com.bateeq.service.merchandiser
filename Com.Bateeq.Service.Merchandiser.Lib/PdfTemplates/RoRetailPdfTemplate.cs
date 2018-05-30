@@ -547,6 +547,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_center.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
+            float[] breakdown_width = breakdownWidth.ToArray();
+            table_breakDown.SetWidths(breakdown_width);
+
             foreach (var productRetail in viewModel.RO_Retail_SizeBreakdowns)
             {
                 if (productRetail.Total != 0)
@@ -611,10 +614,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             cell_breakDown_left.Phrase = new Phrase(viewModel.Total.ToString() != null ? viewModel.Total.ToString() : "0", normal_font);
             table_breakDown.AddCell(cell_breakDown_left);
-
-            float[] breakdown_width = breakdownWidth.ToArray();
-            table_breakDown.SetWidths(breakdown_width);
-
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion
 

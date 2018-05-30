@@ -182,7 +182,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float row1Height = imageHeight > table_top.TotalHeight ? imageHeight : table_top.TotalHeight;
             float rowYTittleFab = row1Y - row1Height - 10;
             float allowedRow2Height = rowYTittleFab - printedOnHeight - margin;
-            table_fabric_top.WriteSelectedRows(0, -1, 10, rowYTittleFab, cb);
             #endregion
 
             #region Fabric Table
@@ -191,6 +190,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float[] fabric_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_fabric.SetWidths(fabric_widths);
+
+            var fabIndex = 0;
 
             PdfPCell cell_fabric_center = new PdfPCell()
             {
@@ -244,10 +245,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     cell_fabric_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
+
+                    fabIndex++;
                 }
             }
 
-            table_fabric.WriteSelectedRows(0, -1, 10, rowYFab, cb);
+            if (fabIndex != 0)
+            {
+                table_fabric_top.WriteSelectedRows(0, -1, 10, rowYTittleFab, cb);
+                table_fabric.WriteSelectedRows(0, -1, 10, rowYFab, cb);
+            }
             #endregion
 
 
@@ -274,7 +281,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYTittleAcc = rowYFab - table_fabric.TotalHeight - 10;
             float allowedRow2HeightTopAcc = rowYTittleFab - printedOnHeight - margin;
-            table_acc_top.WriteSelectedRows(0, -1, 10, rowYTittleAcc, cb);
             #endregion
 
             #region Accessoris Table
@@ -284,6 +290,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float[] accessories_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_accessories.SetWidths(accessories_widths);
+
+            var accIndex = 0;
 
             PdfPCell cell_acc_center = new PdfPCell()
             {
@@ -337,10 +345,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_accessories.AddCell(cell_acc_left);
+                    accIndex++;
                 }
             }
 
-            table_accessories.WriteSelectedRows(0, -1, 10, rowYAcc, cb);
+            if (accIndex != 0)
+            {
+                table_acc_top.WriteSelectedRows(0, -1, 10, rowYTittleAcc, cb);
+                table_accessories.WriteSelectedRows(0, -1, 10, rowYAcc, cb);
+            }
             #endregion
 
             #region Ongkos Table Title
@@ -547,6 +560,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_center.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
+            float[] breakdown_width = breakdownWidth.ToArray();
+            table_breakDown.SetWidths(breakdown_width);
+
             foreach (var productRetail in viewModel.RO_Retail_SizeBreakdowns)
             {
                 if (productRetail.Total != 0)
@@ -611,10 +627,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             cell_breakDown_left.Phrase = new Phrase(viewModel.Total.ToString() != null ? viewModel.Total.ToString() : "0", normal_font);
             table_breakDown.AddCell(cell_breakDown_left);
-
-            float[] breakdown_width = breakdownWidth.ToArray();
-            table_breakDown.SetWidths(breakdown_width);
-
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion
 

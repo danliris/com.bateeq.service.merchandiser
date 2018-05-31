@@ -224,7 +224,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 double usageConversion = usage / conversion;
                 double quantity = (100 + factor) / 100 * usageConversion * totalQuantity;
 
-                quantity = Math.Floor(quantity);
+                quantity = Math.Ceiling(quantity);
 
                 cell_ccm.Phrase = new Phrase(quantity.ToString(), normal_font);
                 table_ccm.AddCell(cell_ccm);

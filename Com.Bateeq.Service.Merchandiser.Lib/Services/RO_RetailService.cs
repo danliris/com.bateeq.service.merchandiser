@@ -142,6 +142,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<RO_Retail> ReadModelById(int id)
         {
+            //Define available size from master size-range for sorting
+            string[] sizes = new[] {
+                "XS", "S", "M", "L", "XL", "2XL", "3", "5", "7", "9","10", "11", "12", "13", "14", "14.5", "15", "15.5", "16", "16.5",
+                "17", "17.5", "18", "18.5", "19", "30", "32","34", "36", "ALL SIZE"
+            };
+
             RO_Retail read = await this.DbSet
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.RO_Retail_SizeBreakdowns)
@@ -156,10 +162,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 if (!String.IsNullOrEmpty(itemBreakdown.SizeQuantity))
                 {
                     var sizeQuantity = JsonConvert.DeserializeObject<IDictionary<string, string>>(itemBreakdown.SizeQuantity);
-                    var orderAsc = sizeQuantity.OrderBy(item => item.Key);
+                    var otherAsc = sizeQuantity.OrderBy(s => sizes.Contains(s.Key) ? "0" : "1").ThenBy(s => Array.IndexOf(sizes, s.Key)).ThenBy(s => s);
                     var sizeDictionary = new Dictionary<string, string>();
 
-                    foreach( var item in orderAsc)
+                    foreach( var item in otherAsc)
                     {
                         sizeDictionary.Add(item.Key, item.Value);
                     }

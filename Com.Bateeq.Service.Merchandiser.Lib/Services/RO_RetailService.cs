@@ -12,6 +12,8 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage;
+using System.Collections;
+using Newtonsoft.Json.Linq;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 {
@@ -140,6 +142,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public override async Task<RO_Retail> ReadModelById(int id)
         {
+            //Define available size from master size-range for sorting
+            string[] sizes = new[] {
+                "XS", "S", "M", "L", "XL", "2XL", "3", "5", "7", "9","10", "11", "12", "13", "14", "14.5", "15", "15.5", "16", "16.5",
+                "17", "17.5", "18", "18.5", "19", "30", "32","34", "36", "ALL SIZE"
+            };
+
             RO_Retail read = await this.DbSet
                 .Where(d => d.Id.Equals(id) && d._IsDeleted.Equals(false))
                 .Include(d => d.RO_Retail_SizeBreakdowns)
@@ -148,6 +156,40 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 .FirstOrDefaultAsync();
 
             read.RO_Retail_SizeBreakdowns = read.RO_Retail_SizeBreakdowns.OrderBy(item => item.StoreCode).ToList();
+
+            foreach (var itemBreakdown in read.RO_Retail_SizeBreakdowns)
+            {
+                if (!String.IsNullOrEmpty(itemBreakdown.SizeQuantity))
+                {
+                    var sizeQuantity = JsonConvert.DeserializeObject<IDictionary<string, string>>(itemBreakdown.SizeQuantity);
+                    var otherAsc = sizeQuantity.OrderBy(s => sizes.Contains(s.Key) ? "0" : "1").ThenBy(s => Array.IndexOf(sizes, s.Key)).ThenBy(s => s);
+                    var sizeDictionary = new Dictionary<string, string>();
+
+                    foreach( var item in otherAsc)
+                    {
+                        sizeDictionary.Add(item.Key, item.Value);
+                    }
+
+                    var result = JsonConvert.SerializeObject(sizeDictionary);
+                    itemBreakdown.SizeQuantity = result;
+                }
+            }
+
+            if (!String.IsNullOrEmpty(read.SizeQuantityTotal))
+            {
+                var size = JsonConvert.DeserializeObject<IDictionary<string, string>>(read.SizeQuantityTotal);
+                var orderAsc = size.OrderBy(item => item.Key);
+                var sizeDictionary = new Dictionary<string, string>();
+
+                foreach (var item in orderAsc)
+                {
+                    sizeDictionary.Add(item.Key, item.Value);
+                }
+
+                var result = JsonConvert.SerializeObject(sizeDictionary);
+                read.SizeQuantityTotal = result;
+            }
+
             read.CostCalculationRetail.ImageFile = await this.AzureImageService.DownloadImage(read.CostCalculationRetail.GetType().Name, read.CostCalculationRetail.ImagePath);
             read.ImagesFile = await this.AzureImageService.DownloadMultipleImages(read.GetType().Name, read.ImagesPath);
 
@@ -162,7 +204,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             Model.ImagesPath = await this.AzureImageService.UploadMultipleImage(Model.GetType().Name, Model.Id, Model._CreatedUtc, Model.ImagesFile, Model.ImagesPath);
 
             int updated = await this.UpdateAsync(Id, Model);
-            
+
             costCalculationRetail.RO_RetailId = Model.Id;
             await this.CostCalculationRetailService.UpdateModel(costCalculationRetail.Id, costCalculationRetail);
 
@@ -212,7 +254,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             await this.CostCalculationRetailService.UpdateModel(costCalculationRetail.Id, costCalculationRetail);
 
             List<CostCalculationRetail_Material> costCalculationRetail_Materials = this.CostCalculationRetail_MaterialService.DbSet.Where(p => p.CostCalculationRetailId.Equals(costCalculationRetail.Id)).ToList();
-            foreach(CostCalculationRetail_Material costCalculationRetail_Material in costCalculationRetail_Materials)
+            foreach (CostCalculationRetail_Material costCalculationRetail_Material in costCalculationRetail_Materials)
             {
                 costCalculationRetail_Material.Information = null;
                 await this.CostCalculationRetail_MaterialService.UpdateModel(costCalculationRetail_Material.Id, costCalculationRetail_Material);
@@ -240,7 +282,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             RO_RetailViewModel viewModel = new RO_RetailViewModel();
             PropertyCopier<RO_Retail, RO_RetailViewModel>.Copy(model, viewModel);
             viewModel.ImagesPath = model.ImagesPath != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesPath) : null;
-            
+
             viewModel.CostCalculationRetail = this.CostCalculationRetailService.MapToViewModel(model.CostCalculationRetail);
             viewModel.ImagesName = model.ImagesName != null ? JsonConvert.DeserializeObject<List<string>>(model.ImagesName) : new List<string>();
 
@@ -273,7 +315,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             RO_Retail model = new RO_Retail();
             PropertyCopier<RO_RetailViewModel, RO_Retail>.Copy(viewModel, model);
             model.ImagesPath = viewModel.ImagesPath != null ? JsonConvert.SerializeObject(viewModel.ImagesPath) : null;
-            
+
             model.CostCalculationRetailId = viewModel.CostCalculationRetail.Id;
             model.CostCalculationRetail = this.CostCalculationRetailService.MapToModel(viewModel.CostCalculationRetail);
             model.ImagesName = JsonConvert.SerializeObject(viewModel.ImagesName);

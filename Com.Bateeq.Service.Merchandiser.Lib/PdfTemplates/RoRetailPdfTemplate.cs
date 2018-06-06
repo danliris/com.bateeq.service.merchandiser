@@ -119,6 +119,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_top.AddCell(cell_colon);
             cell_top_keterangan.Phrase = new Phrase($"{viewModel.Total}", normal_font);
             table_top.AddCell(cell_top_keterangan);
+            cell_top.Phrase = new Phrase("RO DESCRIPTION", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top_keterangan.Phrase = new Phrase(viewModel.CostCalculationRetail.Description ?? "" , normal_font);
+            table_top.AddCell(cell_top_keterangan);
             #endregion
 
             #region Image
@@ -156,7 +161,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #region Fabric Table Title
 
             PdfPTable table_fabric_top = new PdfPTable(1);
-            table_fabric_top.TotalWidth = 570f;
+            table_fabric_top.TotalWidth = 500f;
 
             float[] fabric_widths_top = new float[] { 5f };
             table_fabric_top.SetWidths(fabric_widths_top);
@@ -177,15 +182,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float row1Height = imageHeight > table_top.TotalHeight ? imageHeight : table_top.TotalHeight;
             float rowYTittleFab = row1Y - row1Height - 10;
             float allowedRow2Height = rowYTittleFab - printedOnHeight - margin;
-            table_fabric_top.WriteSelectedRows(0, -1, 10, rowYTittleFab, cb);
             #endregion
 
             #region Fabric Table
             PdfPTable table_fabric = new PdfPTable(5);
-            table_fabric.TotalWidth = 570f;
+            table_fabric.TotalWidth = 500f;
 
             float[] fabric_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_fabric.SetWidths(fabric_widths);
+
+            var fabIndex = 0;
 
             PdfPCell cell_fabric_center = new PdfPCell()
             {
@@ -239,17 +245,23 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     cell_fabric_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
+
+                    fabIndex++;
                 }
             }
 
-            table_fabric.WriteSelectedRows(0, -1, 10, rowYFab, cb);
+            if (fabIndex != 0)
+            {
+                table_fabric_top.WriteSelectedRows(0, -1, 10, rowYTittleFab, cb);
+                table_fabric.WriteSelectedRows(0, -1, 10, rowYFab, cb);
+            }
             #endregion
 
 
             #region Accessoris Table Title
 
             PdfPTable table_acc_top = new PdfPTable(1);
-            table_acc_top.TotalWidth = 570f;
+            table_acc_top.TotalWidth = 500f;
 
             float[] acc_width_top = new float[] { 5f };
             table_acc_top.SetWidths(acc_width_top);
@@ -269,16 +281,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYTittleAcc = rowYFab - table_fabric.TotalHeight - 10;
             float allowedRow2HeightTopAcc = rowYTittleFab - printedOnHeight - margin;
-            table_acc_top.WriteSelectedRows(0, -1, 10, rowYTittleAcc, cb);
             #endregion
 
             #region Accessoris Table
 
             PdfPTable table_accessories = new PdfPTable(5);
-            table_accessories.TotalWidth = 570f;
+            table_accessories.TotalWidth = 500f;
 
             float[] accessories_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_accessories.SetWidths(accessories_widths);
+
+            var accIndex = 0;
 
             PdfPCell cell_acc_center = new PdfPCell()
             {
@@ -332,16 +345,21 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Information != null ? materialModel.Information : "", normal_font);
                     table_accessories.AddCell(cell_acc_left);
+                    accIndex++;
                 }
             }
 
-            table_accessories.WriteSelectedRows(0, -1, 10, rowYAcc, cb);
+            if (accIndex != 0)
+            {
+                table_acc_top.WriteSelectedRows(0, -1, 10, rowYTittleAcc, cb);
+                table_accessories.WriteSelectedRows(0, -1, 10, rowYAcc, cb);
+            }
             #endregion
 
             #region Ongkos Table Title
 
             PdfPTable table_ong_top = new PdfPTable(1);
-            table_ong_top.TotalWidth = 570f;
+            table_ong_top.TotalWidth = 500f;
 
             float[] ong_width_top = new float[] { 5f };
             table_ong_top.SetWidths(ong_width_top);
@@ -367,7 +385,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #region Ongkos Table
 
             PdfPTable table_budget = new PdfPTable(5);
-            table_budget.TotalWidth = 570f;
+            table_budget.TotalWidth = 500f;
 
             float[] budget_widths = new float[] { 5f, 5f, 5f, 5f, 5f };
             table_budget.SetWidths(budget_widths);
@@ -521,8 +539,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             PdfPTable table_breakDown = new PdfPTable(tableBreakdownColumn);
             table_breakDown.TotalWidth = 570f;
-
-
+            List<float> breakdownWidth = new List<float>();
+            breakdownWidth.Add(1f);
+            breakdownWidth.Add(3f);
+            
             cell_breakDown_center.Phrase = new Phrase("STORE CODE", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
@@ -531,12 +551,17 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             foreach (var size in breakdownSizes)
             {
+                breakdownWidth.Add(1f);
                 cell_breakDown_center.Phrase = new Phrase(size, bold_font);
                 table_breakDown.AddCell(cell_breakDown_center);
             }
 
+            breakdownWidth.Add(1f);
             cell_breakDown_center.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
+
+            float[] breakdown_width = breakdownWidth.ToArray();
+            table_breakDown.SetWidths(breakdown_width);
 
             foreach (var productRetail in viewModel.RO_Retail_SizeBreakdowns)
             {
@@ -602,7 +627,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             }
             cell_breakDown_left.Phrase = new Phrase(viewModel.Total.ToString() != null ? viewModel.Total.ToString() : "0", normal_font);
             table_breakDown.AddCell(cell_breakDown_left);
-
             table_breakDown.WriteSelectedRows(0, -1, 10, rowYbreakDown, cb);
             #endregion
 

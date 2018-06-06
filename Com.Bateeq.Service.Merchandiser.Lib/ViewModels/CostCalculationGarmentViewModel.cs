@@ -127,7 +127,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
                             Count++;
                             costCalculationGarment_MaterialsError += "Price: 'Harga harus diisi', ";
                         }
-                        else if (costCalculation_Material.Price <= 0)
+                        else if (costCalculation_Material.Price <= 0 && !costCalculation_Material.isFabricCM)
                         {
                             Count++;
                             costCalculationGarment_MaterialsError += "Price: 'Harga harus lebih besar dari 0', ";

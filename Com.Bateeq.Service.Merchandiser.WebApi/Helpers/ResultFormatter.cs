@@ -105,6 +105,13 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Helpers
             return Result;
         }
 
+        public Dictionary<string, object> Ok(Object Data)
+        {
+            Result.Add("data", Data);
+
+            return Result;
+        }
+
         public Dictionary<string, object> Ok<TModel, TViewModel>(TModel Data, Func<TModel, TViewModel> MapToViewModel)
         {
             Result.Add("data", MapToViewModel(Data));

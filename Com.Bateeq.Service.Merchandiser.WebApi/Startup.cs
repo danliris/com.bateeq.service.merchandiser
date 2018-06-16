@@ -67,7 +67,8 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi
                 .AddTransient<RO_GarmentService>()
                 .AddTransient<RO_Garment_SizeBreakdownService>()
                 .AddTransient<RO_Garment_SizeBreakdown_DetailService>()
-                .AddTransient<LineService>();
+                .AddTransient<LineService>()
+                .AddTransient<SearchByROService>();
 
             var Secret = Configuration.GetValue<string>("Secret") ?? Configuration["Secret"];
             var Key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));

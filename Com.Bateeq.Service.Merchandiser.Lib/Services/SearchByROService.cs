@@ -20,26 +20,30 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
         public async Task<Object> ReadModelByRO(string ro)
         {
-            Query = RetailService.DbContext.CostCalculationRetails.Where(retail => retail.RO == ro).Select(b => new SearchByROViewModel
+            Query = RetailService.DbContext.CostCalculationRetails.Where(retail => retail.RO.Contains(ro) && retail._IsDeleted == false).Select(b => new SearchByROViewModel
             {
                 RO = b.RO,
                 Article = b.Article,
+                DeliveryDate = b.DeliveryDate,
                 Style = b.StyleName,
-                Counter = b.CounterName,
-                DeliveryDate = b.DeliveryDate
+                Counter = b.CounterName
+                
             });
-            
-            if (Query.Any() == false)
-            {
-                Query = SalesService.DbContext.CostCalculationGarments.Where(garment => garment.RO == ro).Select(b => new SearchByROViewModel
-                {
-                    RO = b.RO,
-                    Article = b.Article,
-                    DeliveryDate = b.DeliveryDate
-                });
-            }
 
-            return await Task.FromResult(Query);
+            var result = await Query.ToDynamicListAsync();
+
+            Query = SalesService.DbContext.CostCalculationGarments.Where(garment => garment.RO.Contains(ro) && garment._IsDeleted == false).Select(b => new SearchByROViewModel
+            {
+                RO = b.RO,
+                Article = b.Article,
+                DeliveryDate = b.DeliveryDate,
+                Style = "",
+                Counter = ""
+            });
+
+            result.Add(await Query.ToDynamicListAsync());
+
+            return await Task.FromResult(result);
         }
     }
 }

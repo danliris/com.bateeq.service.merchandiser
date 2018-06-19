@@ -28,7 +28,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
         {
             try
             {
-                if (ro.Length <= 3)
+                if (ro.Length <= 2)
                 {
                     Dictionary<string, object> Result =
                         new ResultFormatter(ApiVersion, General.NOT_FOUND_STATUS_CODE, General.NOT_FOUND_MESSAGE)

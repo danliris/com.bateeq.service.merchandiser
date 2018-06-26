@@ -26,8 +26,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 Article = b.Article,
                 DeliveryDate = b.DeliveryDate,
                 Style = b.StyleName,
-                Counter = b.CounterName
-                
+                Counter = b.CounterName,
+                SMV_Sewing = b.SH_Sewing
             });
 
             var result = await Query.ToDynamicListAsync();
@@ -38,7 +38,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 Article = b.Article,
                 DeliveryDate = b.DeliveryDate,
                 Style = "",
-                Counter = ""
+                Counter = "",
+                SMV_Sewing = b.SMV_Sewing
             });
 
             result.Add(await Query.ToDynamicListAsync());

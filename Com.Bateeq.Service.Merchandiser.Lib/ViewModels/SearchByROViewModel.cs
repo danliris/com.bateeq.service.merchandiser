@@ -9,5 +9,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public DateTime DeliveryDate { get; set; }
         public string Style { get; set; }
         public string Counter { get; set; }
+        public double SMV_Sewing { get; set; }
     }
 }

@@ -620,13 +620,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_total_2.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_total_2);
 
-            foreach (var sizeTotal in viewModel.SizeQuantityTotal)
+            foreach (var sizeTotal in breakdownSizes )
             {
-                foreach (var sizeHeader in breakdownSizes)
+                foreach (var sizeHeader in viewModel.SizeQuantityTotal)
                 {
-                    if (sizeTotal.Key == sizeHeader)
+                    if (sizeHeader.Key == sizeTotal)
                     {
-                        cell_breakDown_left.Phrase = new Phrase(sizeTotal.Value.ToString() != null ? sizeTotal.Value.ToString() : "0", normal_font);
+                        cell_breakDown_left.Phrase = new Phrase(sizeHeader.Value.ToString() != null ? sizeHeader.Value.ToString() : "0", normal_font);
                         table_breakDown.AddCell(cell_breakDown_left);
                     }
                 }

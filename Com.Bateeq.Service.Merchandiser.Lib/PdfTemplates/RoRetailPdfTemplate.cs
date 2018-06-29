@@ -122,7 +122,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_top.Phrase = new Phrase("RO DESCRIPTION", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top_keterangan.Phrase = new Phrase(viewModel.CostCalculationRetail.Description ?? "" , normal_font);
+            cell_top_keterangan.Phrase = new Phrase(viewModel.CostCalculationRetail.Description ?? "", normal_font);
             table_top.AddCell(cell_top_keterangan);
             #endregion
 
@@ -542,7 +542,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             List<float> breakdownWidth = new List<float>();
             breakdownWidth.Add(1f);
             breakdownWidth.Add(3f);
-            
+
             cell_breakDown_center.Phrase = new Phrase("STORE CODE", bold_font);
             table_breakDown.AddCell(cell_breakDown_center);
 
@@ -620,10 +620,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_total_2.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_total_2);
 
-            foreach (var sizeTotal in viewModel.SizeQuantityTotal)
+            foreach (var sizeTotal in breakdownSizes )
             {
-                cell_breakDown_left.Phrase = new Phrase(sizeTotal.Value.ToString() != null ? sizeTotal.Value.ToString() : "0", normal_font);
-                table_breakDown.AddCell(cell_breakDown_left);
+                foreach (var sizeHeader in viewModel.SizeQuantityTotal)
+                {
+                    if (sizeHeader.Key == sizeTotal)
+                    {
+                        cell_breakDown_left.Phrase = new Phrase(sizeHeader.Value.ToString() != null ? sizeHeader.Value.ToString() : "0", normal_font);
+                        table_breakDown.AddCell(cell_breakDown_left);
+                    }
+                }
             }
             cell_breakDown_left.Phrase = new Phrase(viewModel.Total.ToString() != null ? viewModel.Total.ToString() : "0", normal_font);
             table_breakDown.AddCell(cell_breakDown_left);
@@ -718,7 +724,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             {
                 countImageRo++;
             }
-            
+
             float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 5;
             float imageRoHeight;
             PdfPTable table_ro_image = null;
@@ -788,7 +794,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 }
                 imageRoHeight = table_ro_image.TotalHeight;
                 table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
-            } else
+            }
+            else
             {
                 imageRoHeight = 0;
             }

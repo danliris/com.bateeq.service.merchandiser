@@ -162,7 +162,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 if (!String.IsNullOrEmpty(itemBreakdown.SizeQuantity))
                 {
                     var sizeQuantity = JsonConvert.DeserializeObject<IDictionary<string, string>>(itemBreakdown.SizeQuantity);
-                    var otherAsc = sizeQuantity.OrderBy(s => sizes.Contains(s.Key) ? "0" : "1").ThenBy(s => Array.IndexOf(sizes, s.Key)).ThenBy(s => s);
+                    var otherAsc = sizeQuantity.OrderBy(s => sizes.Contains(s.Key) ? "0" : "1").ThenBy(s => Array.IndexOf(sizes, s.Key));
                     var sizeDictionary = new Dictionary<string, string>();
 
                     foreach( var item in otherAsc)

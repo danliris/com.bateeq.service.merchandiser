@@ -91,7 +91,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                     },
                     ColorId = ro.ColorId,
                     ColorName = ro.ColorName,
-                    Total = ro.Total
+                    Total = ro.Total,
+                    _LastModifiedUtc = ro._LastModifiedUtc
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);

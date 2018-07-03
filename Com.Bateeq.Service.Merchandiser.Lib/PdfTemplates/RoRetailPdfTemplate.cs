@@ -620,7 +620,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_breakDown_total_2.Phrase = new Phrase("TOTAL", bold_font);
             table_breakDown.AddCell(cell_breakDown_total_2);
 
-            foreach (var sizeTotal in breakdownSizes )
+            foreach (var sizeTotal in breakdownSizes)
             {
                 foreach (var sizeHeader in viewModel.SizeQuantityTotal)
                 {
@@ -720,13 +720,22 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             var countImageRo = 0;
             byte[] roImage;
 
-            foreach (var index in viewModel.ImagesFile)
+            if (viewModel.ImagesFile != null)
             {
-                countImageRo++;
+                foreach (var index in viewModel.ImagesFile)
+                {
+                    if (!string.IsNullOrEmpty(index))
+                    {
+                        countImageRo++;
+                    }
+                }
             }
+
 
             float rowYRoImage = rowYInstruction - table_instruction.TotalHeight - 5;
             float imageRoHeight;
+            var remainingRowToHeightRoImage = rowYRoImage - 5 - printedOnHeight - margin;
+            float allowedRow2HeightRoImage = rowYRoImage - printedOnHeight - margin;
             PdfPTable table_ro_image = null;
 
             if (countImageRo != 0)
@@ -777,6 +786,28 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     PdfPCell imageCell = new PdfPCell(images);
                     imageCell.Border = 0;
                     table_ro_image.AddCell(imageCell);
+
+                    var tableROImageCurrentHeight = table_ro_image.TotalHeight;
+
+                    if (tableROImageCurrentHeight / remainingRowToHeightRoImage > 1)
+                    {
+                        if (tableROImageCurrentHeight / allowedRow2HeightRoImage > 1)
+                        {
+                            PdfPRow headerRow = table_ro_image.GetRow(0);
+                            PdfPRow lastRow = table_ro_image.GetRow(table_ro_image.Rows.Count - 1);
+                            table_ro_image.DeleteLastRow();
+                            table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
+                            table_ro_image.DeleteBodyRows();
+                            this.DrawPrintedOn(now, bf, cb);
+                            document.NewPage();
+                            table_ro_image.Rows.Add(headerRow);
+                            table_ro_image.Rows.Add(lastRow);
+                            table_ro_image.CalculateHeights();
+                            rowYRoImage = startY;
+                            remainingRowToHeightRoImage = rowYRoImage - 5 - printedOnHeight - margin;
+                            allowedRow2HeightRoImage = remainingRowToHeightRoImage - printedOnHeight - margin;
+                        }
+                    }
                 }
 
                 PdfPCell cell_image = new PdfPCell()

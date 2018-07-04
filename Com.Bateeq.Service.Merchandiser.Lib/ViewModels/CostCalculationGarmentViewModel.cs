@@ -49,7 +49,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public string ImageFile { get; set; }
         public string ImagePath { get; set; }
 
-        public int? RO_RetailId { get; set; }
+        public int? RO_GarmentId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

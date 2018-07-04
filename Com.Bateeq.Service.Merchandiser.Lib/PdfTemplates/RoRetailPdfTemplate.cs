@@ -479,7 +479,13 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             float rowYTittleBreakDown = rowYBudget - table_budget.TotalHeight - 10;
             float allowedRow2HeightBreakdown = rowYTittleBreakDown - printedOnHeight - margin;
-            table_breakdown_top.WriteSelectedRows(0, -1, 10, rowYTittleBreakDown, cb);
+
+            if (ongIndex == 0)
+            {
+                rowYTittleBreakDown = rowYBudget;
+            }
+
+            table_breakdown_top.WriteSelectedRows(0, -1, 5, rowYTittleBreakDown, cb);
             #endregion
 
             #region == Table Size Breakdown ==
@@ -786,28 +792,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     PdfPCell imageCell = new PdfPCell(images);
                     imageCell.Border = 0;
                     table_ro_image.AddCell(imageCell);
-
-                    var tableROImageCurrentHeight = table_ro_image.TotalHeight;
-
-                    if (tableROImageCurrentHeight / remainingRowToHeightRoImage > 1)
-                    {
-                        if (tableROImageCurrentHeight / allowedRow2HeightRoImage > 1)
-                        {
-                            PdfPRow headerRow = table_ro_image.GetRow(0);
-                            PdfPRow lastRow = table_ro_image.GetRow(table_ro_image.Rows.Count - 1);
-                            table_ro_image.DeleteLastRow();
-                            table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
-                            table_ro_image.DeleteBodyRows();
-                            this.DrawPrintedOn(now, bf, cb);
-                            document.NewPage();
-                            table_ro_image.Rows.Add(headerRow);
-                            table_ro_image.Rows.Add(lastRow);
-                            table_ro_image.CalculateHeights();
-                            rowYRoImage = startY;
-                            remainingRowToHeightRoImage = rowYRoImage - 5 - printedOnHeight - margin;
-                            allowedRow2HeightRoImage = remainingRowToHeightRoImage - printedOnHeight - margin;
-                        }
-                    }
                 }
 
                 PdfPCell cell_image = new PdfPCell()
@@ -823,6 +807,29 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     cell_image.Phrase = new Phrase(name, normal_font);
                     table_ro_image.AddCell(cell_image);
                 }
+
+                var tableROImageCurrentHeight = table_ro_image.TotalHeight;
+
+                if (tableROImageCurrentHeight / remainingRowToHeightRoImage > 1)
+                {
+                    if (tableROImageCurrentHeight / allowedRow2HeightRoImage > 1)
+                    {
+                        PdfPRow headerRow = table_ro_image.GetRow(0);
+                        PdfPRow lastRow = table_ro_image.GetRow(table_ro_image.Rows.Count - 1);
+                        table_ro_image.DeleteLastRow();
+                        table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
+                        table_ro_image.DeleteBodyRows();
+                        this.DrawPrintedOn(now, bf, cb);
+                        document.NewPage();
+                        table_ro_image.Rows.Add(headerRow);
+                        table_ro_image.Rows.Add(lastRow);
+                        table_ro_image.CalculateHeights();
+                        rowYRoImage = startY;
+                        remainingRowToHeightRoImage = rowYRoImage - 5 - printedOnHeight - margin;
+                        allowedRow2HeightRoImage = remainingRowToHeightRoImage - printedOnHeight - margin;
+                    }
+                }
+
                 imageRoHeight = table_ro_image.TotalHeight;
                 table_ro_image.WriteSelectedRows(0, -1, 10, rowYRoImage, cb);
             }
@@ -839,6 +846,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.TotalWidth = 570f;
 
             float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };
+            float rowYSignature = rowYRoImage - table_instruction.TotalHeight - 5;
+            var remainingRowToHeightSignature = rowYSignature - 5 - printedOnHeight - margin;
+            float allowedRow2HeightSignature = rowYSignature - printedOnHeight - margin;
             table_signature.SetWidths(signature_widths);
 
             PdfPCell cell_signature = new PdfPCell()
@@ -855,7 +865,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 HorizontalAlignment = Element.ALIGN_CENTER,
                 VerticalAlignment = Element.ALIGN_MIDDLE,
                 Padding = 2,
-                PaddingTop = 30
+                PaddingTop = 15
             };
 
             cell_signature.Phrase = new Phrase("Dibuat", normal_font);
@@ -870,6 +880,27 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
             table_signature.AddCell(cell_signature);
+
+            var tableSignatureCurrentHeight = table_signature.TotalHeight;
+            if (tableSignatureCurrentHeight / remainingRowToHeightSignature > 1)
+            {
+                if (tableSignatureCurrentHeight / allowedRow2HeightSignature > 1)
+                {
+                    PdfPRow headerRow = table_signature.GetRow(0);
+                    PdfPRow lastRow = table_signature.GetRow(table_signature.Rows.Count - 1);
+                    table_signature.DeleteLastRow();
+                    table_signature.WriteSelectedRows(0, -1, 10, rowYSignature, cb);
+                    table_signature.DeleteBodyRows();
+                    this.DrawPrintedOn(now, bf, cb);
+                    document.NewPage();
+                    table_signature.Rows.Add(headerRow);
+                    table_signature.Rows.Add(lastRow);
+                    table_signature.CalculateHeights();
+                    rowYSignature = startY;
+                    remainingRowToHeightSignature = rowYSignature - 5 - printedOnHeight - margin;
+                    allowedRow2HeightSignature = remainingRowToHeightSignature - printedOnHeight - margin;
+                }
+            }
 
             cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);

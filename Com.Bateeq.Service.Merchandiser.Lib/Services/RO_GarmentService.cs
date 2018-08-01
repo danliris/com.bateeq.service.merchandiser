@@ -62,7 +62,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             List<string> SearchAttributes = new List<string>()
                 {
-                    "Code"
+                    "CostCalculationGarment.RO", "CostCalculationGarment.Article"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 

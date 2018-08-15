@@ -250,8 +250,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 table_ccm.AddCell(cell_ccm);
 
                 cell_ccm.HorizontalAlignment = Element.ALIGN_RIGHT;
-                //double amount = quantity * price;
-                double amount = quantity * processCost;
+                double amount = quantity * price;
                 cell_ccm.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(amount), normal_font);
                 table_ccm.AddCell(cell_ccm);
 
@@ -292,6 +291,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.SetWidths(detail3_widths);
 
             //double budgetCost = isDollar ? viewModel.ConfirmPrice * viewModel.Rate.Value ?? 0 : viewModel.ConfirmPrice ?? 0;
+            double totalProcessCost = processCost * allQuantity;
             double budgetCost = totalBudget / allQuantity;
 
             PdfPCell cell_detail3 = new PdfPCell() { HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
@@ -356,6 +356,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{viewModel.SMV_Total}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
+            cell_detail3_colspan8.Phrase = new Phrase("PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(processCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
+            cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
             cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
 
@@ -387,6 +391,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.WriteSelectedRows(0, -1, margin + table_detail2.TotalWidth + 10, row3Y, cb);
 
             float signatureY = row3Y - row3Height - 10;
+            signatureY = signatureY - 150;
             float signatureRemainingHeight = signatureY - printedOnHeight - margin;
             if (signatureRemainingHeight < table_signature.TotalHeight)
             {

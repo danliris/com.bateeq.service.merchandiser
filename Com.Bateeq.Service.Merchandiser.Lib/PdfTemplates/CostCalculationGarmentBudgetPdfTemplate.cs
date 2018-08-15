@@ -391,7 +391,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.WriteSelectedRows(0, -1, margin + table_detail2.TotalWidth + 10, row3Y, cb);
 
             float signatureY = row3Y - row3Height - 10;
-            signatureY = signatureY - 150;
+            signatureY = signatureY - 50;
             float signatureRemainingHeight = signatureY - printedOnHeight - margin;
             if (signatureRemainingHeight < table_signature.TotalHeight)
             {

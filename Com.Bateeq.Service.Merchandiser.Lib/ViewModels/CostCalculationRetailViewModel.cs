@@ -66,9 +66,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public string SelectedRounding { get; set; }
         public string ImageFile { get; set; }
         public string ImagePath { get; set; }
-
         public int? RO_RetailId { get; set; }
-        public double? Thr { get; set; }
+        public RateViewModel Thr { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

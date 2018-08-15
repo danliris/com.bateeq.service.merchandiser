@@ -193,7 +193,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             double cuttingCost = viewModel.SH_Cutting ?? 0;
             double sewingCost = viewModel.SH_Sewing ?? 0;
             double finishingCost = viewModel.SH_Finishing ?? 0;
-            double thrCost = viewModel.Thr ?? 0;
+            double thrCost = viewModel.Thr.Value ?? 0;
             double processCost = cuttingCost + sewingCost + finishingCost + thrCost;
             #endregion
 

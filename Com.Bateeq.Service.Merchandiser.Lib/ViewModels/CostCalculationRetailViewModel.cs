@@ -68,6 +68,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.ViewModels
         public string ImagePath { get; set; }
 
         public int? RO_RetailId { get; set; }
+        public double? Thr { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

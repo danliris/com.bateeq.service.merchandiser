@@ -188,6 +188,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float row2AllowedHeight = row2Y - printedOnHeight - margin;
             double totalBudget = 0;
 
+            #region Process Cost
+            double ol = viewModel.OL.CalculatedValue ?? 0;
+            double processCost = ol;
+            #endregion
+
             for (int i = 0; i < viewModel.CostCalculationRetail_Materials.Count; i++)
             {
                 cell_ccm.Phrase = new Phrase((i + 1).ToString(), normal_font);
@@ -277,8 +282,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] detail3_widths = new float[] { 3.25f, 4.75f, 1.9f, 0.2f, 1.9f, 1.9f, 0.2f, 1.9f };
             table_detail3.SetWidths(detail3_widths);
 
-            double budgetCost = viewModel.HPP;
-            
+            //double budgetCost = viewModel.HPP;
+            double totalProcessCost = processCost * (double) viewModel.Quantity;
+            double budgetCost = totalBudget / (double) viewModel.Quantity;
+
             PdfPCell cell_detail3 = new PdfPCell() { HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
             PdfPCell cell_detail3_right = new PdfPCell() { HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
             PdfPCell cell_detail3_colspan6 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7, Colspan = 6 };
@@ -340,6 +347,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
+            cell_detail3_colspan8.Phrase = new Phrase("PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(processCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
+            cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
             #endregion
 
             #region Draw Others
@@ -359,6 +370,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.WriteSelectedRows(0, -1, margin + table_detail2.TotalWidth + 10, row3Y, cb);
 
             float signatureY = row3Y - row3Height - 10;
+            signatureY = signatureY - 20;
             float signatureRemainingHeight = signatureY - printedOnHeight - margin;
             if (signatureRemainingHeight < table_signature.TotalHeight)
             {

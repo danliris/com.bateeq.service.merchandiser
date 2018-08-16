@@ -21,8 +21,11 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
     public class CostCalculationRetailsController : BasicController<MerchandiserDbContext, CostCalculationRetailService, CostCalculationRetailViewModel, CostCalculationRetail>
     {
         private static readonly string ApiVersion = "1.0";
-        public CostCalculationRetailsController(CostCalculationRetailService service) : base(service, ApiVersion)
+        private readonly RateService _rateService;
+
+        public CostCalculationRetailsController(CostCalculationRetailService service, RateService rateService) : base(service, ApiVersion)
         {
+            _rateService = rateService;
         }
 
         [HttpGet("pdf/{id}")]
@@ -60,7 +63,10 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
 
                 await Service.GeneratePO(Id);
                 var model = Service.ReadModelById(Id).Result;
+                var rateModel = _rateService.Get().SingleOrDefault(x => x.Name == "THR"); //Get Default THR From Rate (Master Ongkos)
                 var viewModel = Service.MapToViewModel(model);
+                var rateViewModel = _rateService.MapToViewModel(rateModel);
+                viewModel.Thr = rateViewModel;
 
                 CostCalculationRetailBudgetPdfTemplate PdfTemplate = new CostCalculationRetailBudgetPdfTemplate();
                 MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel);

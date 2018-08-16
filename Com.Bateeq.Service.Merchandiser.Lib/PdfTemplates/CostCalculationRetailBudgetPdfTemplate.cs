@@ -187,14 +187,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float row2RemainingHeight = row2Y - 10 - row3Height - printedOnHeight - margin;
             float row2AllowedHeight = row2Y - printedOnHeight - margin;
             double totalBudget = 0;
-            double allQuantity = 0;
 
             #region Process Cost
-            double cuttingCost = viewModel.SH_Cutting ?? 0;
-            double sewingCost = viewModel.SH_Sewing ?? 0;
-            double finishingCost = viewModel.SH_Finishing ?? 0;
-            double thrCost = viewModel.Thr.Value ?? 0;
-            double processCost = cuttingCost + sewingCost + finishingCost + thrCost;
+            double ol = viewModel.OL.CalculatedValue ?? 0;
+            double processCost = ol;
             #endregion
 
             for (int i = 0; i < viewModel.CostCalculationRetail_Materials.Count; i++)
@@ -256,7 +252,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                 table_ccm.AddCell(cell_ccm);
 
                 totalBudget += amount;
-                allQuantity += totalQuantity;
                 float currentHeight = table_ccm.TotalHeight;
                 if (currentHeight / row2RemainingHeight > 1)
                 {
@@ -288,8 +283,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.SetWidths(detail3_widths);
 
             //double budgetCost = viewModel.HPP;
-            double totalProcessCost = processCost * allQuantity;
-            double budgetCost = totalBudget / allQuantity;
+            double totalProcessCost = processCost * (double) viewModel.Quantity;
+            double budgetCost = totalBudget / (double) viewModel.Quantity;
 
             PdfPCell cell_detail3 = new PdfPCell() { HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
             PdfPCell cell_detail3_right = new PdfPCell() { HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
@@ -350,11 +345,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{SH_Total}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
+            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
             cell_detail3_colspan8.Phrase = new Phrase("PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(processCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
             cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
-            table_detail3.AddCell(cell_detail3_colspan8);
-            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
             #endregion
 

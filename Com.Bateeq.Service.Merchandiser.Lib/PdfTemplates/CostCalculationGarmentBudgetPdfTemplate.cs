@@ -184,12 +184,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_ccm.AddCell(cell_ccm);
             cell_ccm.Phrase = new Phrase("PO NUMBER", bold_font);
             table_ccm.AddCell(cell_ccm);
-            
+
             float row2Y = row1Y - table_detail1.TotalHeight - 10;
             float row3Height = table_detail2.TotalHeight;
             float row2RemainingHeight = row2Y - 10 - row3Height - printedOnHeight - margin;
             float row2AllowedHeight = row2Y - printedOnHeight - margin;
             double totalBudget = 0;
+
+            #region Process Cost
+            double processCost = viewModel.ProductionCost;
+            #endregion
 
             for (int i = 0; i < viewModel.CostCalculationGarment_Materials.Count; i++)
             {
@@ -227,7 +231,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     factor = viewModel.FabricAllowance ?? 0;
                 }
                 double totalQuantity = viewModel.Quantity ?? 0;
-                double conversion = (double) viewModel.CostCalculationGarment_Materials[i].Conversion;
+                double conversion = (double)viewModel.CostCalculationGarment_Materials[i].Conversion;
                 double usageConversion = usage / conversion;
                 double quantity = (100 + factor) / 100 * usageConversion * totalQuantity;
 
@@ -280,7 +284,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             float[] detail3_widths = new float[] { 3.25f, 4.75f, 1.9f, 0.2f, 1.9f, 1.9f, 0.2f, 1.9f };
             table_detail3.SetWidths(detail3_widths);
 
-            double budgetCost = isDollar ? viewModel.ConfirmPrice * viewModel.Rate.Value ?? 0 : viewModel.ConfirmPrice ?? 0;
+            //double budgetCost = isDollar ? viewModel.ConfirmPrice * viewModel.Rate.Value ?? 0 : viewModel.ConfirmPrice ?? 0;
+            double totalProcessCost = processCost * (double) viewModel.Quantity;
+            double budgetCost = totalBudget / (double) viewModel.Quantity;
 
             PdfPCell cell_detail3 = new PdfPCell() { HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
             PdfPCell cell_detail3_right = new PdfPCell() { HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7 };
@@ -344,7 +350,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{viewModel.SMV_Total}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
+
             cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
+            cell_detail3_colspan8.Phrase = new Phrase("PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(processCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
+            cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
 
             double rateValue = (double)viewModel.Rate.Value;
@@ -373,8 +384,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail2.WriteSelectedRows(0, -1, margin, row3Y, cb);
 
             table_detail3.WriteSelectedRows(0, -1, margin + table_detail2.TotalWidth + 10, row3Y, cb);
-            
+
             float signatureY = row3Y - row3Height - 10;
+            signatureY = signatureY - 50;
             float signatureRemainingHeight = signatureY - printedOnHeight - margin;
             if (signatureRemainingHeight < table_signature.TotalHeight)
             {

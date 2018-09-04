@@ -108,7 +108,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
         
         public async Task<string> UploadImage(string moduleName, int id, DateTime _createdUtc, string imageBase64)
         {
-            if (imageBase64 != null)
+            if (!String.IsNullOrWhiteSpace(imageBase64))
             {
                 string imageName = this.GenerateFileName(id, _createdUtc);
                 return await this.UploadBase64Image(moduleName, imageBase64, imageName);

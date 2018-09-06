@@ -330,7 +330,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 RO_Retail_SizeBreakdown ro_rsb = this.RO_Retail_SizeBreakdownService.MapToModel(ro_rsbVM);
                 model.RO_Retail_SizeBreakdowns.Add(ro_rsb);
             }
-            model.SizeQuantityTotal = JsonConvert.SerializeObject(viewModel.SizeQuantityTotal);
+
+            var sizeQuantityTotal = viewModel.SizeQuantityTotal == null ? viewModel.RO_Retail_SizeBreakdowns.FirstOrDefault().SizeQuantity : viewModel.SizeQuantityTotal;
+            model.SizeQuantityTotal = JsonConvert.SerializeObject(sizeQuantityTotal);
 
             return model;
         }

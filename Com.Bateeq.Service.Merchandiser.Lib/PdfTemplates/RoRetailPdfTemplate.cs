@@ -746,33 +746,24 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             if (countImageRo != 0)
             {
-                table_ro_image = new PdfPTable(countImageRo);
+                table_ro_image = new PdfPTable(8);
+                table_ro_image.DefaultCell.Border = Rectangle.NO_BORDER;
+                float[] ro_widths = new float[8];
 
-                if (countImageRo > 5)
-                {
-                    countImageRo = 5;
-                }
-
-                float[] ro_widths = new float[countImageRo];
-
-                for (var i = 0; i < countImageRo; i++)
+                for (var i = 0; i < 8; i++)
                 {
                     ro_widths.SetValue(5f, i);
                 }
 
-                if (countImageRo != 0)
-                {
-                    table_ro_image.SetWidths(ro_widths);
-                }
-
+                table_ro_image.SetWidths(ro_widths);
                 table_ro_image.TotalWidth = 570f;
 
 
-                foreach (var imageFromRo in viewModel.ImagesFile)
+                for (var i = 0; i < viewModel.ImagesFile.Count; i++)
                 {
                     try
                     {
-                        roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
+                        roImage = Convert.FromBase64String(Base64.GetBase64File(viewModel.ImagesFile[i]));
                     }
                     catch (Exception)
                     {
@@ -781,6 +772,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
                     }
 
                     Image images = Image.GetInstance(imgb: roImage);
+                    var imageName = viewModel.ImagesName[i];
 
                     if (images.Width > 60)
                     {
@@ -791,22 +783,24 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
                     PdfPCell imageCell = new PdfPCell(images);
                     imageCell.Border = 0;
-                    table_ro_image.AddCell(imageCell);
+                    imageCell.Padding = 4;
+
+                    PdfPCell nameCell = new PdfPCell();
+                    nameCell.Border = 0;
+                    nameCell.Padding = 4;
+
+                    nameCell.Phrase = new Phrase(imageName, normal_font);
+                    PdfPTable table_ro_name = new PdfPTable(1);
+                    table_ro_name.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                    table_ro_name.AddCell(imageCell);
+                    table_ro_name.AddCell(nameCell);
+
+                    table_ro_name.CompleteRow();
+                    table_ro_image.AddCell(table_ro_name);
                 }
 
-                PdfPCell cell_image = new PdfPCell()
-                {
-                    Border = Rectangle.NO_BORDER,
-                    HorizontalAlignment = Element.ALIGN_LEFT,
-                    VerticalAlignment = Element.ALIGN_MIDDLE,
-                    Padding = 2,
-                };
-
-                foreach (var name in viewModel.ImagesName)
-                {
-                    cell_image.Phrase = new Phrase(name, normal_font);
-                    table_ro_image.AddCell(cell_image);
-                }
+                table_ro_image.CompleteRow();
 
                 var tableROImageCurrentHeight = table_ro_image.TotalHeight;
 

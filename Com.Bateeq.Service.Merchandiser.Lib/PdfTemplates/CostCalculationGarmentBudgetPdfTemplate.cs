@@ -123,18 +123,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);
             table_signature.AddCell(cell_signature);
-            table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
             table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4; i++)
             {
                 signatureArea += Environment.NewLine;
             }
 
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
-            table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);

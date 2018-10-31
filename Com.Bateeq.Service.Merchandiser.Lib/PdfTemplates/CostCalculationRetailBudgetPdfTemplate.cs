@@ -104,10 +104,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #endregion
             
             #region Signature
-            PdfPTable table_signature = new PdfPTable(6);
+            PdfPTable table_signature = new PdfPTable(5);
             table_signature.TotalWidth = 570f;
 
-            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };
+            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f};
             table_signature.SetWidths(signature_widths);
 
             PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
@@ -120,18 +120,16 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);
             table_signature.AddCell(cell_signature);
-            table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
             table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4; i++)
             {
                 signatureArea += Environment.NewLine;
             }
 
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
-            table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);
@@ -143,8 +141,6 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Ka. Bag Pembelian", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka. Bag Produksi", normal_font);
             table_signature.AddCell(cell_signature);

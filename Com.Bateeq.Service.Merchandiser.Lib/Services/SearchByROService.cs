@@ -17,10 +17,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             this.RetailService = retailService;
             this.SalesService = salesService;
         }
-
+     
         public async Task<Object> ReadModelByRO(string ro)
         {
-            Query = RetailService.DbContext.CostCalculationRetails.Where(retail => retail.RO.Contains(ro) && retail._IsDeleted == false).Select(b => new SearchByROViewModel
+            Query = RetailService.DbContext.CostCalculationRetails
+                                            .Where(retail => retail.RO.Contains(ro) && retail._IsDeleted == false)
+                                            .Select(b => new SearchByROViewModel
             {
                 RO = b.RO,
                 Article = b.Article,
@@ -32,7 +34,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
 
             var result = await Query.ToDynamicListAsync();
 
-            Query = SalesService.DbContext.CostCalculationGarments.Where(garment => garment.RO.Contains(ro) && garment._IsDeleted == false).Select(b => new SearchByROViewModel
+            Query = SalesService.DbContext.CostCalculationGarments
+                                .Where(garment => garment.RO.Contains(ro) && garment._IsDeleted == false)
+                                .Select(b => new SearchByROViewModel
             {
                 RO = b.RO,
                 Article = b.Article,

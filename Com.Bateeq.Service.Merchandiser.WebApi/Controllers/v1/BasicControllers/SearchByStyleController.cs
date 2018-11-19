@@ -11,24 +11,24 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
 {
     [Produces("application/json")]
     [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/search-by-ro")]
+    [Route("v{version:apiVersion}/search-by-style")]
     [Authorize]
-    public class SearchByROController : Controller
+    public class SearchByStyleController : Controller
     {
         private static readonly string ApiVersion = "1.0";
-        private SearchByROService SearchByRO;
+        private SearchByStyleService searchByStyle;
 
-        public SearchByROController(SearchByROService searchByROService)
+        public SearchByStyleController(SearchByStyleService searchByStyle)
         {
-            this.SearchByRO = searchByROService;
+            this.searchByStyle = searchByStyle;
         }
 
-        [HttpGet("{ro}")]
-        public async Task<IActionResult> GetByRO(string ro)
+        [HttpGet("{stylename}")]
+        public async Task<IActionResult> GetByStyle(string stylename)
         {
             try
             {
-                if (ro.Length <= 1)
+                if (stylename.Length <= 2)
                 {
                     Dictionary<string, object> Result =
                         new ResultFormatter(ApiVersion, General.NOT_FOUND_STATUS_CODE, General.NOT_FOUND_MESSAGE)
@@ -37,7 +37,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
                 }
                 else
                 {
-                    var model = await SearchByRO.ReadModelByRO(ro);
+                    var model = await searchByStyle.ReadModelByStyle(stylename);
 
                     Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)

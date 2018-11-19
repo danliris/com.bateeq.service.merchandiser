@@ -227,7 +227,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Direktur Penjualan", normal_font);
+            cell_signature.Phrase = new Phrase("Direktur Marketing", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Wakil Direktur Utama", normal_font);
             table_signature.AddCell(cell_signature);

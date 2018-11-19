@@ -144,7 +144,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka. Bag Produksi", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Direktur Penjualan", normal_font);
+            cell_signature.Phrase = new Phrase("Direktur Marketing", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 

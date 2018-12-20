@@ -46,7 +46,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 SMV_Sewing = b.SMV_Sewing
             });
 
-            result.Add(await Query.ToDynamicListAsync());
+            var allQueryResult = await Query.ToDynamicListAsync();
+
+            foreach(var item in allQueryResult)
+            {
+                result.Add(item);
+            }
 
             return await Task.FromResult(result);
         }

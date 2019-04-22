@@ -287,11 +287,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfPCell cell_detail3_colspan6 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7, Colspan = 6 };
             PdfPCell cell_detail3_colspan8 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 2, PaddingBottom = 7, PaddingLeft = 2, PaddingTop = 7, Colspan = 8 };
 
+            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan8);
+
             cell_detail3.Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER;
-            cell_detail3.Phrase = new Phrase("TOTAL BUDGET", normal_font);
+            cell_detail3.Phrase = new Phrase("TOTAL BUDGET COST", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3.Border = Rectangle.TOP_BORDER | Rectangle.RIGHT_BORDER;
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiah(totalBudget)}", normal_font);
+            cell_detail3.Phrase = new Phrase("".PadRight(7) + $"{Number.ToRupiah(totalBudget)}", normal_font);
             table_detail3.AddCell(cell_detail3);
             cell_detail3_colspan6.Phrase = new Phrase("STANDARD HOURS", normal_font);
             table_detail3.AddCell(cell_detail3_colspan6);
@@ -341,11 +344,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{SH_Total}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
-            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+            cell_detail3_colspan8.Phrase = new Phrase("PROCESS COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(processCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
-            cell_detail3_colspan8.Phrase = new Phrase("PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(processCost)}", normal_font);
-            table_detail3.AddCell(cell_detail3_colspan8);
-            cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
+            cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(3) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
             #endregion
 

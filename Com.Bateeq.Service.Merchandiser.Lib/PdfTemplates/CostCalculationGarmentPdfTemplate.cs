@@ -196,14 +196,14 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfPTable table_detail3 = new PdfPTable(3);
             table_detail3.TotalWidth = 190f;
 
-            float[] detail3_widths = new float[] { 1.5f, 1f, 1.5f };
+            float[] detail3_widths = new float[] { 1.7f, 1f, 1.3f };
             table_detail3.SetWidths(detail3_widths);
 
             PdfPCell cell_detail3 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3 };
 
             PdfPCell cell_detail3_colspan2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3, Colspan = 2 };
 
-            cell_detail3.Phrase = new Phrase("TOTAL", normal_font);
+            cell_detail3.Phrase = new Phrase("TOTAL (OL+Material)", normal_font);
             table_detail3.AddCell(cell_detail3);
             double total = 0;
             foreach (CostCalculationGarment_MaterialViewModel item in viewModel.CostCalculationGarment_Materials)
@@ -273,8 +273,37 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             double confirmPriceWithRate = isDollar ? confirmPrice * viewModel.Rate.Value ?? 1 : confirmPrice;
             cell_detail3_colspan2.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(confirmPriceWithRate)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan2);
-            #endregion
 
+            ////cell_detail3.Phrase = new Phrase("PROCESS COST" + "".PadRight(5), normal_font);
+            cell_detail3.Phrase = new Phrase("OL" + "".PadRight(5), normal_font);
+            table_detail3.AddCell(cell_detail3);
+            double processCost = viewModel.ProductionCost;
+            ////cell_detail3_colspan2.Phrase = new Phrase($"{GetCurrencyValue(processCost, isDollar)}", normal_font);
+            cell_detail3_colspan2.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(processCost)}", normal_font);
+            //cell_detail3_colspan2.Phrase = new Phrase($"{(processCost)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan2);
+
+            cell_detail3.Phrase = new Phrase("OTL1" + "".PadRight(5), normal_font);
+            table_detail3.AddCell(cell_detail3);
+            double NOTL1CalculatedValue = viewModel.OTL1.CalculatedValue ?? 0;
+            cell_detail3_colspan2.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(NOTL1CalculatedValue)}", normal_font);
+            //cell_detail3_colspan2.Phrase = new Phrase($"{(NOTL1CalculatedValue)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan2);
+
+            cell_detail3.Phrase = new Phrase("OTL2" + "".PadRight(5), normal_font);
+            table_detail3.AddCell(cell_detail3);
+            double NOTL2CalculatedValue = viewModel.OTL2.CalculatedValue ?? 0;
+            cell_detail3_colspan2.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(NOTL2CalculatedValue)}", normal_font);
+            //cell_detail3_colspan2.Phrase = new Phrase($"{(NOTL2CalculatedValue)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan2);
+
+            cell_detail3.Phrase = new Phrase("Total (OL+OTL1+OTL2)" + "".PadRight(5), normal_font);
+            table_detail3.AddCell(cell_detail3);
+            double totale = viewModel.ProductionCost + NOTL1CalculatedValue + NOTL2CalculatedValue;
+            cell_detail3_colspan2.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(totale)}", normal_font);
+            //cell_detail3_colspan2.Phrase = new Phrase($"{(totale)}", normal_font);
+            table_detail3.AddCell(cell_detail3_colspan2);
+            #endregion
             #region Detail 4.1 (Bottom, Column 3.1)
             PdfPTable table_detail4_1 = new PdfPTable(2);
             table_detail4_1.TotalWidth = 180f;

@@ -149,11 +149,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cell_signature.Phrase = new Phrase("Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Sie IE", normal_font);
+            table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka. Sie Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("IE", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Direktur Marketing", normal_font);
             table_signature.AddCell(cell_signature);

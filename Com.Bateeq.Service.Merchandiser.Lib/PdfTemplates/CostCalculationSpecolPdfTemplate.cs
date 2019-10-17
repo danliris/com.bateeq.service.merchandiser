@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 {
-    public class CostCalculationRetailPdfTemplate
+    public class CostCalculationSpecolPdfTemplate
     {
         public MemoryStream GeneratePdfTemplate(CostCalculationRetailViewModel viewModel)
         {
@@ -229,7 +229,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Creative Director", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Direktur Marketing", normal_font);
+            cell_signature.Phrase = new Phrase("Komisaris", normal_font);
             table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
@@ -248,7 +248,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ari Seputra", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Haenis Gunarto", normal_font);
+            cell_signature.Phrase = new Phrase("Sistha Alicia Tjokrosaputro", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 

@@ -775,9 +775,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature_noted);
             cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(Bekti Wahyuningsih)", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(Sistha Alicia Tjokrosaputro)", normal_font);
+            cell_signature_noted.Phrase = new Phrase("(Michelle Tjokrosaputro)", normal_font);
             table_signature.AddCell(cell_signature_noted);
 
             float table_signatureY = rowYRoImage - imageRoHeight - 10;

@@ -229,7 +229,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Creative Director", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Komisaris", normal_font);
+            cell_signature.Phrase = new Phrase("President Director", normal_font);
             table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
@@ -244,11 +244,11 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("Dwi Fajar", normal_font);
+            cell_signature.Phrase = new Phrase("Anita Purnamaningrum", normal_font);
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ari Seputra", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Sistha Alicia Tjokrosaputro", normal_font);
+            cell_signature.Phrase = new Phrase("Michelle Tjokrosaputro", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 

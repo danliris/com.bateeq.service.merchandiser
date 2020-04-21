@@ -78,6 +78,31 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
             }
         }
 
+        [HttpGet("vvip/{id}")]
+        public IActionResult GetVvip([FromRoute]int Id)
+        {
+            try
+            {
+                var model = Service.ReadModelById(Id).Result;
+                var viewModel = Service.MapToViewModel(model);
+
+                CostCalculationVvipPdfTemplate PdfTemplate = new CostCalculationVvipPdfTemplate();
+                MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel);
+
+                return new FileStreamResult(stream, "application/pdf")
+                {
+                    FileDownloadName = "Cost Calculation Retail " + viewModel.RO + ".pdf"
+                };
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpGet("budget/{id}")]
         public async Task<IActionResult> GetBudget([FromRoute]int Id)
         {

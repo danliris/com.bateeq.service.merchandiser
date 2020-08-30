@@ -734,7 +734,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             PdfPTable table_signature = new PdfPTable(5);
             table_signature.TotalWidth = 570f;
 
-            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };
+            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f };
             table_signature.SetWidths(signature_widths);
 
             PdfPCell cell_signature = new PdfPCell()

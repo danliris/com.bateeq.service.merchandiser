@@ -872,8 +872,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Mengetahui", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Menyetujui", normal_font);
-            table_signature.AddCell(cell_signature);
+            
 
             var tableSignatureCurrentHeight = table_signature.TotalHeight;
             if (tableSignatureCurrentHeight / remainingRowToHeightSignature > 1)
@@ -906,8 +905,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature_noted);
             cell_signature_noted.Phrase = new Phrase("(Bekti Wahyuningsih)", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(Michelle Tjokrosaputro)", normal_font);
-            table_signature.AddCell(cell_signature_noted);
+           
 
             float table_signatureY = 0;
 

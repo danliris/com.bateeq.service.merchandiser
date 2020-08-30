@@ -55,7 +55,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
                 var model = Service.ReadModelById(Id).Result;
                 var viewModel = Service.MapToViewModel(model);
 
-                RoRetailPdfTemplate PdfTemplate = new RoRetailPdfTemplate();
+                RoSpecolPdfTemplate PdfTemplate = new RoSpecolPdfTemplate();
                 MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel);
 
                 return new FileStreamResult(stream, "application/pdf")
@@ -80,7 +80,7 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
                 var model = Service.ReadModelById(Id).Result;
                 var viewModel = Service.MapToViewModel(model);
 
-                RoRetailPdfTemplate PdfTemplate = new RoRetailPdfTemplate();
+                RoVvipPdfTemplate PdfTemplate = new RoVvipPdfTemplate();
                 MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel);
 
                 return new FileStreamResult(stream, "application/pdf")

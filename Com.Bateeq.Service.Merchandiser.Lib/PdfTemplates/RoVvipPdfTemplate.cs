@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 {
-    public class RoRetailPdfTemplate
+    public class RoVvipPdfTemplate
     {
         public MemoryStream GeneratePdfTemplate(RO_RetailViewModel viewModel)
         {

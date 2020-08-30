@@ -731,7 +731,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #endregion
 
             #region Signature
-            PdfPTable table_signature = new PdfPTable(6);
+            PdfPTable table_signature = new PdfPTable(5);
             table_signature.TotalWidth = 570f;
 
             float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };

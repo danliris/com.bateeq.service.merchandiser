@@ -46,5 +46,55 @@ namespace Com.Bateeq.Service.Merchandiser.WebApi.Controllers.v1.BasicControllers
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+        
+        [HttpGet("specol/{id}")]
+        public IActionResult GetSpecol([FromRoute]int Id)
+        {
+            try
+            {
+                var model = Service.ReadModelById(Id).Result;
+                var viewModel = Service.MapToViewModel(model);
+
+                RoRetailPdfTemplate PdfTemplate = new RoRetailPdfTemplate();
+                MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel);
+
+                return new FileStreamResult(stream, "application/pdf")
+                {
+                    FileDownloadName = "RO Retail " + viewModel.CostCalculationRetail.RO + ".pdf"
+                };
+            }
+            catch (System.Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("vvip/{id}")]
+        public IActionResult GetVvip([FromRoute]int Id)
+        {
+            try
+            {
+                var model = Service.ReadModelById(Id).Result;
+                var viewModel = Service.MapToViewModel(model);
+
+                RoRetailPdfTemplate PdfTemplate = new RoRetailPdfTemplate();
+                MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel);
+
+                return new FileStreamResult(stream, "application/pdf")
+                {
+                    FileDownloadName = "RO Retail " + viewModel.CostCalculationRetail.RO + ".pdf"
+                };
+            }
+            catch (System.Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }

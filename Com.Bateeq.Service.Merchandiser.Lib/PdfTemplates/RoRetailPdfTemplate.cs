@@ -836,10 +836,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             #region Signature (Bottom, Column 1.2)
 
-            PdfPTable table_signature = new PdfPTable(5);
+            PdfPTable table_signature = new PdfPTable(4);
             table_signature.TotalWidth = 570f;
 
-            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f };
+            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f };
             float rowYSignature = rowYRoImage - table_instruction.TotalHeight - 5;
             var remainingRowToHeightSignature = rowYSignature - 5 - printedOnHeight - margin;
             float allowedRow2HeightSignature = rowYSignature - printedOnHeight - margin;
@@ -870,8 +870,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka Produksi", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Mengetahui", normal_font);
-            table_signature.AddCell(cell_signature);
+            //cell_signature.Phrase = new Phrase("Mengetahui", normal_font);
+            //table_signature.AddCell(cell_signature);
             
 
             var tableSignatureCurrentHeight = table_signature.TotalHeight;
@@ -903,8 +903,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature_noted);
             cell_signature_noted.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature_noted);
-            cell_signature_noted.Phrase = new Phrase("(Bekti Wahyuningsih)", normal_font);
-            table_signature.AddCell(cell_signature_noted);
+            //cell_signature_noted.Phrase = new Phrase("(Bekti Wahyuningsih)", normal_font);
+            //table_signature.AddCell(cell_signature_noted);
            
 
             float table_signatureY = 0;

@@ -147,7 +147,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(                           )", normal_font);
+            cell_signature.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
             table_signature.AddCell(cell_signature);
 
             cell_signature.Phrase = new Phrase("Merchandiser", normal_font);
@@ -159,7 +159,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
             table_signature.AddCell(cell_signature);
             
-            cell_signature.Phrase = new Phrase("Ka. Div Operasional", normal_font);
+            cell_signature.Phrase = new Phrase("Direktur Penjualan", normal_font);
             table_signature.AddCell(cell_signature);
             #endregion
 
@@ -359,18 +359,18 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_detail3.AddCell(cell_detail3);
 
 
-            cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
-            table_detail3.AddCell(cell_detail3_colspan8);
+            //cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+            //table_detail3.AddCell(cell_detail3_colspan8);
             cell_detail3_colspan8.Phrase = new Phrase("PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(processCost)}", normal_font);
             table_detail3.AddCell(cell_detail3_colspan8);
-            cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
-            table_detail3.AddCell(cell_detail3_colspan8);
+            //cell_detail3_colspan8.Phrase = new Phrase("TOTAL PROCESS COST" + "".PadRight(5) + $"{Number.ToRupiah(totalProcessCost)}", normal_font);
+            //table_detail3.AddCell(cell_detail3_colspan8);
 
-            double rateValue = (double)viewModel.Rate.Value;
-            double confirmPrice = (double)viewModel.ConfirmPrice;
+            //double rateValue = (double)viewModel.Rate.Value;
+            //double confirmPrice = (double)viewModel.ConfirmPrice;
 
-            cell_detail3_colspan8.Phrase = isDollar ? new Phrase($"US$ 1 = {Number.ToRupiah(rateValue)}" + "".PadRight(10) + $"CONFIRM PRICE : {Number.ToDollar(confirmPrice)} / PCS", normal_font) : new Phrase($"CONFIRM PRICE : {Number.ToRupiah(confirmPrice)} / PCS", normal_font);
-            table_detail3.AddCell(cell_detail3_colspan8);
+            //cell_detail3_colspan8.Phrase = isDollar ? new Phrase($"US$ 1 = {Number.ToRupiah(rateValue)}" + "".PadRight(10) + $"CONFIRM PRICE : {Number.ToDollar(confirmPrice)} / PCS", normal_font) : new Phrase($"CONFIRM PRICE : {Number.ToRupiah(confirmPrice)} / PCS", normal_font);
+            //table_detail3.AddCell(cell_detail3_colspan8);
             cell_detail3_colspan8.Border = Rectangle.NO_BORDER;
             cell_detail3_colspan8.HorizontalAlignment = Element.ALIGN_CENTER;
             cell_detail3_colspan8.Phrase = new Phrase($"ALLOWANCE >> FAB = {viewModel.FabricAllowance}%, ACC = {viewModel.AccessoriesAllowance}%", normal_font);

@@ -18,8 +18,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services.AzureStorage
 
         public AzureStorageService(IServiceProvider serviceProvider)
         {
-            string storageAccountName = Environment.GetEnvironmentVariable("StorageAccountName");
-            string storageAccountKey = Environment.GetEnvironmentVariable("StorageAccountKey");
+            string storageAccountName = "bateeqstorageprd";
+            string storageAccountKey = "qb4/hF0bF6VuBQUcPkz4bEkr75SusaS7Odn/gHQhLGpyRryl6q2BVow9cCWxEVLRmToSFp4ws1eQos9kjgovkA==";
             string storageContainer = "merchandiser";
 
             this.ServiceProvider = serviceProvider;

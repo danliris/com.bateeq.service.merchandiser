@@ -38,7 +38,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
 
             cb.BeginText();
             cb.SetFontAndSize(bf, 10);
-            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PT. EFRATA RETAILINDO", 10, 820, 0);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "PT. BATEEQ RETAILINDO UTAMA", 10, 820, 0);
             cb.SetFontAndSize(bf_bold, 12);
             cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "RO RETAIL", 10, 805, 0);
             cb.EndText();

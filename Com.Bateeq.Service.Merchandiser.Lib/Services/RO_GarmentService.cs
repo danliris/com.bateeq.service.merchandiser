@@ -56,23 +56,90 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
             }
         }
 
-        public override Tuple<List<RO_Garment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+//         public override Tuple<List<RO_Garment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+//         {
+//             IQueryable<RO_Garment> Query = this.DbContext.RO_Garments;
+
+//             List<string> SearchAttributes = new List<string>()
+//                 {
+//                     "CostCalculationGarment.RO", "CostCalculationGarment.Article"
+//                 };
+//             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
+
+//             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+//             Query = ConfigureFilter(Query, FilterDictionary);
+
+//             List<string> SelectedFields = new List<string>()
+//                 {
+//                     "Id", "Code", "CostCalculationGarment", "Total"
+//                 };
+//             Query = Query
+//                 .Select(ro => new RO_Garment
+//                 {
+//                     Id = ro.Id,
+//                     Code = ro.Code,
+//                     CostCalculationGarment = new CostCalculationGarment()
+//                     {
+//                         Id = ro.CostCalculationGarment.Id,
+//                         Code = ro.CostCalculationGarment.Code,
+//                         RO = ro.CostCalculationGarment.RO,
+//                         Article = ro.CostCalculationGarment.Article,
+//                         LineId = ro.CostCalculationGarment.LineId,
+//                         LineName = ro.CostCalculationGarment.LineName
+//                     },
+//                     Total = ro.Total
+//                 });
+
+//             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
+//             Query = ConfigureOrder(Query, OrderDictionary);
+
+//             Pageable<RO_Garment> pageable = new Pageable<RO_Garment>(Query, Page - 1, Size);
+//             List<RO_Garment> Data = pageable.Data.ToList<RO_Garment>();
+//             int TotalData = pageable.TotalCount;
+
+//             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+//         }
+
+// baru ditambahkan
+public override Tuple<List<RO_Garment>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<RO_Garment> Query = this.DbContext.RO_Garments;
+            IQueryable<CostCalculationGarment> QueryCC = this.DbContext.CostCalculationGarments;
+
+            var QueryJOIN = (from a in Query
+                             join b in QueryCC
+                             on a.CostCalculationGarmentId equals b.Id
+                             select new RO_Garment
+                             {
+                                Id = a.Id,
+                                Code = a.Code,
+                                CostCalculationGarment = 
+                                new CostCalculationGarment()
+                                {
+                                   Id = b.Id,
+                                   Code = b.Code,
+                                   RO = b.RO,
+                                   Article = b.Article,
+                                   LineId = b.LineId,
+                                   LineName = b.LineName
+                                },
+                                Total = a.Total
+                             });
 
             List<string> SearchAttributes = new List<string>()
-                {
-                    "CostCalculationGarment.RO", "CostCalculationGarment.Article"
-                };
-            Query = ConfigureSearch(Query, SearchAttributes, Keyword);
+            {
+               "CostCalculationGarment.RO", "CostCalculationGarment.Article"
+            };
+            QueryJOIN = ConfigureSearch(QueryJOIN, SearchAttributes, Keyword);
 
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
-            Query = ConfigureFilter(Query, FilterDictionary);
+            QueryJOIN = ConfigureFilter(QueryJOIN, FilterDictionary);
 
             List<string> SelectedFields = new List<string>()
                 {
                     "Id", "Code", "CostCalculationGarment", "Total"
                 };
+
             Query = Query
                 .Select(ro => new RO_Garment
                 {
@@ -91,14 +158,15 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.Services
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
-            Query = ConfigureOrder(Query, OrderDictionary);
+            QueryJOIN = ConfigureOrder(QueryJOIN, OrderDictionary);
 
-            Pageable<RO_Garment> pageable = new Pageable<RO_Garment>(Query, Page - 1, Size);
+            Pageable<RO_Garment> pageable = new Pageable<RO_Garment>(QueryJOIN, Page - 1, Size);
             List<RO_Garment> Data = pageable.Data.ToList<RO_Garment>();
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
+// end
 
         public override async Task<int> CreateModel(RO_Garment Model)
         {

@@ -107,10 +107,10 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             #endregion
 
             #region Signature
-            PdfPTable table_signature = new PdfPTable(5);
+            PdfPTable table_signature = new PdfPTable(4);
             table_signature.TotalWidth = 570f;
 
-            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f, 1f };
+            float[] signature_widths = new float[] { 1f, 1f, 1f, 1f };
             table_signature.SetWidths(signature_widths);
 
             PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
@@ -123,8 +123,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
-            table_signature.AddCell(cell_signature);
+            //cell_signature.Phrase = new Phrase("Menyetujui,", normal_font);
+            //table_signature.AddCell(cell_signature);
 
             string signatureArea = string.Empty;
             for (int i = 0; i < 4; i++)
@@ -137,7 +137,7 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);
             table_signature.AddCell(cell_signature);
-            table_signature.AddCell(cell_signature);
+            //table_signature.AddCell(cell_signature);
 
             cell_signature.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature);
@@ -147,8 +147,8 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("(                           )", normal_font);
             table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
-            table_signature.AddCell(cell_signature);
+            //cell_signature.Phrase = new Phrase("(Haenis Gunarto)", normal_font);
+            //table_signature.AddCell(cell_signature);
 
             cell_signature.Phrase = new Phrase("Merchandiser", normal_font);
             table_signature.AddCell(cell_signature);
@@ -158,9 +158,9 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             table_signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Ka. Sie Pembelian", normal_font);
             table_signature.AddCell(cell_signature);
-            
-            cell_signature.Phrase = new Phrase("Direktur Penjualan", normal_font);
-            table_signature.AddCell(cell_signature);
+
+            //cell_signature.Phrase = new Phrase("Direktur Penjualan", normal_font);
+            //table_signature.AddCell(cell_signature);
             #endregion
 
             #region Cost Calculation Material

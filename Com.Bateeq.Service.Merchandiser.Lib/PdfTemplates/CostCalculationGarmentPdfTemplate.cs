@@ -260,12 +260,12 @@ namespace Com.Bateeq.Service.Merchandiser.Lib.PdfTemplates
             cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(viewModel.NETFOB)}", normal_font);
             table_detail3.AddCell(cell_detail3);
 
-            cell_detail3.Phrase = new Phrase("COMM (%)", normal_font);
-            table_detail3.AddCell(cell_detail3);
-            cell_detail3.Phrase = new Phrase(String.Format("{0:0.00}%", viewModel.CommissionPortion), normal_font);
-            table_detail3.AddCell(cell_detail3);
-            cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(viewModel.CommissionRate)}", normal_font);
-            table_detail3.AddCell(cell_detail3);
+            //cell_detail3.Phrase = new Phrase("COMM (%)", normal_font);
+            //table_detail3.AddCell(cell_detail3);
+            //cell_detail3.Phrase = new Phrase(String.Format("{0:0.00}%", viewModel.CommissionPortion), normal_font);
+            //table_detail3.AddCell(cell_detail3);
+            //cell_detail3.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(viewModel.CommissionRate)}", normal_font);
+            //table_detail3.AddCell(cell_detail3);
 
             cell_detail3.Phrase = new Phrase("CONFIRM PRICE", normal_font);
             table_detail3.AddCell(cell_detail3); ;
